@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding ="utf-8"?>
+<swc xmlns="http://www.adobe.com/flash/swccatalog/9">
+  <versions>
+    <swc version="1.2" />
+    <flex version="4.6.0" build="23201" minimumSupportedVersion="3.0.0" />
+  </versions>
+  <features>
+    <feature-script-deps />
+    <feature-files />
+  </features>
+  <libraries>
+    <library path="library.swf">
+      <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1696875639288" signatureChecksum="1118431505" >
+        <def id="com.vsdevelop.air.extension.glfw:Glfw" /> 
+        <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e" /> 
+        <dep id="Error" type="e" /> 
+        <dep id="Object" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <script name="_686aa562d2df402fc9f691237d8b23d8160893187ac7b61daa9e11805291ad01_flash_display_Sprite" mod="1696875660517" signatureChecksum="2291104011" >
+        <def id="_686aa562d2df402fc9f691237d8b23d8160893187ac7b61daa9e11805291ad01_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1696864277671" signatureChecksum="500071804" >
+        <def id="com.vsdevelop.air.extension.glfw:ANEGLFW" /> 
+        <dep id="flash.events:StatusEvent" type="s" /> 
+        <dep id="flash.external:ExtensionContext" type="s" /> 
+        <dep id="trace" type="e" /> 
+        <dep id="flash.events:StatusEvent" type="e" /> 
+        <dep id="Error" type="e" /> 
+        <dep id="flash.external:ExtensionContext" type="e" /> 
+        <dep id="Object" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <digests>
+        <digest type="SHA-256" signed="false" value="acddd10411253a8fafaa66fff968e3ae189fad15bc97a8f4d8612e0038f69747"   />
+      </digests>
+    </library>
+  </libraries>
+  <files>
+  </files>
+</swc>

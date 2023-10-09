@@ -1,0 +1,45 @@
+<signatures>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#" Id="PackageSignature">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+      <SignatureMethod Algorithm="http://www.w3.org/TR/xmldsig-core#rsa-sha1"/>
+      <Reference URI="#PackageContents">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+        <DigestValue>RIJo/wg60ZeAG2/IKG+MrbxM+GF7v/wN0ffTOvRFn1o=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue Id="PackageSignatureValue">vdV9n3/qFW7m0Fn/omB6DtMjPoA5ExGYxrDyo+qgo/OzYy0si/2JqLkgNwhwcp4+dJ6A7dbFDpo9
+3jjINf5CLqK7jXNpNrJYih8p1L5dYnvNPJ+cUbZM3lqslMchEdjR7QZ171IC6fp6c09nIEWdlCUn
+a4hksJAbniGB/xVSykxTZxp7EeJbyLphAITXko8luxeuv7A8amgY6RtPX0ujOO49ctjhVJqK/Kss
+rkAT4oIozLP9ynG4mWele0wfkhOHxLYKnBVWJ8cD20phF1DggHTcHqXW+2uQKNoJ6S9c7YFHJENL
+6qu0hXjjH4h+se7mNuQ1NGSCjsYPQUZsfd4OHQ==</SignatureValue>
+    <KeyInfo>
+      <X509Data>
+        <X509Certificate>MIIDMjCCAhqgAwIBAgIbLTEyZmU3MjdhOjE3OTY1NTNiNjZhOi04MDAwMA0GCSqGSIb3DQEBBQUA
+MEMxCzAJBgNVBAYTAkNOMRAwDgYDVQQKEwdlZG9jdG9yMRAwDgYDVQQLEwdlZG9jdG9yMRAwDgYD
+VQQDEwdyYXkubGVpMB4XDTIxMDUxMjEwNDQxNVoXDTI2MDUxMzEwNDQxNVowQzELMAkGA1UEBhMC
+Q04xEDAOBgNVBAoTB2Vkb2N0b3IxEDAOBgNVBAsTB2Vkb2N0b3IxEDAOBgNVBAMTB3JheS5sZWkw
+ggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDM5QiUGPS/cEIf2oRuQgrOo/LOD5dc3rRR
+kZ+Iw2gXftawoPHcwEQGMGXnnl3t/s9S3KuWwEh6CTFK9Ka6OzHeY44X5uyP3zVr8T3B1+e0cvKs
+EW2n/ECgEqS2bQgPMn53xmI9b9Inv1ntkz6rpoa5uWTbNz3e6/DgStUGYiYHoC2IpMR1o8qRuHAa
++fdIJzXjiISUZ1HkpeGNEKdi8rTK1FP3VnkRqvJfop9CjOxN2pr8UVljAbR1i3SOr7GuFLEpMS5K
+Ybta/1amoaILN1K8eILFvZamSdp7SFC4WBFLby39EfRagdt21obS7dImE8D39FMeTHaV0wKfaCur
+IEnRAgMBAAGjFzAVMBMGA1UdJQQMMAoGCCsGAQUFBwMDMA0GCSqGSIb3DQEBBQUAA4IBAQBIbgOO
+D6/BctUubfVqi1LXYbXxnQ6SZ6NLz2RY3ckX9J09GmY0cD2oeKr8sAgcto/vwc5rI91u9+m73Lay
+9acPAOFU9O8rxCHjzpGSy9WSQDCr8o+BeG4zqfiTGC36wlUjeORLZZg5s+AJR6bvgof9fHoVMpQU
+kNJPiRdPg1bDgcsBmcbXSQZw3SiAz82MSQo1wHS2bHmIYT9oR5G8zfACLacN2UZcPzENmzuDNJYc
+wKeu32sW+nLRm1f6yEgD4TPKs+mY8Lxi3wcaGc4GXvf2VsdBkdd4h6WXGW+e9FdeXhcvmbEA+fwO
+u1r3MswgyUmTexdaDA1HZkZcS3Q4LzKn</X509Certificate>
+      </X509Data>
+    </KeyInfo>
+    <Object>
+      <Manifest Id="PackageContents">
+        <Reference URI="META-INF/ANE/Windows-x86-64/ANEGLFW.dll"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod><DigestValue>BWo3y7Zq9x6mPxUDyH3x1Iok895WNDLOPUesQQ1oOzA=</DigestValue></Reference><Reference URI="META-INF/ANE/Windows-x86-64/library.swf"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod><DigestValue>rN3RBBElOo+vqmb/+WjjrhifrRW8l6j02GEuADj2l0c=</DigestValue></Reference><Reference URI="META-INF/ANE/Windows-x86/ANEGLFW.dll"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod><DigestValue>jpadGMYz34c1I8Jp0WGSFBmYQJpDF6EtIIeK2wabX6E=</DigestValue></Reference><Reference URI="META-INF/ANE/Windows-x86/library.swf"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod><DigestValue>rN3RBBElOo+vqmb/+WjjrhifrRW8l6j02GEuADj2l0c=</DigestValue></Reference><Reference URI="META-INF/ANE/default/library.swf"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod><DigestValue>rN3RBBElOo+vqmb/+WjjrhifrRW8l6j02GEuADj2l0c=</DigestValue></Reference><Reference URI="META-INF/ANE/extension.xml"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod><DigestValue>OZN0FGVg/89lN5qzdDdLFCmV7DlnLRqO+YxcYtUyvZc=</DigestValue></Reference><Reference URI="catalog.xml"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod><DigestValue>nko2R2ls3xxrR4btTd0nIJ/Y+R1sW3Hs//MDCgIvGDs=</DigestValue></Reference><Reference URI="library.swf"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod><DigestValue>rN3RBBElOo+vqmb/+WjjrhifrRW8l6j02GEuADj2l0c=</DigestValue></Reference><Reference URI="mimetype"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod><DigestValue>QfjPqwYNSozTaKi3Ar1Veog4uaFk5DPieQA0v9uRJdY=</DigestValue></Reference>
+      </Manifest>
+    </Object>
+    
+  </Signature>
+</signatures>
