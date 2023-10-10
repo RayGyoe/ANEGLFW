@@ -2,8 +2,9 @@
   ANEGLFW.cpp
   ANEUtils.cpp
   stdafx.cpp
-    正在创建库 E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.lib 和对象 E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.exp
+    正在创建库 D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.lib 和对象 D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.exp
   正在生成代码
-  All 555 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 619 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   已完成代码的生成
-  ANEGLFW.vcxproj -> E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.dll
+  ANEGLFW.vcxproj -> D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.dll
+  ANEGLFW.vcxproj -> D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.pdb (Full PDB)

@@ -1,32 +1,21 @@
-﻿生成启动时间为 2023/10/9 21:48:39。
-     1>项目“E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\ANEGLFW\ANEGLFW.vcxproj”在节点 2 上(Rebuild 个目标)。
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glad\include /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glfw\x64\include /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\airsdk\ /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D NDEBUG /D _WINDOWS /D _USRDLL /D ANEGLFW_EXPORTS /D _USING_V110_SDK71_ /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Release\\" /Fd"x64\Release\vc140.pdb" /Gd /TC /errorReport:prompt ..\..\3rdparty\glad\src\glad.c
-         glad.c
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glad\include /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glfw\x64\include /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\airsdk\ /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D NDEBUG /D _WINDOWS /D _USRDLL /D ANEGLFW_EXPORTS /D _USING_V110_SDK71_ /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Release\\" /Fd"x64\Release\vc140.pdb" /Gd /TP /errorReport:prompt ANEGLFW.cpp ANEUtils.cpp stdafx.cpp
-         ANEGLFW.cpp
-         ANEUtils.cpp
-     1>ANEUtils.cpp(64): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-     1>ANEUtils.cpp(114): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-     1>ANEUtils.cpp(120): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-     1>ANEUtils.cpp(138): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-     1>ANEUtils.cpp(140): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-     1>ANEUtils.cpp(148): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-     1>ANEUtils.cpp(150): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-     1>ANEUtils.cpp(343): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-     1>ANEUtils.cpp(344): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-         stdafx.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\x64\Release\ANEGLFW.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glad\src /LIBPATH:"E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glfw\x64\lib-vc2015" /LIBPATH:E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\airsdk\x64\ FlashRuntimeExtensions.lib glfw3.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\x64\Release\ANEGLFW.pdb" /SUBSYSTEM:WINDOWS,"5.02" /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\x64\Release\ANEGLFW.lib" /MACHINE:X64 /DLL x64\Release\glad.obj
-         x64\Release\ANEGLFW.obj
-         x64\Release\ANEUtils.obj
-         x64\Release\stdafx.obj
-         正在生成代码
-         All 175 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-         已完成代码的生成
-         ANEGLFW.vcxproj -> E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\x64\Release\ANEGLFW.dll
-     1>已完成生成项目“E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\ANEGLFW\ANEGLFW.vcxproj”(Rebuild 个目标)的操作。
-
-已成功生成。
-
-已用时间 00:00:01.95
+﻿  glad.c
+  ANEGLFW.cpp
+ANEGLFW.cpp(95): warning C4244: “初始化”: 从“intptr_t”转换到“int”，可能丢失数据
+ANEGLFW.cpp(244): warning C4312: “reinterpret_cast”: 从“int”转换到更大的“void *”
+  ANEUtils.cpp
+ANEUtils.cpp(64): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+ANEUtils.cpp(114): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+ANEUtils.cpp(120): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+ANEUtils.cpp(138): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+ANEUtils.cpp(140): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+ANEUtils.cpp(148): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+ANEUtils.cpp(150): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+ANEUtils.cpp(343): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+ANEUtils.cpp(344): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  stdafx.cpp
+    正在创建库 D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\x64\Release\ANEGLFW.lib 和对象 D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\x64\Release\ANEGLFW.exp
+  正在生成代码
+  All 593 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  ANEGLFW.vcxproj -> D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\x64\Release\ANEGLFW.dll
+  ANEGLFW.vcxproj -> D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\x64\Release\ANEGLFW.pdb (Full PDB)

@@ -16,7 +16,11 @@ package com.vsdevelop.air.extension.glfw
 		
 		private var _debug:Boolean = false;
 		
-		private var _actionScriptData:Object = {};
+		private var _actionScriptData:Object = {
+			callback:{
+				
+			}
+		};
 		
 		
 		public function ANEGLFW() 
