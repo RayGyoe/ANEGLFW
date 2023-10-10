@@ -1,10 +1,24 @@
-﻿  glad.c
-  ANEGLFW.cpp
-  ANEUtils.cpp
-  stdafx.cpp
-    正在创建库 D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.lib 和对象 D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.exp
-  正在生成代码
-  All 619 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  已完成代码的生成
-  ANEGLFW.vcxproj -> D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.dll
-  ANEGLFW.vcxproj -> D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.pdb (Full PDB)
+﻿生成启动时间为 2023/10/11 1:56:54。
+     1>项目“E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\ANEGLFW\ANEGLFW.vcxproj”在节点 2 上(Rebuild 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glad\include /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glfw\x86\include /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\airsdk\ /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D ANEGLFW_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TC /analyze- /errorReport:prompt ..\..\3rdparty\glad\src\glad.c
+         glad.c
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glad\include /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glfw\x86\include /IE:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\airsdk\ /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D ANEGLFW_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt ANEGLFW.cpp ANEUtils.cpp stdafx.cpp
+         ANEGLFW.cpp
+         ANEUtils.cpp
+         stdafx.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glad\src /LIBPATH:"E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\glfw\x86\lib-vc2015" /LIBPATH:E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\..\3rdparty\airsdk\x86\ FlashRuntimeExtensions.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.lib" /MACHINE:X86 /SAFESEH /DLL Release\glad.obj
+         Release\ANEGLFW.obj
+         Release\ANEUtils.obj
+         Release\stdafx.obj
+           正在创建库 E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.lib 和对象 E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.exp
+         正在生成代码
+         All 622 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         已完成代码的生成
+         ANEGLFW.vcxproj -> E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\Release\ANEGLFW.dll
+     1>已完成生成项目“E:\Works\eDoctor\ANEGLFW\native\ANEGLFW\ANEGLFW\ANEGLFW.vcxproj”(Rebuild 个目标)的操作。
+
+已成功生成。
+
+已用时间 00:00:02.97

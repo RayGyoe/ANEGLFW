@@ -1,49 +1,52 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding ="utf-8"?>
 <swc xmlns="http://www.adobe.com/flash/swccatalog/9">
-    <versions>
-        <swc version="1.2"/>
-        <compiler name="ActionScript Compiler" version="2.3.0" build="0"/>
-    </versions>
-    <features>
-        <feature-script-deps/>
-    </features>
-    <libraries>
-        <library path="library.swf">
-            <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1696934067451">
-                <def id="com.vsdevelop.air.extension.glfw:ANEGLFW"/>
-                <dep id="Boolean" type="s"/>
-                <dep id="Error" type="e"/>
-                <dep id="Function" type="s"/>
-                <dep id="Object" type="i"/>
-                <dep id="flash.events:StatusEvent" type="s"/>
-                <dep id="flash.external:ExtensionContext" type="s"/>
-                <dep id="trace" type="e"/>
-            </script>
-            <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1696931471264">
-                <def id="com.vsdevelop.air.extension.glfw:Gl"/>
-                <dep id="Boolean" type="s"/>
-                <dep id="Error" type="e"/>
-                <dep id="Number" type="s"/>
-                <dep id="Object" type="i"/>
-                <dep id="String" type="s"/>
-                <dep id="__AS3__.vec:Vector" type="s"/>
-                <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e"/>
-                <dep id="int" type="s"/>
-                <dep id="uint" type="s"/>
-            </script>
-            <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1696934092074">
-                <def id="com.vsdevelop.air.extension.glfw:Glfw"/>
-                <dep id="Boolean" type="s"/>
-                <dep id="Error" type="e"/>
-                <dep id="Function" type="s"/>
-                <dep id="Object" type="i"/>
-                <dep id="String" type="s"/>
-                <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e"/>
-                <dep id="int" type="s"/>
-            </script>
-            <digests>
-                <digest type="SHA-256" signed="false" value="584f15eec635d4801b9f2b543e14ccbeb22a64eb1cd5bce3d9b6daa04bf0c797"/>
-            </digests>
-        </library>
-    </libraries>
+  <versions>
+    <swc version="1.2" />
+    <flex version="4.6.0" build="23201" minimumSupportedVersion="3.0.0" />
+  </versions>
+  <features>
+    <feature-script-deps />
+    <feature-files />
+  </features>
+  <libraries>
+    <library path="library.swf">
+      <script name="_0dc944fbde8fe30afd3cdd037f08d437fdfe7cf301db93b3a9672745ac8a8332_flash_display_Sprite" mod="1696960774315" signatureChecksum="418937979" >
+        <def id="_0dc944fbde8fe30afd3cdd037f08d437fdfe7cf301db93b3a9672745ac8a8332_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1696960158698" signatureChecksum="10127310" >
+        <def id="com.vsdevelop.air.extension.glfw:Glfw" /> 
+        <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e" /> 
+        <dep id="Error" type="e" /> 
+        <dep id="Object" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1696940685382" signatureChecksum="2633439957" >
+        <def id="com.vsdevelop.air.extension.glfw:Gl" /> 
+        <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e" /> 
+        <dep id="Error" type="e" /> 
+        <dep id="Object" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1696960484677" signatureChecksum="512801124" >
+        <def id="com.vsdevelop.air.extension.glfw:ANEGLFW" /> 
+        <dep id="flash.display:NativeWindow" type="s" /> 
+        <dep id="flash.events:StatusEvent" type="s" /> 
+        <dep id="flash.external:ExtensionContext" type="s" /> 
+        <dep id="trace" type="e" /> 
+        <dep id="flash.events:StatusEvent" type="e" /> 
+        <dep id="Error" type="e" /> 
+        <dep id="flash.external:ExtensionContext" type="e" /> 
+        <dep id="Object" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <digests>
+        <digest type="SHA-256" signed="false" value="a28ed4c6117297c4efd65b7dd323a3a6550d687c43bacc9162933a00b79e79a6"   />
+      </digests>
+    </library>
+  </libraries>
+  <files>
+  </files>
 </swc>

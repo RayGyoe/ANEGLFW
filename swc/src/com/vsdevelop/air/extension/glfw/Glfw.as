@@ -311,23 +311,33 @@ package com.vsdevelop.air.extension.glfw {
             if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
             ANEGLFW.getInstance().context.call("glfwWindowHint", hint, value);
         }
-        
 		
-		
-        public static function glfwCreateWindow( width:int,  height:int, title:String, monitor_IntPtr:int = 0, window_share_IntPtr:int = 0):int {
+        public static function glfwCreateWindow( width:int,  height:int, title:String, monitor_IntPtr:int = 0, window_share_IntPtr:int = 0):Number {
             if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
-            return int(ANEGLFW.getInstance().context.call("glfwCreateWindow", width, height, title, monitor_IntPtr, window_share_IntPtr));
+            return ANEGLFW.getInstance().context.call("glfwCreateWindow", width, height, title, monitor_IntPtr, window_share_IntPtr) as Number;
         }
-        public static function glfwMakeContextCurrent(window_IntPtr:int):void {
+		public static function glfwDestroyWindow(window_IntPtr:Number):void {
+            if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
+            ANEGLFW.getInstance().context.call("glfwDestroyWindow", window_IntPtr);
+        }		
+        public static function glfwGetWin32Window( window_IntPtr:Number):int {
+            if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
+            return int(ANEGLFW.getInstance().context.call("glfwGetWin32Window", window_IntPtr));
+        }
+        public static function glfwMakeContextCurrent(window_IntPtr:Number):void {
             if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
             ANEGLFW.getInstance().context.call("glfwMakeContextCurrent", window_IntPtr);
         }
 		
-        public static function glfwSetWindowSize(window_IntPtr:int,width:int,height:int):void {
+        public static function glfwSetWindowPos(window_IntPtr:Number,x:int,y:int):void {
+            if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
+            ANEGLFW.getInstance().context.call("glfwSetWindowPos", window_IntPtr, x, y);
+        }
+        public static function glfwSetWindowSize(window_IntPtr:Number,width:int,height:int):void {
             if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
             ANEGLFW.getInstance().context.call("glfwSetWindowSize", window_IntPtr, width, height);
         }
-        public static function glfwSetWindowSizeCallback(window_IntPtr:int,callback:Function = null):void {
+        public static function glfwSetWindowSizeCallback(window_IntPtr:Number,callback:Function = null):void {
             if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
 			ANEGLFW.getInstance().actionScriptData.callback["WindowSizeCallback_" + window_IntPtr] = callback;			
             ANEGLFW.getInstance().context.call("glfwSetWindowSizeCallback", window_IntPtr, "WindowSizeCallback_" + window_IntPtr);
@@ -338,17 +348,17 @@ package com.vsdevelop.air.extension.glfw {
             return int(ANEGLFW.getInstance().context.call("glfwSwapInterval", value?1:0));
         }
         
-        public static function glfwWindowShouldClose(window_IntPtr:int):int {
+        public static function glfwWindowShouldClose(window_IntPtr:Number):int {
             if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
             return int(ANEGLFW.getInstance().context.call("glfwWindowShouldClose", window_IntPtr));
         }
         
-        public static function glfwSetWindowShouldClose(window_IntPtr:int, value:Boolean = false):void {
+        public static function glfwSetWindowShouldClose(window_IntPtr:Number, value:Boolean = false):void {
             if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
             ANEGLFW.getInstance().context.call("glfwSetWindowShouldClose", window_IntPtr, value ? 1 : 0);
         }
         
-        public static function glfwSwapBuffers(window_IntPtr:int):void {
+        public static function glfwSwapBuffers(window_IntPtr:Number):void {
             if (!ANEGLFW.getInstance().isSupported) throw Error('ANEGLFW Not Supported');
             ANEGLFW.getInstance().context.call("glfwSwapBuffers", window_IntPtr);
         }

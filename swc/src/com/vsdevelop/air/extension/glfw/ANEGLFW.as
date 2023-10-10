@@ -1,6 +1,8 @@
 package com.vsdevelop.air.extension.glfw
 {
 	
+	import flash.display.NativeWindow;
+	import flash.display.Stage;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
 	/**
@@ -16,12 +18,6 @@ package com.vsdevelop.air.extension.glfw
 		
 		private var _debug:Boolean = false;
 		
-		private var _actionScriptData:Object = {
-			callback:{
-				
-			}
-		};
-		
 		
 		public function ANEGLFW() 
 		{
@@ -36,7 +32,11 @@ package com.vsdevelop.air.extension.glfw
 					
 					if(_isSupported)
 					{
-						_extCtx.actionScriptData = actionScriptData;
+						_extCtx.actionScriptData = {
+														callback:{
+															
+														}
+													};
 					}
 					
 					_extCtx.addEventListener(StatusEvent.STATUS, onStatus);
@@ -54,7 +54,7 @@ package com.vsdevelop.air.extension.glfw
 		
 		public function get actionScriptData():Object
 		{
-			return _actionScriptData;
+			return _extCtx.actionScriptData;
 		}
 		
 		public static function getInstance() : ANEGLFW
@@ -91,9 +91,42 @@ package com.vsdevelop.air.extension.glfw
 		
 		private function onStatus(e:StatusEvent):void 
 		{
+			if(_debug)trace(e.code, e.level);
 			
+			var arr:Array;
+			switch (e.code) 
+			{
+				case "WindowSizeCallback":
+					arr = e.level.split("||");					
+					if (actionScriptData.callback["WindowSizeCallback_"+arr[0]]){
+						actionScriptData.callback["WindowSizeCallback_" + arr[0]](Number(arr[0]), int(arr[1]), int(arr[2]));
+					}
+					
+				break;
+			}
 		}
 		
+		
+		
+		public function getHwnd(nativeWindow:NativeWindow):int{
+			if (_isSupported){
+				return int(_extCtx.call("AIRWindowHwnd", nativeWindow));
+			}
+			return 0;
+		}
+		
+		
+		public function SetParent(hwnd:int, phwnd:int):void{
+			if (_isSupported){
+				_extCtx.call("SetParent", hwnd, phwnd);
+			}
+		}
+		
+		public function openGLToNativeWindow(hwnd:int, nativeWindow:NativeWindow):void{
+			if (_isSupported){
+				_extCtx.call("openGLToNativeWindow", hwnd, nativeWindow);
+			}
+		}
 		
 		
 		

@@ -210,13 +210,12 @@ FREObject ANEUtils::getFREObject(uint8_t value) {
 
 */
 
-void ANEUtils::dispatchEvent(FREContext ctx, std::string name, std::string value) {
-	FREDispatchStatusEventAsync(ctx, reinterpret_cast<const uint8_t *>(name.data()), reinterpret_cast<const uint8_t *>(value.data()));
+
+
+void ANEUtils::dispatchEvent(std::string name, std::string value) {
+	FREDispatchStatusEventAsync(ctxContext, reinterpret_cast<const uint8_t *>(name.data()), reinterpret_cast<const uint8_t *>(value.data()));
 }
 
-void ANEUtils::setFREContext(FREContext ctx) {
-	ctxContext = ctx;
-}
 void ANEUtils::trace(std::string message) const
 {
 	//dispatchEvent(ctxContext, "TRACE", message);

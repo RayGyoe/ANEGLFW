@@ -4,8 +4,7 @@
   <versionNumber>1.0</versionNumber>
   <!--<supportedProfiles>tv extendedTV desktop mobileDevice extendedDesktop</supportedProfiles>-->
   <supportedProfiles>extendedDesktop</supportedProfiles>
-	
-	<architecture>32</architecture>
+  <architecture>32</architecture>
   <programMenuFolder>eDoctor</programMenuFolder>
   <filename>example</filename>
   <name>

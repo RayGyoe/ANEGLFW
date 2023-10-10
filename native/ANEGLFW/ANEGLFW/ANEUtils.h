@@ -42,6 +42,17 @@ typedef unsigned long long	uint64;
 
 #define SafeDeleteVideoArr(pArr) {delete[] pArr; pArr = 0;}
 
+
+static auto wrap = [](auto f) noexcept {
+	try {
+		f();
+	}
+	catch (std::exception& e) {
+		std::cout << "Exception in foo_chronflow EngineWindow event handler: " << e.what() << std::endl;
+	}
+};
+
+
 class ANEUtils {
 
 public:
@@ -70,14 +81,10 @@ public:
 	wchar_t* chatToWchar(const char* ch);
 	char* wcharToChar(const wchar_t* wch);
 
-	FREObject newBool(bool value);
-
-	static void dispatchEvent(FREContext ctx, std::string name, std::string value);
-
-	void trace(std::string message) const;
-	void setFREContext(FREContext ctx);
 	FREContext ctxContext;
+	void dispatchEvent(std::string name, std::string value);
 
+	void trace(std::string message) const;	
 
 	bool LoadBundle(std::string strRealPath, vector<char>& data);
 

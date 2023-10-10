@@ -21,6 +21,30 @@
 
 //--shadertoy code---------------------------------------------------------------------
 
+// Copyright Inigo Quilez, 2019 - https://iquilezles.org/
+// I am the sole copyright owner of this Work.
+// You cannot host, display, distribute or share this Work neither
+// as it is or altered, here on Shadertoy or anywhere else, in any
+// form including physical and digital. You cannot use this Work in any
+// commercial or non-commercial product, website or project. You cannot
+// sell this Work and you cannot mint an NFTs of it or train a neural
+// network with it without permission. I share this Work for educational
+// purposes, and you can link to it, through an URL, proper attribution
+// and unmodified screenshot, as part of your educational material. If
+// these conditions are too restrictive please contact me and we'll
+// definitely work it out.
+
+
+// An animation test - a happy and blobby creature
+// jumping and looking around. It gets off-model very
+// often, but it looks good enough I think.
+//
+// Making-of with math/shader/art explanations (6 hours
+// long): https://www.youtube.com/watch?v=Cfe5UQ-1L9Q
+//
+// Buy a metal print here: https://www.redbubble.com/i/metal-print/Happy-Jumping-by-InigoQuilez/43594745.0JXQP
+
+
 #if HW_PERFORMANCE==0
 #define AA 1
 #else
@@ -170,7 +194,7 @@ vec4 map( in vec3 pos, float atime )
     h.xz = mat2x2(cos(hr),sin(hr),-sin(hr),cos(hr))*h.xz;
     vec3 hq = vec3( abs(h.x), h.yz );
    	float d  = sdEllipsoid( h-vec3(0.0,0.20,0.02), vec3(0.08,0.2,0.15) );
-	float d2 = sdEllipsoid( h-vec3(0.0,0.21,-0.1), vec3(0.20,0.2,0.20) );
+	float d2 = sdSphere( h-vec3(0.0,0.21,-0.1), 0.2 );
 	d = smin( d, d2, 0.1 );
     res.x = smin( res.x, d, 0.1 );
     
@@ -451,6 +475,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         vec2 o = vec2(float(m),float(n)) / float(AA) - 0.5;
         vec2 p = (-iResolution.xy + 2.0*(fragCoord+o))/iResolution.y;
         // time coordinate (motion blurred, shutter=0.5)
+        // see https://www.shadertoy.com/view/4sBGD1
         float d = 0.5+0.5*sin(fragCoord.x*147.0)*sin(fragCoord.y*131.0);
         float time = iTime - 0.5*(1.0/24.0)*(float(m*AA+n)+d)/float(AA*AA);
 #else    

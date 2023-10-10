@@ -6,12 +6,12 @@
     <movie input="" />
     <movie path="bin\example.swf" />
     <movie fps="60" />
-    <movie width="1024" />
-    <movie height="748" />
+    <movie width="800" />
+    <movie height="500" />
     <movie version="23" />
     <movie minorVersion="0" />
     <movie platform="AIR Mobile" />
-    <movie background="#FFFFFF" />
+    <movie background="#000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -20,7 +20,7 @@
   <!-- Build options -->
   <build>
     <option accessible="False" />
-    <option advancedTelemetry="False" />
+    <option advancedTelemetry="True" />
     <option allowSourcePathOverlap="False" />
     <option benchmark="False" />
     <option es="False" />

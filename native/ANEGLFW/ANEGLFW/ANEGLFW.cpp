@@ -6,11 +6,12 @@ extern "C" {
 
 	const char* TAG = "ANEGLFW";
 
-	ANEUtils* ANEutils;
+	ANEUtils* ANEutils = new ANEUtils();
 
 	bool debug = false;
 
 
+	std::string FGS = "||";
 	FREContext ctxContext;
 	/*
 	³õÊ¼»¯
@@ -30,6 +31,55 @@ extern "C" {
 		printf("\n%s %s  %d", TAG, "isDeBug",debug);
 		return NULL;
 	}
+
+
+	FREObject ANE_AIRWindowHwnd(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int hwnd = 0;
+		FRENativeWindow nativeWindow;
+		FREObject window = argv[0];
+		FREResult ret = FREAcquireNativeWindowHandle(window, &nativeWindow);
+		if (ret == FRE_OK) {
+			hwnd = (int)nativeWindow;
+			FREReleaseNativeWindowHandle(window);
+		}
+		return ANEutils->getFREObject(hwnd);
+	}
+
+	FREObject ANE_SetParent(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int hwnd = ANEutils->getInt32(argv[0]);
+		int phwnd = ANEutils->getInt32(argv[1]);
+		printf("\n%s %s  %d  %d", TAG, "ANE_SetParent", hwnd, phwnd);
+		SetParent((HWND)hwnd, (HWND)phwnd);
+		return NULL;
+	}
+
+
+	FREObject ANE_openGLToNativeWindow(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		HWND hwNative = (HWND)ANEutils->getInt32(argv[0]);
+
+		FRENativeWindow nativeWindow;
+		FREObject window = argv[1];
+		FREResult ret = FREAcquireNativeWindowHandle(window, &nativeWindow);
+		if (ret == FRE_OK) {
+			SetParent(hwNative, nativeWindow);
+			FREReleaseNativeWindowHandle(window);
+
+			long style = GetWindowLong(hwNative, GWL_STYLE);
+			style &= ~WS_POPUP; // remove popup style
+			style |= WS_CHILDWINDOW; // add childwindow style
+			SetWindowLong(hwNative, GWL_STYLE, style);
+
+			ShowWindow(hwNative, SW_SHOW);
+		}
+
+		return NULL;
+	}
+	
+
+
 	///--GLFW----------------------------------------------------------------------------------------------
 
 
@@ -95,15 +145,44 @@ extern "C" {
 			return ANEutils->getFREObject(0);
 		}
 		
-		int int_window = (intptr_t)window; 
+		double int_window = (intptr_t)window;
+
+		if (debug) {
+			std::cout << "\n intptr_t=" << int_window << std::endl;
+		}
+
 		return ANEutils->getFREObject(int_window);
+	}
+
+
+	FREObject ANE_glfwDestroyWindow(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		double intptr = ANEutils->getDouble(argv[0]);
+		if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwDestroyWindow", intptr);
+		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
+		if (window) {
+			glfwDestroyWindow(window);
+		}
+		return NULL;
+	}
+
+	FREObject ANE_glfwGetWin32Window(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		double intptr = ANEutils->getDouble(argv[0]);
+		if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwGetWin32Window", intptr);
+		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
+		if (window) {
+		  HWND hwnd = glfwGetWin32Window(window);
+		  return ANEutils->getFREObject((int)hwnd);
+		}
+		return ANEutils->getFREObject(0);
 	}
 
 	FREObject ANE_glfwMakeContextCurrent(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		int intptr = ANEutils->getInt32(argv[0]);
+		double intptr = ANEutils->getDouble(argv[0]);
 
-		if (debug)printf("\n%s %s  %d", TAG, "ANE_glfwMakeContextCurrent", intptr);
+		if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwMakeContextCurrent", intptr);
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
 			glfwMakeContextCurrent(window);
@@ -112,14 +191,29 @@ extern "C" {
 		return NULL;
 	}
 
+
 	
+
+	FREObject ANE_glfwSetWindowPos(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		double intptr = ANEutils->getDouble(argv[0]);
+		int x = ANEutils->getInt32(argv[1]);
+		int y = ANEutils->getInt32(argv[2]);
+
+		if (debug)printf("\n%s %s  %lf    %d   %d", TAG, "ANE_glfwSetWindowPos", intptr, x, y);
+		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
+		if (window) {
+			glfwSetWindowPos(window, x, y);
+		}
+		return NULL;
+	}
 	FREObject ANE_glfwSetWindowSize(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		int intptr = ANEutils->getInt32(argv[0]);
+		double intptr = ANEutils->getDouble(argv[0]);
 		int width = ANEutils->getInt32(argv[1]);
 		int height = ANEutils->getInt32(argv[2]);
 
-		if (debug)printf("\n%s %s  %d    %d   %d", TAG, "ANE_glfwSetWindowSize", intptr , width,height);
+		if (debug)printf("\n%s %s  %lf    %d   %d", TAG, "ANE_glfwSetWindowSize", intptr , width,height);
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
 			glfwSetWindowSize(window,width,height);
@@ -127,38 +221,42 @@ extern "C" {
 		return NULL;
 	}
 
-	
 	FREObject ANE_glfwSetWindowSizeCallback(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		int intptr = ANEutils->getInt32(argv[0]);
+		double intptr = ANEutils->getDouble(argv[0]);
 
 		std::string funName = ANEutils->getString(argv[1]);
 
-		if (debug)printf("\n%s %s  %d  ", TAG, "ANE_glfwSetWindowSize", intptr);
+		if (debug)printf("\n%s %s  %lf  ", TAG, "ANE_glfwSetWindowSize", intptr);
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
-			auto callback = [](GLFWwindow* window, int width, int height)
+
+
+			glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height)
 			{
-				int int_window = (intptr_t)window;
+				auto int_window = (intptr_t)window;
 
+				ANEutils->dispatchEvent("WindowSizeCallback", std::to_string(int_window) + FGS + std::to_string(width) + FGS + std::to_string(height));
+				
+				/*
 				FREObject asData;
-				if (FREGetContextActionScriptData(ctxContext, &asData) == FRE_OK)
+				FREResult result = FREGetContextActionScriptData(ctxContext, &asData);
+				std::cout << "result" << result << std::endl;
+				if (result == FRE_OK)
 				{
-					FREObject callback;
-					FREGetObjectProperty(asData, (uint8_t*)"callback", &callback, NULL);
-					
-					std::string callName = "WindowSizeCallback_" + std::to_string(int_window);
+				FREObject callback;
+				FREGetObjectProperty(asData, (uint8_t*)"callback", &callback, NULL);
 
-					FREObject argv[3];
-					argv[0] = ANEutils->getFREObject(int_window);
-					argv[1] = ANEutils->getFREObject(width);
-					argv[2] = ANEutils->getFREObject(height);
-					
-					FRECallObjectMethod(callback, (uint8_t*)callName.c_str(), 3, argv, NULL, NULL);
+				std::string callName = "WindowSizeCallback_" + std::to_string(int_window);
 
+				FREObject argv[3];
+				argv[0] = ANEutils->getFREObject(int_window);
+				argv[1] = ANEutils->getFREObject(width);
+				argv[2] = ANEutils->getFREObject(height);
+				FRECallObjectMethod(callback, (uint8_t*)callName.c_str(), 3, argv, NULL, NULL);
 				}
-			};
-			glfwSetWindowSizeCallback(window, callback);
+				*/
+			});
 		}
 		return NULL;
 	}
@@ -175,9 +273,9 @@ extern "C" {
 
 	FREObject ANE_glfwWindowShouldClose(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		int intptr = ANEutils->getInt32(argv[0]);
+		double intptr = ANEutils->getDouble(argv[0]);
 
-		if (debug)printf("\n%s %s  %d", TAG, "ANE_glfwWindowShouldClose", intptr);
+		if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwWindowShouldClose", intptr);
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
 			return ANEutils->getFREObject(glfwWindowShouldClose(window));
@@ -188,11 +286,10 @@ extern "C" {
 
 	FREObject ANE_glfwSetWindowShouldClose(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		int intptr = ANEutils->getInt32(argv[0]);
-
+		double intptr = ANEutils->getDouble(argv[0]);
 		int value = ANEutils->getInt32(argv[1]);
 
-		if (debug)printf("\n%s %s  %d", TAG, "ANE_glfwSetWindowShouldClose", intptr);
+		if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwSetWindowShouldClose", intptr);
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
 			glfwSetWindowShouldClose(window, value);
@@ -203,9 +300,9 @@ extern "C" {
 
 	FREObject ANE_glfwSwapBuffers(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		int intptr = ANEutils->getInt32(argv[0]);
+		double intptr = ANEutils->getDouble(argv[0]);
 
-		if (debug)printf("\n%s %s  %d", TAG, "ANE_glfwSwapBuffers", intptr);
+		if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwSwapBuffers", intptr);
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
 			glfwSwapBuffers(window);
@@ -237,9 +334,9 @@ extern "C" {
 	FREObject ANE_glViewport(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		int x = ANEutils->getInt32(argv[0]);
-		int y = ANEutils->getInt32(argv[0]);
-		int width = ANEutils->getInt32(argv[0]);
-		int height = ANEutils->getInt32(argv[0]);
+		int y = ANEutils->getInt32(argv[1]);
+		int width = ANEutils->getInt32(argv[2]);
+		int height = ANEutils->getInt32(argv[3]);
 		glViewport(x,y,width,height);
 		return NULL;
 	}
@@ -476,20 +573,30 @@ extern "C" {
 	// Flash Native Extensions stuff	
 	void ANEGLFWContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToSet, const FRENamedFunction** functionsToSet) {
 
-		ctxContext = ctx;
+		ANEutils->ctxContext = ctx;
 
 		static FRENamedFunction extensionFunctions[] =
 		{
 			{ (const uint8_t*)"isSupported",					NULL, &isSupported },
 			{ (const uint8_t*)"debug",					NULL, &isDeBug },
 
+			
+			{ (const uint8_t*)"AIRWindowHwnd",					NULL, &ANE_AIRWindowHwnd },
+			{ (const uint8_t*)"SetParent",					NULL, &ANE_SetParent },
+			{ (const uint8_t*)"openGLToNativeWindow",					NULL, &ANE_openGLToNativeWindow },
+			
 			{ (const uint8_t*)"glfwInit",					NULL, &ANE_glfwInit },
 			{ (const uint8_t*)"glfwTerminate",					NULL, &ANE_glfwTerminate },
 
 			{ (const uint8_t*)"glfwWindowHint",					NULL, &ANE_glfwWindowHint },
 
 			{ (const uint8_t*)"glfwCreateWindow",					NULL, &ANE_glfwCreateWindow },
-			{ (const uint8_t*)"glfwMakeContextCurrent",					NULL, &ANE_glfwMakeContextCurrent },
+			{ (const uint8_t*)"glfwDestroyWindow",					NULL, &ANE_glfwDestroyWindow },
+			
+			{ (const uint8_t*)"glfwGetWin32Window",					NULL, &ANE_glfwGetWin32Window },
+
+			{ (const uint8_t*)"glfwMakeContextCurrent",					NULL, &ANE_glfwMakeContextCurrent },			
+			{ (const uint8_t*)"glfwSetWindowPos",					NULL, &ANE_glfwSetWindowPos },
 			{ (const uint8_t*)"glfwSetWindowSize",					NULL, &ANE_glfwSetWindowSize },
 			{ (const uint8_t*)"glfwSetWindowSizeCallback",					NULL, &ANE_glfwSetWindowSizeCallback },
 			

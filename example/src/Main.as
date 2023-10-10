@@ -1,19 +1,16 @@
 package {
-    //import flash.desktop.NativeApplication;
     import com.vsdevelop.air.extension.glfw.ANEGLFW;
     import com.vsdevelop.air.extension.glfw.Gl;
     import com.vsdevelop.air.extension.glfw.Glfw;
     import com.vsdevelop.controls.Fps;
+	import flash.display.Screen;
     import flash.events.Event;
     import flash.display.Sprite;
     import flash.display.StageAlign;
     import flash.display.StageScaleMode;
     import flash.events.MouseEvent;
-    import flash.external.ExtensionContext;
-    import flash.filesystem.File;
-    import flash.ui.Multitouch;
-    import flash.ui.MultitouchInputMode;
-    import flash.display.BitmapData;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
     
     /**
      * ...
@@ -25,64 +22,98 @@ package {
         [Embed(source = "../assets/vs.hlsl", mimeType = "application/octet-stream")]
         private var vsHlsl:Class;
         
-        [Embed(source = "../assets/fs.hlsl", mimeType = "application/octet-stream")]
+        [Embed(source = "../assets/Ms2SDc.hlsl", mimeType = "application/octet-stream")]
+		//[Embed(source="../assets/3lsSzf.hlsl", mimeType="application/octet-stream")]
+		//[Embed(source="../assets/Ms2SD1.hlsl", mimeType="application/octet-stream")]
+		//[Embed(source="../assets/tsXBzS.hlsl", mimeType="application/octet-stream")]
         private var fsHlsl:Class;
         
-        private var windowIntPtr:int;
+        private var windowIntPtr:Number;
         private var shaderProgram:int;
 		private var frame:int;
+		
+		
+		private var glWidth:int = 800;
+		private var glHeight:int = 450;
+		private var note:flash.text.TextField;
         
+		
+		private var isAIRWindow:Boolean = true;
+		
         public function Main():void {
             stage.align = StageAlign.TOP_LEFT;
             stage.scaleMode = StageScaleMode.NO_SCALE;
             // entry point
             
             stage.nativeWindow.addEventListener(Event.CLOSING, closeApp);
+			stage.addEventListener(Event.RESIZE, stageResize);
             
             if (ANEGLFW.getInstance().isSupported) {
+				
+				note = new TextField();
+				note.defaultTextFormat = new TextFormat(null, 14, 0xffffff);
+				note.text = "click start";
+				addChild(note);
+				
+				note.x =  200;
+				note.y = 20;
+				
                 ANEGLFW.getInstance().debug = false;
                 stage.addEventListener(MouseEvent.CLICK, click);
-                initTest();
             }
             addChild(new Fps());
         }
+		
+		private function stageResize(e:Event):void 
+		{
+			if (isAIRWindow && frame)
+			{
+				Glfw.glfwSetWindowPos(windowIntPtr, 0, 60);
+				Glfw.glfwSetWindowSize(windowIntPtr, stage.stageWidth * Screen.mainScreen.contentsScaleFactor, stage.stageHeight * Screen.mainScreen.contentsScaleFactor);				
+			}
+		}
         
-        private function initTest():void {
-            //var vector:Vector.<Number> = new <Number>[
-            //-1.0, -1.0,     0.0, 0.0,
-            //-1.0, 1.0,      0.0, 1.0,
-            //1.0, -1.0,      1.0, 0.0,
-            //
-            //1.0, -1.0,      1.0, 0.0,
-            //-1.0, 1.0,      0.0, 1.0,
-            //1.0, 1.0,       1.0, 1.0
-            //];
-            //ANEGLFW.getInstance().context.call("glBufferData",1,vector,2);
-        }
-        
+		private function framebuffer_size_callback(wIntPtr:Number,width:int,height:int):void{
+			//trace("glfwSetWindowSizeCallback", wIntPtr, width, height);
+			glWidth = width;
+			glHeight = height;
+			Gl.glViewport(0, 0, width, height);
+		}
         private function click(e:MouseEvent):void {
             
+			removeChild(note);
             stage.removeEventListener(MouseEvent.CLICK, click);
             
-            if (!Glfw.glfwInit()) {
-                trace("glfw init error！");
-                return;
-            }
-            
+            Glfw.glfwInit();
             Glfw.glfwWindowHint(Glfw.GLFW_SAMPLES, 4);
             Glfw.glfwWindowHint(Glfw.GLFW_CONTEXT_VERSION_MAJOR, 3);
             Glfw.glfwWindowHint(Glfw.GLFW_CONTEXT_VERSION_MINOR, 3);
             Glfw.glfwWindowHint(Glfw.GLFW_OPENGL_PROFILE, Glfw.GLFW_OPENGL_CORE_PROFILE);
             Glfw.glfwWindowHint(Glfw.GLFW_OPENGL_FORWARD_COMPAT, 1);
-            windowIntPtr = Glfw.glfwCreateWindow(800, 450, "Test");
+			
+			//bind air window
+			if (isAIRWindow){
+				Glfw.glfwWindowHint(Glfw.GLFW_DECORATED, 0);
+				Glfw.glfwWindowHint(Glfw.GLFW_FOCUSED, 0);
+				Glfw.glfwWindowHint(Glfw.GLFW_RESIZABLE, 0);
+				Glfw.glfwWindowHint(Glfw.GLFW_VISIBLE, 0);
+			}
+
+            windowIntPtr = Glfw.glfwCreateWindow(glWidth, glHeight, "Test");
             trace("intptr", windowIntPtr);
             if (!windowIntPtr) return;
+			
+			if (isAIRWindow){
+				var hwnd:int = Glfw.glfwGetWin32Window(windowIntPtr);
+				if (hwnd)
+				{
+					ANEGLFW.getInstance().openGLToNativeWindow(hwnd, stage.nativeWindow);
+					Glfw.glfwSetWindowPos(windowIntPtr, 100, 100);
+				}
+			}
+			
             Glfw.glfwMakeContextCurrent(windowIntPtr);
-			
-			
-			Glfw.glfwSetWindowSizeCallback(windowIntPtr, function(wIntPtr:int,width:int,height:int):void{
-				trace("glfwSetWindowSizeCallback",wIntPtr, width, height);
-			});
+			Glfw.glfwSetWindowSizeCallback(windowIntPtr, framebuffer_size_callback);
             
             if (!Gl.gladLoadGLLoader()) {
                 trace("GL error");
@@ -93,6 +124,7 @@ package {
 													-1.0, -1.0, 0.0, 0.0, 
 													-1.0, 1.0, 0.0, 1.0, 
 													1.0, -1.0, 1.0, 0.0,
+													
 													1.0, -1.0, 1.0, 0.0, 
 													-1.0, 1.0, 0.0, 1.0, 
 													1.0, 1.0, 1.0, 1.0];
@@ -133,8 +165,8 @@ package {
             Gl.glDeleteShader(vertexShader);
             Gl.glDeleteShader(fragmentShader);
             
-			
-			enterFrame();
+			Glfw.glfwSwapInterval(true);
+			//enterFrame();
             addEventListener(Event.ENTER_FRAME, enterFrame);
         }
         
@@ -145,7 +177,7 @@ package {
                 Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
                 
                 Gl.glUseProgram(shaderProgram);
-                Gl.glUniform3f(Gl.glGetUniformLocation(shaderProgram, "iResolution"), 800, 450, 1);
+                Gl.glUniform3f(Gl.glGetUniformLocation(shaderProgram, "iResolution"), glWidth, glHeight, 1);
                 Gl.glUniform1f(Gl.glGetUniformLocation(shaderProgram, "iTime"), Gl.glfwGetTime());
 				Gl.glUniform1f(Gl.glGetUniformLocation(shaderProgram, "iFrame"), frame);
                 Gl.glDrawArrays(Gl.GL_TRIANGLES, 0, 6);
@@ -158,8 +190,11 @@ package {
         }
         
         private function closeApp(e:Event):void {
-            Glfw.glfwSetWindowShouldClose(windowIntPtr, true);
+			
             removeEventListener(Event.ENTER_FRAME, enterFrame);
+            Glfw.glfwSetWindowShouldClose(windowIntPtr, true);
+			Glfw.glfwDestroyWindow(windowIntPtr);
+			
             ANEGLFW.getInstance().dispose();
         }
     
