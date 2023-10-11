@@ -19,10 +19,7 @@ extern "C" {
 	FREObject isSupported(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		printf("\n%s %s", TAG, "isSupport");
-		FREObject result;
-		auto status = FRENewObjectFromBool(true, &result);
-		
-		return result;
+		return ANEutils->AS_Boolean(true);
 	}
 
 	FREObject isDeBug(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
@@ -43,7 +40,7 @@ extern "C" {
 			hwnd = (int)nativeWindow;
 			FREReleaseNativeWindowHandle(window);
 		}
-		return ANEutils->getFREObject(hwnd);
+		return ANEutils->AS_int(hwnd);
 	}
 
 	FREObject ANE_SetParent(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
@@ -142,7 +139,7 @@ extern "C" {
 		if (!window)
 		{
 			std::cerr << "failed to create window" << std::endl;
-			return ANEutils->getFREObject(0);
+			return ANEutils->AS_int(0);
 		}
 		
 		double int_window = (intptr_t)window;
@@ -151,7 +148,7 @@ extern "C" {
 			std::cout << "\n intptr_t=" << int_window << std::endl;
 		}
 
-		return ANEutils->getFREObject(int_window);
+		return ANEutils->AS_Number(int_window);
 	}
 
 
@@ -173,9 +170,9 @@ extern "C" {
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
 		  HWND hwnd = glfwGetWin32Window(window);
-		  return ANEutils->getFREObject((int)hwnd);
+		  return ANEutils->AS_int((int)hwnd);
 		}
-		return ANEutils->getFREObject(0);
+		return ANEutils->AS_int(0);
 	}
 
 	FREObject ANE_glfwMakeContextCurrent(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
@@ -231,32 +228,17 @@ extern "C" {
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
 
+			if (funName.length()) {
+				glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height)
+					{
+						auto int_window = (intptr_t)window;
 
-			glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height)
-			{
-				auto int_window = (intptr_t)window;
-
-				ANEutils->dispatchEvent("WindowSizeCallback", std::to_string(int_window) + FGS + std::to_string(width) + FGS + std::to_string(height));
-				
-				/*
-				FREObject asData;
-				FREResult result = FREGetContextActionScriptData(ctxContext, &asData);
-				std::cout << "result" << result << std::endl;
-				if (result == FRE_OK)
-				{
-				FREObject callback;
-				FREGetObjectProperty(asData, (uint8_t*)"callback", &callback, NULL);
-
-				std::string callName = "WindowSizeCallback_" + std::to_string(int_window);
-
-				FREObject argv[3];
-				argv[0] = ANEutils->getFREObject(int_window);
-				argv[1] = ANEutils->getFREObject(width);
-				argv[2] = ANEutils->getFREObject(height);
-				FRECallObjectMethod(callback, (uint8_t*)callName.c_str(), 3, argv, NULL, NULL);
-				}
-				*/
-			});
+						ANEutils->dispatchEvent("WindowSizeCallback", std::to_string(int_window) + FGS + std::to_string(width) + FGS + std::to_string(height));
+					});
+			}
+			else {
+				glfwSetWindowSizeCallback(window, NULL);
+			}
 		}
 		return NULL;
 	}
@@ -278,9 +260,9 @@ extern "C" {
 		if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwWindowShouldClose", intptr);
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
-			return ANEutils->getFREObject(glfwWindowShouldClose(window));
+			return ANEutils->AS_int(glfwWindowShouldClose(window));
 		}
-		return ANEutils->getFREObject(0);
+		return ANEutils->AS_int(0);
 	}
 
 
@@ -319,6 +301,76 @@ extern "C" {
 		return NULL;
 	}
 
+
+	FREObject ANE_glfwSetInputMode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		double intptr = ANEutils->getDouble(argv[0]);
+		int model = ANEutils->getInt32(argv[1]);
+		int value = ANEutils->getInt32(argv[2]);
+		if (debug)printf("\n%s %s  %lf  ", TAG, "ANE_glfwSetInputMode", intptr);
+		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
+		if (window) {
+			glfwSetInputMode(window,model,value);
+		}
+		return NULL;
+	}
+	FREObject ANE_glfwGetCursorPos(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		double xpos, ypos;
+		double intptr = ANEutils->getDouble(argv[0]);
+		if (debug)printf("\n%s %s  %lf  ", TAG, "ANE_glfwGetCursorPos", intptr);
+		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
+		if (window) {
+			glfwGetCursorPos(window, &xpos, &ypos);
+		}
+		return ANEutils->AS_Point(xpos, ypos);
+	}
+
+	FREObject ANE_glfwSetCursorPosCallback(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		double intptr = ANEutils->getDouble(argv[0]);
+
+		std::string funName = ANEutils->getString(argv[1]);
+		if (debug)printf("\n%s %s  %lf  ", TAG, "ANE_glfwSetCursorPosCallback", intptr);
+		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
+		if (window) {
+			if (funName.length()) {
+				glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos)
+					{
+						auto int_window = (intptr_t)window;
+
+						ANEutils->dispatchEvent("CursorPosCallback", std::to_string(int_window) + FGS + std::to_string(xpos) + FGS + std::to_string(ypos));
+				});
+			}
+			else {
+				glfwSetCursorPosCallback(window, NULL);
+			}
+		}
+		return NULL;
+	}
+	
+	FREObject ANE_glfwSetMouseButtonCallback(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		double intptr = ANEutils->getDouble(argv[0]);
+
+		std::string funName = ANEutils->getString(argv[1]);
+		if (debug)printf("\n%s %s  %lf  ", TAG, "ANE_glfwSetMouseButtonCallback", intptr);
+		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
+		if (window) {
+			if (funName.length()) {
+				glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods)
+					{
+						auto int_window = (intptr_t)window;
+
+						ANEutils->dispatchEvent("MouseButtonCallback", std::to_string(int_window) + FGS + std::to_string(button) + FGS + std::to_string(action) + FGS + std::to_string(mods));
+					});
+			}
+			else {
+				glfwSetMouseButtonCallback(window, NULL);
+			}
+		}
+		return NULL;
+	}
 	///--GLFW----------------------------------------------------------------------------------------------
 
 
@@ -326,7 +378,7 @@ extern "C" {
 
 	FREObject ANE_gladLoadGLLoader(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		return ANEutils->getFREObject(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress));
+		return ANEutils->AS_int(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress));
 	}
 
 
@@ -346,7 +398,7 @@ extern "C" {
 		int sizei = ANEutils->getInt32(argv[0]);
 		GLuint VBO;
 		glGenVertexArrays(sizei, &VBO);
-		return ANEutils->getFREObject((int)VBO);
+		return ANEutils->AS_int((int)VBO);
 	}
 
 	FREObject ANE_glBindVertexArray(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
@@ -362,7 +414,7 @@ extern "C" {
 		int sizei = ANEutils->getInt32(argv[0]);
 		GLuint VBO;
 		glGenBuffers(sizei, &VBO);
-		return ANEutils->getFREObject((int)VBO);
+		return ANEutils->AS_int((int)VBO);
 	}
 
 	FREObject ANE_glBindBuffer(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
@@ -422,7 +474,7 @@ extern "C" {
 	FREObject ANE_glCreateShader(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		int shader = ANEutils->getInt32(argv[0]);
-		return ANEutils->getFREObject((int)glCreateShader(shader));
+		return ANEutils->AS_int((int)glCreateShader(shader));
 	}
 	FREObject ANE_glShaderSource(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
@@ -450,7 +502,7 @@ extern "C" {
 	
 	FREObject ANE_glCreateProgram(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		return ANEutils->getFREObject((int)glCreateProgram());
+		return ANEutils->AS_int((int)glCreateProgram());
 	}
 	FREObject ANE_glAttachShader(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
@@ -479,7 +531,7 @@ extern "C" {
 	{
 		int program = ANEutils->getInt32(argv[0]);
 		std::string name = ANEutils->getString(argv[1]);
-		return ANEutils->getFREObject((int)glGetUniformLocation(program, name.c_str()));
+		return ANEutils->AS_int((int)glGetUniformLocation(program, name.c_str()));
 	}
 	
 
@@ -513,7 +565,7 @@ extern "C" {
 	
 	FREObject ANE_glfwGetTime(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		return ANEutils->getFREObject(glfwGetTime());
+		return ANEutils->AS_Number(glfwGetTime());
 	}
 
 	FREObject ANE_glDrawArrays(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
@@ -607,6 +659,11 @@ extern "C" {
 			
 			{ (const uint8_t*)"glfwSwapBuffers",					NULL, &ANE_glfwSwapBuffers },
 			{ (const uint8_t*)"glfwPollEvents",					NULL, &ANE_glfwPollEvents },
+
+			{ (const uint8_t*)"glfwGetCursorPos",					NULL, &ANE_glfwGetCursorPos },
+			{ (const uint8_t*)"glfwSetInputMode",					NULL, &ANE_glfwSetInputMode },
+			{ (const uint8_t*)"glfwSetCursorPosCallback",					NULL, &ANE_glfwSetCursorPosCallback },
+			{ (const uint8_t*)"glfwSetMouseButtonCallback",					NULL, &ANE_glfwSetMouseButtonCallback },
 			
 
 			//GL

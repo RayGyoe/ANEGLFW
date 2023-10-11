@@ -97,11 +97,17 @@ package com.vsdevelop.air.extension.glfw
 			switch (e.code) 
 			{
 				case "WindowSizeCallback":
-					arr = e.level.split("||");					
-					if (actionScriptData.callback["WindowSizeCallback_"+arr[0]]){
-						actionScriptData.callback["WindowSizeCallback_" + arr[0]](Number(arr[0]), int(arr[1]), int(arr[2]));
+				case "CursorPosCallback":
+					arr = e.level.split("||");
+					if (actionScriptData.callback[e.code+"_"+arr[0]]){
+						actionScriptData.callback[e.code+"_"+arr[0]](Number(arr[0]), int(arr[1]), int(arr[2]));
 					}
-					
+				break;
+				case "MouseButtonCallback":
+					arr = e.level.split("||");
+					if (actionScriptData.callback[e.code+"_"+arr[0]]){
+						actionScriptData.callback[e.code+"_"+arr[0]](Number(arr[0]), int(arr[1]), int(arr[2]), int(arr[3]));
+					}
 				break;
 			}
 		}

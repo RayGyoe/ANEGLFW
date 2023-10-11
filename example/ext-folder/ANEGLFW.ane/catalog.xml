@@ -10,14 +10,10 @@
   </features>
   <libraries>
     <library path="library.swf">
-      <script name="_0dc944fbde8fe30afd3cdd037f08d437fdfe7cf301db93b3a9672745ac8a8332_flash_display_Sprite" mod="1696960774315" signatureChecksum="418937979" >
-        <def id="_0dc944fbde8fe30afd3cdd037f08d437fdfe7cf301db93b3a9672745ac8a8332_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1696960158698" signatureChecksum="10127310" >
+      <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1697043865605" signatureChecksum="3470778787" >
         <def id="com.vsdevelop.air.extension.glfw:Glfw" /> 
+        <dep id="flash.geom:Point" type="s" /> 
+        <dep id="flash.geom:Point" type="e" /> 
         <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e" /> 
         <dep id="Error" type="e" /> 
         <dep id="Object" type="i" /> 
@@ -30,7 +26,13 @@
         <dep id="Object" type="i" /> 
         <dep id="AS3" type="n" /> 
       </script>
-      <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1696960484677" signatureChecksum="512801124" >
+      <script name="_e36213a63d78fe5b1297cae28067d132c135dd1fda22e91e0b9a573f6e37a0ff_flash_display_Sprite" mod="1697043941538" signatureChecksum="2874178273" >
+        <def id="_e36213a63d78fe5b1297cae28067d132c135dd1fda22e91e0b9a573f6e37a0ff_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1697043920743" signatureChecksum="512801124" >
         <def id="com.vsdevelop.air.extension.glfw:ANEGLFW" /> 
         <dep id="flash.display:NativeWindow" type="s" /> 
         <dep id="flash.events:StatusEvent" type="s" /> 
@@ -43,7 +45,7 @@
         <dep id="AS3" type="n" /> 
       </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="a28ed4c6117297c4efd65b7dd323a3a6550d687c43bacc9162933a00b79e79a6"   />
+        <digest type="SHA-256" signed="false" value="af683195353fbd0b519a6e2ff238682e2963a58b003b9a9db0452e2e7d2372dc"   />
       </digests>
     </library>
   </libraries>

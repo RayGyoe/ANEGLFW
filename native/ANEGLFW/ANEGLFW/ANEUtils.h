@@ -24,6 +24,7 @@
 
 #include "FlashRuntimeExtensions.h"
 
+
 using std::string;
 using namespace std;
 
@@ -43,29 +44,66 @@ typedef unsigned long long	uint64;
 #define SafeDeleteVideoArr(pArr) {delete[] pArr; pArr = 0;}
 
 
-static auto wrap = [](auto f) noexcept {
-	try {
-		f();
-	}
-	catch (std::exception& e) {
-		std::cout << "Exception in foo_chronflow EngineWindow event handler: " << e.what() << std::endl;
-	}
-};
+
+
 
 
 class ANEUtils {
 
 public:
-	FREObject getFREObject(std::string value);
-	FREObject getFREObject(const char *value);
-	FREObject getFREObject(double value);
-	FREObject getFREObject(bool value);
-	FREObject getFREObject(int32_t value);
-	FREObject getFREObject(uint32_t value);
-	FREObject getFREObject(uint8_t value);
+
+	FREObject AS_String(std::string value) {
+		FREObject result;
+		FRENewObjectFromUTF8(uint32_t(value.length()), reinterpret_cast<const uint8_t*>(value.data()), &result);
+		return result;
+	}
+	FREObject AS_String(const char* value) {
+		FREObject result;
+		FRENewObjectFromUTF8(uint32_t(strlen(value)) + 1, reinterpret_cast<const uint8_t*>(value), &result);
+		return result;
+	}
+
 	
-	
-	std::string intToStdString(int value);
+	FREObject AS_int(int32_t value) {
+		FREObject result;
+		FRENewObjectFromInt32(value, &result);
+		return result;
+	}
+
+	FREObject AS_uint(uint32_t value) {
+		FREObject result;
+		FRENewObjectFromUint32(value, &result);
+		return result;
+	}
+	FREObject AS_uint(uint8_t value) {
+		FREObject result;
+		FRENewObjectFromUint32(value, &result);
+		return result;
+	}
+
+
+	FREObject AS_Boolean(bool value) {
+		FREObject result;
+		FRENewObjectFromBool(value, &result);
+		return result;
+	}
+
+	FREObject AS_Number(double value) {
+		FREObject result;
+		FRENewObjectFromDouble(value, &result);
+		return result;
+	}
+
+	FREObject AS_Point(double x, double y) {
+		FREObject obj;
+		FREObject argv[] = {
+			AS_Number(x),
+			AS_Number(y)
+		};
+		FRENewObject(reinterpret_cast<const uint8_t*>("flash.geom.Point"), 2, argv, &obj, nullptr);
+		return obj;
+	}
+
 
 	uint32_t getUInt32(FREObject freObject);
 	int32_t getInt32(FREObject freObject);
@@ -73,11 +111,11 @@ public:
 	bool getBool(FREObject freObject);
 	double getDouble(FREObject freObject);
 
+	std::string intToStdString(int value);
 	std::string string_To_UTF8(const std::string& str);
 	std::wstring to_wide_string(const std::string & input);
 	std::string to_byte_string(const std::wstring & input);
 	std::wstring s2ws(const std::string& str);
-
 	wchar_t* chatToWchar(const char* ch);
 	char* wcharToChar(const wchar_t* wch);
 
@@ -89,7 +127,6 @@ public:
 	bool LoadBundle(std::string strRealPath, vector<char>& data);
 
 	string UrlUTF8(char * str);
-
 
 private:
 	bool isFREResultOK(FREResult errorCode, std::string errorMessage);

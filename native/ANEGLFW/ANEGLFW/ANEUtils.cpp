@@ -164,47 +164,6 @@ std::string ANEUtils::intToStdString(int value)
 }
 
 
-FREObject ANEUtils::getFREObject(std::string value) {
-	FREObject result;
-	auto status = FRENewObjectFromUTF8(uint32_t(value.length()), reinterpret_cast<const uint8_t *>(value.data()), &result);
-	return result;
-}
-
-FREObject ANEUtils::getFREObject(const char *value) {
-	FREObject result;
-	auto status = FRENewObjectFromUTF8(uint32_t(strlen(value)) + 1, reinterpret_cast<const uint8_t *>(value), &result);
-	return result;
-}
-
-FREObject ANEUtils::getFREObject(double value) {
-	FREObject result;
-	auto status = FRENewObjectFromDouble(value, &result);
-	return result;
-}
-
-FREObject ANEUtils::getFREObject(bool value) {
-	FREObject result;
-	auto status = FRENewObjectFromBool(value, &result);
-	return result;
-}
-
-FREObject ANEUtils::getFREObject(int32_t value) {
-	FREObject result;
-	auto status = FRENewObjectFromInt32(value, &result);
-	return result;
-}
-
-FREObject ANEUtils::getFREObject(uint32_t value) {
-	FREObject result;
-	auto status = FRENewObjectFromUint32(value, &result);
-	return result;
-}
-
-FREObject ANEUtils::getFREObject(uint8_t value) {
-	FREObject result;
-	auto status = FRENewObjectFromUint32(value, &result);
-	return result;
-}
 /*
 
 
