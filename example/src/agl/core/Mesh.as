@@ -15,6 +15,11 @@ package agl.core
 		private var _vertexBuffer:VertexBuffer;
 		private var _indexBuffer:IndexBuffer;
 		
+<<<<<<< HEAD
+		public var shader:Shader;
+		
+=======
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 		public function Mesh(vertexFormat:VertexFormat)
 		{
 			_vertexBuffer = new VertexBuffer(vertexFormat);
@@ -48,17 +53,31 @@ package agl.core
 			}
 		}
 		
+<<<<<<< HEAD
+		public function render():void
+		{
+			Gl.glBindBuffer(this._vertexBuffer.vbo,Gl.GL_ARRAY_BUFFER);
+=======
 		public function render(shader:Shader):void
 		{
 			Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, this._vertexBuffer.vbo);
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 			
 			this._vertexBuffer.bindAttrib(shader);
 			
 			if (this._indexBuffer)
 			{
+<<<<<<< HEAD
+				Gl.glBindBuffer(this._indexBuffer.vbo,Gl.GL_ELEMENT_ARRAY_BUFFER);
+				//Gl.glDrawElements(this._indexBuffer.mode, this._indexBuffer.indexCount, this._indexBuffer.type, 0);
+				Gl.glDrawArrays(Gl.GL_TRIANGLES, 0, this._indexBuffer.indexCount);
+				
+				Gl.glBindBuffer(0, Gl.GL_ELEMENT_ARRAY_BUFFER);
+=======
 				Gl.glBindBuffer(Gl.GL_ELEMENT_ARRAY_BUFFER, this._indexBuffer.vbo);
 				Gl.glDrawElements(this._indexBuffer.mode, this._indexBuffer.indexCount, this._indexBuffer.type, 0);
 				Gl.glBindBuffer(Gl.GL_ELEMENT_ARRAY_BUFFER, null);
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 			}
 			else
 			{
@@ -67,7 +86,11 @@ package agl.core
 			
 			this._vertexBuffer.unbindAttrib(shader);
 			
+<<<<<<< HEAD
+			Gl.glBindBuffer(0,Gl.GL_ARRAY_BUFFER);
+=======
 			Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, null);
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 		}
 	}
 

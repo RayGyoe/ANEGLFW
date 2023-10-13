@@ -10,7 +10,7 @@
   </features>
   <libraries>
     <library path="library.swf">
-      <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1697043865605" signatureChecksum="3470778787" >
+      <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1697203906070" signatureChecksum="841483291" >
         <def id="com.vsdevelop.air.extension.glfw:Glfw" /> 
         <dep id="flash.geom:Point" type="s" /> 
         <dep id="flash.geom:Point" type="e" /> 
@@ -19,20 +19,21 @@
         <dep id="Object" type="i" /> 
         <dep id="AS3" type="n" /> 
       </script>
-      <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1696940685382" signatureChecksum="2633439957" >
+      <script name="_877e76fc58494128456788a52afb4bb4fea19786ec720b655606965ed4c44137_flash_display_Sprite" mod="1697215491806" signatureChecksum="983136423" >
+        <def id="_877e76fc58494128456788a52afb4bb4fea19786ec720b655606965ed4c44137_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1697215487082" signatureChecksum="778491414" >
         <def id="com.vsdevelop.air.extension.glfw:Gl" /> 
+        <dep id="flash.geom:Matrix3D" type="s" /> 
         <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e" /> 
         <dep id="Error" type="e" /> 
         <dep id="Object" type="i" /> 
         <dep id="AS3" type="n" /> 
       </script>
-      <script name="_e36213a63d78fe5b1297cae28067d132c135dd1fda22e91e0b9a573f6e37a0ff_flash_display_Sprite" mod="1697043941538" signatureChecksum="2874178273" >
-        <def id="_e36213a63d78fe5b1297cae28067d132c135dd1fda22e91e0b9a573f6e37a0ff_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1697043920743" signatureChecksum="512801124" >
+      <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1697203932941" signatureChecksum="512801124" >
         <def id="com.vsdevelop.air.extension.glfw:ANEGLFW" /> 
         <dep id="flash.display:NativeWindow" type="s" /> 
         <dep id="flash.events:StatusEvent" type="s" /> 
@@ -45,7 +46,7 @@
         <dep id="AS3" type="n" /> 
       </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="af683195353fbd0b519a6e2ff238682e2963a58b003b9a9db0452e2e7d2372dc"   />
+        <digest type="SHA-256" signed="false" value="6c190d03d8490c2ece586f3d17d8b41691962e4017505110f8253cce2970b130"   />
       </digests>
     </library>
   </libraries>

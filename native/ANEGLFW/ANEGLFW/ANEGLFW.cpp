@@ -79,14 +79,36 @@ extern "C" {
 
 	///--GLFW----------------------------------------------------------------------------------------------
 
+	
+	FREObject ANE_glfwGetVersionString(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		if (debug)printf("\n%s %s", TAG, "glfwGetVersionString");
+		return ANEutils->AS_String(glfwGetVersionString());
+	}
+
+
+	FREObject ANE_glfwSetErrorCallback(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		std::string funName = ANEutils->getString(argv[0]);
+		if (debug)printf("\n%s %s  %s  ", TAG, "ANE_glfwSetErrorCallback", funName.c_str());
+
+		if (funName.length()) {
+			glfwSetErrorCallback([](int error_code, const char* description)
+				{
+					ANEutils->dispatchEvent("ErrorCallback", std::to_string(error_code) + FGS + std::string(description));
+				});
+		}
+		else {
+			glfwSetErrorCallback(NULL);
+		}
+		return NULL;
+	}
+	
 
 	FREObject ANE_glfwInit(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		if (debug)printf("\n%s %s", TAG, "ANE_glfwInit");
-
-		FREObject result;
-		auto status = FRENewObjectFromInt32(glfwInit(), &result);
-		return result;
+		return ANEutils->AS_int(glfwInit());
 	}
 
 
@@ -257,7 +279,7 @@ extern "C" {
 	{
 		double intptr = ANEutils->getDouble(argv[0]);
 
-		if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwWindowShouldClose", intptr);
+		//if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwWindowShouldClose", intptr);
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
 			return ANEutils->AS_int(glfwWindowShouldClose(window));
@@ -284,7 +306,6 @@ extern "C" {
 	{
 		double intptr = ANEutils->getDouble(argv[0]);
 
-		if (debug)printf("\n%s %s  %lf", TAG, "ANE_glfwSwapBuffers", intptr);
 		GLFWwindow* window = reinterpret_cast<GLFWwindow*>((uintptr_t)intptr);
 		if (window) {
 			glfwSwapBuffers(window);
@@ -371,6 +392,9 @@ extern "C" {
 		}
 		return NULL;
 	}
+
+
+
 	///--GLFW----------------------------------------------------------------------------------------------
 
 
@@ -417,6 +441,32 @@ extern "C" {
 		return ANEutils->AS_int((int)VBO);
 	}
 
+
+	FREObject ANE_glCreateBuffers(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int sizei = ANEutils->getInt32(argv[0]);
+
+		FREObject data = argv[1];
+		uint32_t length;
+		FREGetArrayLength(data, &length);
+		GLuint* buffers = new GLuint[length];
+		for (uint32_t i = 0; i < length; i++) {
+			FREObject value;
+			FREGetArrayElementAt(data, i, &value);
+			buffers[i] = (int)ANEutils->getDouble(value);
+		}
+		glCreateBuffers(sizei, buffers);
+		return NULL;
+	}
+
+	FREObject ANE_glDeleteBuffers(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int sizei = ANEutils->getInt32(argv[0]);
+		uint32_t buffers = ANEutils->getUInt32(argv[1]);
+		glDeleteBuffers(sizei, (GLuint*)buffers);
+		return NULL;
+	}
+
 	FREObject ANE_glBindBuffer(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		int target = ANEutils->getInt32(argv[0]);
@@ -435,15 +485,26 @@ extern "C" {
 		uint32_t length;
 		FREGetArrayLength(data, &length);
 
-		float *Vector = new float[length];
+		if (debug)printf("\n%s %s  %d  %d  %d  %d", TAG, "ANE_glBufferData", target,usage,dataSize,length);
+
+		//float *Vector = new float[length];
+		std::vector<float> Vector;
 		for (uint32_t i = 0; i < length; i++) {
 			FREObject value;
 			FREGetArrayElementAt(data, i, &value);
-			Vector[i] = (float)ANEutils->getDouble(value);
-		}		
-		glBufferData(target, dataSize, Vector, usage);
+			//Vector[i] = (float)ANEutils->getDouble(value);
+			float valuef = static_cast<float>(ANEutils->getDouble(value)) + 0.0f;
+			Vector.push_back(valuef);
+		}
 
-		SafeDelete(Vector);
+		int size = sizeof(float) * Vector.size();
+		if (debug)printf("\n%s %s  %d  %d   ", TAG, "ANE_glBufferData Length", dataSize, size);
+		if (size > dataSize) {
+			dataSize = size;
+		}
+		glBufferData(target, dataSize, &Vector[0], usage);
+
+		//SafeDelete(Vector);
 		return NULL;
 	}
 
@@ -469,7 +530,13 @@ extern "C" {
 	}
 
 
-
+	FREObject ANE_glDisableVertexAttribArray(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		uint32_t index = ANEutils->getUInt32(argv[0]);
+		glDisableVertexAttribArray((GLuint)index);
+		return NULL;
+	}
+	
 
 	FREObject ANE_glCreateShader(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
@@ -562,7 +629,33 @@ extern "C" {
 
 
 
+	FREObject ANE_glUniformMatrix4fv(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int location = ANEutils->getInt32(argv[0]);
+		int count = ANEutils->getInt32(argv[1]);
+		int transpose = ANEutils->getInt32(argv[2]);
+
+		FREObject asData = argv[3];
+
+		FREObject rawData;
+		FREGetObjectProperty(asData, (uint8_t*)"rawData", &rawData, NULL);
+		if (rawData) {
+			uint32_t length;
+			FREGetArrayLength(rawData,&length);
+
+			GLfloat* matrix4 = new GLfloat[length];
+			for (uint32_t i = 0; i < length; i++) {
+				FREObject value;
+				FREGetArrayElementAt(rawData, i, &value);
+				matrix4[i] = (GLfloat)ANEutils->getDouble(value);
+				//if(debug)std::cout << "\n" << i << "=" << matrix4[i] << std::endl;
+			}
+			glUniformMatrix4fv(location, count, (GLboolean)transpose, (const GLfloat*)matrix4);
+		}
+		return NULL;
+	}
 	
+
 	FREObject ANE_glfwGetTime(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		return ANEutils->AS_Number(glfwGetTime());
@@ -576,15 +669,28 @@ extern "C" {
 		glDrawArrays(mode,first,count);
 		return NULL;
 	}
+
 	
+
+	FREObject ANE_glDrawElements(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int mode = ANEutils->getInt32(argv[0]);
+		int count = ANEutils->getInt32(argv[1]);
+		int type = ANEutils->getInt32(argv[2]);
+		int indices = ANEutils->getInt32(argv[3]);
+
+		glDrawElements(mode, count, type, &indices);
+
+		return NULL;
+	}
 
 
 	FREObject ANE_glClearColor(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		int red = ANEutils->getInt32(argv[0]);
-		int green = ANEutils->getInt32(argv[1]);
-		int blue = ANEutils->getInt32(argv[2]);
-		int alpha = ANEutils->getInt32(argv[3]);
+		double red = ANEutils->getDouble(argv[0]);
+		double green = ANEutils->getDouble(argv[1]);
+		double blue = ANEutils->getDouble(argv[2]);
+		double alpha = ANEutils->getDouble(argv[3]);
 		glClearColor((float)red, (float)green, (float)blue, (float)alpha);
 		return NULL;
 	}
@@ -597,22 +703,124 @@ extern "C" {
 	}
 
 
+	FREObject ANE_glPolygonMode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+	//	GLenum face, GLenum mode
+		glPolygonMode(ANEutils->getInt32(argv[0]), ANEutils->getInt32(argv[1]));
+		return NULL;
+	}
+	
+
+	FREObject ANE_glPointSize(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		//	GLenum face, GLenum mode
+		glPointSize((float)ANEutils->getDouble(argv[0]));
+		return NULL;
+	}
+
+
+	FREObject ANE_glCullFace(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		//mode
+		glCullFace(ANEutils->getInt32(argv[0]));
+		return NULL;
+	}
+
+	FREObject ANE_glEnable(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		glEnable(ANEutils->getInt32(argv[0]));
+		return NULL;
+	}
+	FREObject ANE_glDisable(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		glDisable(ANEutils->getInt32(argv[0]));
+		return NULL;
+	}
+	FREObject ANE_glClearDepth(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		glClearDepth(ANEutils->getDouble(argv[0]));
+		return NULL;
+	}
 
 	FREObject ANE_render(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
-		int shaderProgram = ANEutils->getInt32(argv[0]);
+		std::vector<float> sphereVertices;
 
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glUseProgram(shaderProgram);
-		glUniform3f(glGetUniformLocation(shaderProgram, "iResolution")	, (GLfloat)800, (GLfloat)450, 1.0);
-		glUniform1f(glGetUniformLocation(shaderProgram, "iTime")		, (GLfloat)glfwGetTime());
-		//glUniform1f(glGetUniformLocation(shaderProgram, "iFrame"), frame);
-		//glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		const GLfloat  PI = 3.14159265358979323846f;
+		//将球横纵划分成50X50的网格
+		const int Y_SEGMENTS = 50;
+		const int X_SEGMENTS = 50;
+		// 生成球的顶点
+		for (int y = 0; y <= Y_SEGMENTS; y++)
+		{
+			for (int x = 0; x <= X_SEGMENTS; x++)
+			{
+				float xSegment = (float)x / (float)X_SEGMENTS;
+				float ySegment = (float)y / (float)Y_SEGMENTS;
+				float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+				float yPos = std::cos(ySegment * PI);
+				float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
 
+
+				sphereVertices.push_back(xPos);
+				sphereVertices.push_back(yPos);
+				sphereVertices.push_back(zPos);
+			}
+		}
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * sphereVertices.size(), &sphereVertices[0], GL_STATIC_DRAW);
+
+		GLuint element_buffer_object; //EBO
+		glGenBuffers(1, &element_buffer_object);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_object);
+		std::vector<int> sphereIndices;
+		// 生成球的Indices
+		for (int i = 0; i < Y_SEGMENTS; i++)
+		{
+			for (int j = 0; j < X_SEGMENTS; j++)
+			{
+
+				sphereIndices.push_back(i * (X_SEGMENTS + 1) + j);
+				sphereIndices.push_back((i + 1) * (X_SEGMENTS + 1) + j);
+				sphereIndices.push_back((i + 1) * (X_SEGMENTS + 1) + j + 1);
+
+				sphereIndices.push_back(i * (X_SEGMENTS + 1) + j);
+				sphereIndices.push_back((i + 1) * (X_SEGMENTS + 1) + j + 1);
+				sphereIndices.push_back(i * (X_SEGMENTS + 1) + j + 1);
+			}
+		}
+		int leng2 = sphereIndices.size() * sizeof(int);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, leng2, &sphereIndices[0], GL_STATIC_DRAW);
+		return NULL;
+
+
+		int model_location = ANEutils->getInt32(argv[0]);
+		int view_location = ANEutils->getInt32(argv[1]);
+		int projection_location = ANEutils->getInt32(argv[2]);
+
+
+		//视野
+		float fov = 45.0f;
+		//相机参数
+		glm::vec3 camera_position = glm::vec3(0.0f, 0.0f, 3.0f);     //摄像机位置
+		glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);       //摄像机方向
+		glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 0.0f);           //摄像机上向量
+
+
+		// Transform坐标变换矩阵
+		glm::mat4 model(1);//model矩阵，局部坐标变换至世界坐标
+		model = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glm::mat4 view(1);//view矩阵，世界坐标变换至观察坐标系
+		view = glm::lookAt(camera_position, camera_position + camera_front, camera_up);
+		glm::mat4 projection(1);//projection矩阵，投影矩阵
+		projection = glm::perspective(glm::radians(fov), (float)800 / 450, 0.1f, 100.0f);
+
+		glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model));//写入参数值
+		glUniformMatrix4fv(view_location, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projection_location, 1, GL_FALSE, glm::value_ptr(projection));
 
 		return NULL;
 	}
@@ -637,14 +845,14 @@ extern "C" {
 			{ (const uint8_t*)"SetParent",					NULL, &ANE_SetParent },
 			{ (const uint8_t*)"openGLToNativeWindow",					NULL, &ANE_openGLToNativeWindow },
 			
+			{ (const uint8_t*)"glfwGetVersionString",					NULL, &ANE_glfwGetVersionString },
+			{ (const uint8_t*)"glfwSetErrorCallback",					NULL, &ANE_glfwSetErrorCallback },
 			{ (const uint8_t*)"glfwInit",					NULL, &ANE_glfwInit },
 			{ (const uint8_t*)"glfwTerminate",					NULL, &ANE_glfwTerminate },
 
 			{ (const uint8_t*)"glfwWindowHint",					NULL, &ANE_glfwWindowHint },
-
 			{ (const uint8_t*)"glfwCreateWindow",					NULL, &ANE_glfwCreateWindow },
-			{ (const uint8_t*)"glfwDestroyWindow",					NULL, &ANE_glfwDestroyWindow },
-			
+			{ (const uint8_t*)"glfwDestroyWindow",					NULL, &ANE_glfwDestroyWindow },			
 			{ (const uint8_t*)"glfwGetWin32Window",					NULL, &ANE_glfwGetWin32Window },
 
 			{ (const uint8_t*)"glfwMakeContextCurrent",					NULL, &ANE_glfwMakeContextCurrent },			
@@ -675,12 +883,18 @@ extern "C" {
 			{ (const uint8_t*)"glGenVertexArrays",					NULL, &ANE_glGenVertexArrays },
 			{ (const uint8_t*)"glBindVertexArray",					NULL, &ANE_glBindVertexArray },
 
+
+			{ (const uint8_t*)"glCreateBuffers",					NULL, &ANE_glCreateBuffers },
+			{ (const uint8_t*)"glDeleteBuffers",				NULL, &ANE_glDeleteBuffers },
+			
+
 			{ (const uint8_t*)"glGenBuffers",					NULL, &ANE_glGenBuffers },
 			{ (const uint8_t*)"glBindBuffer",					NULL, &ANE_glBindBuffer },
 			{ (const uint8_t*)"glBufferData",					NULL, &ANE_glBufferData },
 
 			{ (const uint8_t*)"glVertexAttribPointer",					NULL, &ANE_glVertexAttribPointer },
 			{ (const uint8_t*)"glEnableVertexAttribArray",					NULL, &ANE_glEnableVertexAttribArray },
+			{ (const uint8_t*)"glDisableVertexAttribArray",					NULL, &ANE_glDisableVertexAttribArray },
 			
 			{ (const uint8_t*)"glCreateShader",					NULL, &ANE_glCreateShader },
 			{ (const uint8_t*)"glShaderSource",					NULL, &ANE_glShaderSource },
@@ -697,10 +911,29 @@ extern "C" {
 			{ (const uint8_t*)"glUniform1f",					NULL, &ANE_glUniform1f },
 			{ (const uint8_t*)"glUniform2f",					NULL, &ANE_glUniform2f },
 			{ (const uint8_t*)"glUniform3f",					NULL, &ANE_glUniform3f },
+
+			{ (const uint8_t*)"glUniformMatrix4fv",					NULL, &ANE_glUniformMatrix4fv },
+
 			
 			
 			{ (const uint8_t*)"glfwGetTime",					NULL, &ANE_glfwGetTime },
 			{ (const uint8_t*)"glDrawArrays",					NULL, &ANE_glDrawArrays },
+			{ (const uint8_t*)"glDrawElements",					NULL, &ANE_glDrawElements },
+			
+			{ (const uint8_t*)"glClearColor",					NULL, &ANE_glClearColor },
+			{ (const uint8_t*)"glClear",					NULL, &ANE_glClear },
+
+
+			{ (const uint8_t*)"glPolygonMode",					NULL, &ANE_glPolygonMode },
+			{ (const uint8_t*)"glPointSize",					NULL, &ANE_glPointSize },
+			{ (const uint8_t*)"glCullFace",					NULL, &ANE_glCullFace },
+			{ (const uint8_t*)"glEnable",					NULL, &ANE_glEnable },
+			{ (const uint8_t*)"glDisable",					NULL, &ANE_glDisable },
+			{ (const uint8_t*)"glClearDepth",					NULL, &ANE_glClearDepth },
+
+
+			//test
+			{ (const uint8_t*)"ANE_render",					NULL, &ANE_render },
 			{ (const uint8_t*)"glClearColor",					NULL, &ANE_glClearColor },
 			{ (const uint8_t*)"glClear",					NULL, &ANE_glClear },
 			

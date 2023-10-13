@@ -308,6 +308,24 @@ package com.vsdevelop.air.extension.glfw
 			}
 		}
 		
+		public static function glfwGetVersionString():String
+		{
+			checkSupported();
+			return ANEGLFW.getInstance().context.call("glfwGetVersionString") as String;
+		}
+		public static function glfwSetErrorCallback(callback:Function):void
+		{
+			checkSupported();
+			var callName:String = "ErrorCallback";
+			if (callback!=null){
+				ANEGLFW.getInstance().actionScriptData.callback[callName] = callback;
+			}else{
+				callName = "";
+				delete ANEGLFW.getInstance().actionScriptData.callback[callName];
+			}
+			ANEGLFW.getInstance().context.call("glfwSetErrorCallback",callName);
+		}
+		
 		public static function glfwInit():int
 		{
 			checkSupported();

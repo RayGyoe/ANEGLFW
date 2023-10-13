@@ -1,9 +1,19 @@
 package agl 
 {
+<<<<<<< HEAD
+	import agl.core.Mesh;
+	import com.vsdevelop.air.extension.glfw.ANEGLFW;
+	import com.vsdevelop.air.extension.glfw.Gl;
+	import com.vsdevelop.air.extension.glfw.Glfw;
+	import flash.display.Screen;
+	import flash.display.Stage;
+	import flash.events.Event;
+=======
 	import com.vsdevelop.air.extension.glfw.ANEGLFW;
 	import com.vsdevelop.air.extension.glfw.Gl;
 	import com.vsdevelop.air.extension.glfw.Glfw;
 	import flash.display.Stage;
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 	/**
 	 * ...
 	 * @author Ray.lei
@@ -16,6 +26,10 @@ package agl
 		
 		private var windowIntPtr:Number;
 		private var _stage:Stage;
+<<<<<<< HEAD
+		private var renders:Array = [];
+=======
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 		
 		
 		public function AirGl(stage:Stage) 
@@ -27,7 +41,17 @@ package agl
 				trace("not Support opengl");
 				return;
 			}
+<<<<<<< HEAD
+			_stage.addEventListener(Event.RESIZE, stageResize);
 			
+			trace(Glfw.glfwGetVersionString());
+			
+			Glfw.glfwSetErrorCallback(function(error_code:int,description:String):void{
+				trace("ErrorCallback",error_code, description);
+			});
+=======
+			
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 			
 			Glfw.glfwInit();
 			Glfw.glfwWindowHint(Glfw.GLFW_SAMPLES, 4);
@@ -52,8 +76,15 @@ package agl
 			
 			Glfw.glfwMakeContextCurrent(windowIntPtr);
 			
+<<<<<<< HEAD
+			
 			Glfw.glfwSetWindowSizeCallback(windowIntPtr, function(wIntPtr:Number, width:int, height:int):void
 			{
+				Glfw.glfwSetWindowSize(windowIntPtr, _stage.stageWidth * Screen.mainScreen.contentsScaleFactor, _stage.stageHeight * Screen.mainScreen.contentsScaleFactor);
+=======
+			Glfw.glfwSetWindowSizeCallback(windowIntPtr, function(wIntPtr:Number, width:int, height:int):void
+			{
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 				Gl.glViewport(0, 0, width, height);
 			});
 			
@@ -76,7 +107,22 @@ package agl
 			}
 			//Glfw.glfwSwapInterval(true);
 			trace("init AirGl",VERSION);
+<<<<<<< HEAD
+			trace("stage frameRate", _stage.frameRate);
+			
+			
+			Gl.glClearColor(0, 0, 0);
+			Gl.glClearDepth(1.0);
+			Gl.glEnable(Gl.GL_DEPTH_TEST);
+		}
+		
+		private function stageResize(e:Event):void 
+		{
+			Glfw.glfwSetWindowPos(windowIntPtr, 0, 0);
+			Glfw.glfwSetWindowSize(windowIntPtr, _stage.stageWidth * Screen.mainScreen.contentsScaleFactor, _stage.stageHeight * Screen.mainScreen.contentsScaleFactor);
+=======
 			trace("stage frameRate",_stage.frameRate);
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 		}
 		
 		public function render():void 
@@ -86,11 +132,26 @@ package agl
 			//Glfw.glfwMakeContextCurrent(windowIntPtr);
 			Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
 			//Gl.glClearColor(0, 0, 0);
+<<<<<<< HEAD
+			
+			for (var i:int = 0; i < renders.length; i++ ){
+				renders[i]['render']();
+			}
+=======
 					
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 				
 			Glfw.glfwSwapBuffers(windowIntPtr);
 		}
 		
+<<<<<<< HEAD
+		public function addRender(mesh:agl.core.Mesh):void 
+		{
+			renders[renders.length] = mesh;
+		}
+		
+=======
+>>>>>>> a06a60f3db15f644b949939c977d4e683c1a161c
 	}
 
 }

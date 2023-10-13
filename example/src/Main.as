@@ -56,6 +56,13 @@ package
 			
 			if (ANEGLFW.getInstance().isSupported)
 			{
+				
+				trace(Glfw.glfwGetVersionString());
+				
+				Glfw.glfwSetErrorCallback(function(error_code:int,description:String):void{
+					trace("ErrorCallback",error_code, description);
+				});
+				
 				note = new TextField();
 				note.defaultTextFormat = new TextFormat(null, 14, 0xffffff);
 				note.text = "click start";
@@ -64,7 +71,7 @@ package
 				note.x = 200;
 				note.y = 20;
 				
-				ANEGLFW.getInstance().debug = false;
+				ANEGLFW.getInstance().debug = true;
 				stage.addEventListener(MouseEvent.CLICK, click);
 			}
 			addChild(new Fps());

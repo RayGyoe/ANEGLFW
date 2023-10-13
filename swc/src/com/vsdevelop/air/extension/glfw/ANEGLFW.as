@@ -108,7 +108,14 @@ package com.vsdevelop.air.extension.glfw
 					if (actionScriptData.callback[e.code+"_"+arr[0]]){
 						actionScriptData.callback[e.code+"_"+arr[0]](Number(arr[0]), int(arr[1]), int(arr[2]), int(arr[3]));
 					}
-				break;
+					break;
+				case "ErrorCallback":
+					arr = e.level.split("||");
+					if (actionScriptData.callback[e.code]){
+						actionScriptData.callback[e.code](int(arr[0]), arr[1]);
+					}
+					
+					break;
 			}
 		}
 		
