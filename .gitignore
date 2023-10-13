@@ -1,9 +1,13 @@
 .DS_Store
 temp
 .db
-native/ANEWinCore.VC.db
-native/ANEWinCore.sdf
-native/.vs/ANEWinCore/v14/.suo
+native/ANEGLFW/.vs
+native/ANEGLFW/ANEGLFW.sdf
+native/ANEGLFW/Release
+native/ANEGLFW/Debug
+native/ANEGLFW/x64
+native/ANEGLFW/ANEGLFW/Release
+native/ANEGLFW/ANEGLFW/x64
 *.txt
 .docx
 apm
