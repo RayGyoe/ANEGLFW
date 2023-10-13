@@ -1,13 +1,9 @@
-#version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 PosColor;
-out vec3 positionColor;
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-
-void main()
-{
-	gl_Position = projection * view * model * vec4(aPos, 1.0);
-	positionColor=PosColor;
+attribute vec4 a_Position;
+attribute vec4 a_Color;
+attribute float a_Custom;    
+uniform mat4 u_mvpMatrix;
+varying vec4 v_Color;
+void main(){
+	gl_Position = u_mvpMatrix * a_Position;
+	v_Color = a_Color;
 }
