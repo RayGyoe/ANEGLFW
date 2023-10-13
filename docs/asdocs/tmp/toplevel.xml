@@ -3,13 +3,15 @@
 <classRec name='Gl' fullname='com.vsdevelop.air.extension.glfw:Gl' sourcefile='E:\Works\eDoctor\ANEGLFW\swc\src\com\vsdevelop\air\extension\glfw\Gl.as' namespace='com.vsdevelop.air.extension.glfw' access='public' baseclass='Object' isFinal='true' isDynamic='false' >
 <description><![CDATA[
 
-     ...
+	 ...
 
-     ]]></description>
+	 ]]></description>
 <author><![CDATA[Ray.eDoctor
 
-     ]]></author>
+	 ]]></author>
 </classRec>
+<method name='checkSupported' fullname='com.vsdevelop.air.extension.glfw:Gl/private:checkSupported' isStatic='true' isFinal='false' isOverride='false'  result_type='void'>
+</method>
 <method name='glAttachShader' fullname='com.vsdevelop.air.extension.glfw:Gl/glAttachShader' isStatic='true' isFinal='false' isOverride='false'  param_names='program;shader' param_types='int;int' param_defaults='undefined;undefined' result_type='void'>
 </method>
 <method name='glBindBuffer' fullname='com.vsdevelop.air.extension.glfw:Gl/glBindBuffer' isStatic='true' isFinal='false' isOverride='false'  param_names='target;buffer' param_types='int;int' param_defaults='undefined;undefined' result_type='void'>
@@ -18,21 +20,37 @@
 </method>
 <method name='glBufferData' fullname='com.vsdevelop.air.extension.glfw:Gl/glBufferData' isStatic='true' isFinal='false' isOverride='false'  param_names='target;dataSize;data;buffer' param_types='int;int;Vector$Number;int' param_defaults='undefined;undefined;undefined;undefined' result_type='void'>
 </method>
-<method name='glClearColor' fullname='com.vsdevelop.air.extension.glfw:Gl/glClearColor' isStatic='true' isFinal='false' isOverride='false'  param_names='red;green;blue;alpha' param_types='int;int;int;int' param_defaults='undefined;undefined;undefined;1' result_type='void'>
+<method name='glClearColor' fullname='com.vsdevelop.air.extension.glfw:Gl/glClearColor' isStatic='true' isFinal='false' isOverride='false'  param_names='red;green;blue;alpha' param_types='Number;Number;Number;Number' param_defaults='undefined;undefined;undefined;1' result_type='void'>
+</method>
+<method name='glClearDepth' fullname='com.vsdevelop.air.extension.glfw:Gl/glClearDepth' isStatic='true' isFinal='false' isOverride='false'  param_names='depth' param_types='Number' param_defaults='undefined' result_type='void'>
 </method>
 <method name='glClear' fullname='com.vsdevelop.air.extension.glfw:Gl/glClear' isStatic='true' isFinal='false' isOverride='false'  param_names='mask' param_types='uint' param_defaults='undefined' result_type='void'>
 </method>
 <method name='glCompileShader' fullname='com.vsdevelop.air.extension.glfw:Gl/glCompileShader' isStatic='true' isFinal='false' isOverride='false'  param_names='shader' param_types='int' param_defaults='undefined' result_type='void'>
 </method>
+<method name='glCreateBuffers' fullname='com.vsdevelop.air.extension.glfw:Gl/glCreateBuffers' isStatic='true' isFinal='false' isOverride='false'  param_names='GLsizei;buffer' param_types='int;Vector$int' param_defaults='undefined;undefined' result_type='int'>
+</method>
 <method name='glCreateProgram' fullname='com.vsdevelop.air.extension.glfw:Gl/glCreateProgram' isStatic='true' isFinal='false' isOverride='false'  result_type='int'>
 </method>
 <method name='glCreateShader' fullname='com.vsdevelop.air.extension.glfw:Gl/glCreateShader' isStatic='true' isFinal='false' isOverride='false'  param_names='shader' param_types='int' param_defaults='undefined' result_type='int'>
 </method>
+<method name='glCullFace' fullname='com.vsdevelop.air.extension.glfw:Gl/glCullFace' isStatic='true' isFinal='false' isOverride='false'  param_names='mode' param_types='int' param_defaults='undefined' result_type='void'>
+</method>
+<method name='glDeleteBuffers' fullname='com.vsdevelop.air.extension.glfw:Gl/glDeleteBuffers' isStatic='true' isFinal='false' isOverride='false'  param_names='GLsizei;buffer' param_types='int;uint' param_defaults='undefined;undefined' result_type='int'>
+</method>
 <method name='glDeleteShader' fullname='com.vsdevelop.air.extension.glfw:Gl/glDeleteShader' isStatic='true' isFinal='false' isOverride='false'  param_names='shader' param_types='int' param_defaults='undefined' result_type='void'>
+</method>
+<method name='glDisableVertexAttribArray' fullname='com.vsdevelop.air.extension.glfw:Gl/glDisableVertexAttribArray' isStatic='true' isFinal='false' isOverride='false'  param_names='index' param_types='int' param_defaults='undefined' result_type='void'>
+</method>
+<method name='glDisable' fullname='com.vsdevelop.air.extension.glfw:Gl/glDisable' isStatic='true' isFinal='false' isOverride='false'  param_names='cap' param_types='int' param_defaults='undefined' result_type='void'>
 </method>
 <method name='glDrawArrays' fullname='com.vsdevelop.air.extension.glfw:Gl/glDrawArrays' isStatic='true' isFinal='false' isOverride='false'  param_names='mode;first;count' param_types='int;int;int' param_defaults='undefined;undefined;undefined' result_type='void'>
 </method>
+<method name='glDrawElements' fullname='com.vsdevelop.air.extension.glfw:Gl/glDrawElements' isStatic='true' isFinal='false' isOverride='false'  param_names='mode;count;type;indicesPtr' param_types='int;int;int;int' param_defaults='undefined;undefined;undefined;undefined' result_type='void'>
+</method>
 <method name='glEnableVertexAttribArray' fullname='com.vsdevelop.air.extension.glfw:Gl/glEnableVertexAttribArray' isStatic='true' isFinal='false' isOverride='false'  param_names='index' param_types='int' param_defaults='undefined' result_type='void'>
+</method>
+<method name='glEnable' fullname='com.vsdevelop.air.extension.glfw:Gl/glEnable' isStatic='true' isFinal='false' isOverride='false'  param_names='cap' param_types='int' param_defaults='undefined' result_type='void'>
 </method>
 <method name='glGenBuffers' fullname='com.vsdevelop.air.extension.glfw:Gl/glGenBuffers' isStatic='true' isFinal='false' isOverride='false'  param_names='GLsizei' param_types='int' param_defaults='undefined' result_type='int'>
 </method>
@@ -42,6 +60,10 @@
 </method>
 <method name='glLinkProgram' fullname='com.vsdevelop.air.extension.glfw:Gl/glLinkProgram' isStatic='true' isFinal='false' isOverride='false'  param_names='program' param_types='int' param_defaults='undefined' result_type='void'>
 </method>
+<method name='glPointSize' fullname='com.vsdevelop.air.extension.glfw:Gl/glPointSize' isStatic='true' isFinal='false' isOverride='false'  param_names='size' param_types='Number' param_defaults='undefined' result_type='void'>
+</method>
+<method name='glPolygonMode' fullname='com.vsdevelop.air.extension.glfw:Gl/glPolygonMode' isStatic='true' isFinal='false' isOverride='false'  param_names='face;mode' param_types='int;int' param_defaults='undefined;undefined' result_type='void'>
+</method>
 <method name='glShaderSource' fullname='com.vsdevelop.air.extension.glfw:Gl/glShaderSource' isStatic='true' isFinal='false' isOverride='false'  param_names='shader;count;shaderString' param_types='int;int;String' param_defaults='undefined;undefined;undefined' result_type='void'>
 </method>
 <method name='glUniform1f' fullname='com.vsdevelop.air.extension.glfw:Gl/glUniform1f' isStatic='true' isFinal='false' isOverride='false'  param_names='location;v0' param_types='int;Number' param_defaults='undefined;undefined' result_type='void'>
@@ -49,6 +71,8 @@
 <method name='glUniform2f' fullname='com.vsdevelop.air.extension.glfw:Gl/glUniform2f' isStatic='true' isFinal='false' isOverride='false'  param_names='location;v0;v1' param_types='int;Number;Number' param_defaults='undefined;undefined;undefined' result_type='void'>
 </method>
 <method name='glUniform3f' fullname='com.vsdevelop.air.extension.glfw:Gl/glUniform3f' isStatic='true' isFinal='false' isOverride='false'  param_names='location;v0;v1;v2' param_types='int;Number;Number;Number' param_defaults='undefined;undefined;undefined;undefined' result_type='void'>
+</method>
+<method name='glUniformMatrix4fv' fullname='com.vsdevelop.air.extension.glfw:Gl/glUniformMatrix4fv' isStatic='true' isFinal='false' isOverride='false'  param_names='location;count;transpose;matrix3D' param_types='int;Number;int;flash.geom:Matrix3D' param_defaults='undefined;undefined;undefined;null' result_type='void'>
 </method>
 <method name='glUseProgram' fullname='com.vsdevelop.air.extension.glfw:Gl/glUseProgram' isStatic='true' isFinal='false' isOverride='false'  param_names='program' param_types='int' param_defaults='undefined' result_type='void'>
 </method>
@@ -2821,16 +2845,22 @@
 <classRec name='Glfw' fullname='com.vsdevelop.air.extension.glfw:Glfw' sourcefile='E:\Works\eDoctor\ANEGLFW\swc\src\com\vsdevelop\air\extension\glfw\Glfw.as' namespace='com.vsdevelop.air.extension.glfw' access='public' baseclass='Object' isFinal='true' isDynamic='false' >
 <description><![CDATA[
 
-     ...
+	 ...
 
-     ]]></description>
+	 ]]></description>
 <author><![CDATA[Ray.lei
 
-     ]]></author>
+	 ]]></author>
 </classRec>
+<method name='checkSupported' fullname='com.vsdevelop.air.extension.glfw:Glfw/private:checkSupported' isStatic='true' isFinal='false' isOverride='false'  result_type='void'>
+</method>
 <method name='glfwCreateWindow' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwCreateWindow' isStatic='true' isFinal='false' isOverride='false'  param_names='width;height;title;monitor_IntPtr;window_share_IntPtr' param_types='int;int;String;int;int' param_defaults='undefined;undefined;undefined;0;0' result_type='Number'>
 </method>
 <method name='glfwDestroyWindow' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwDestroyWindow' isStatic='true' isFinal='false' isOverride='false'  param_names='window_IntPtr' param_types='Number' param_defaults='undefined' result_type='void'>
+</method>
+<method name='glfwGetCursorPos' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwGetCursorPos' isStatic='true' isFinal='false' isOverride='false'  param_names='window_IntPtr' param_types='Number' param_defaults='undefined' result_type='flash.geom:Point'>
+</method>
+<method name='glfwGetVersionString' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwGetVersionString' isStatic='true' isFinal='false' isOverride='false'  result_type='String'>
 </method>
 <method name='glfwGetWin32Window' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwGetWin32Window' isStatic='true' isFinal='false' isOverride='false'  param_names='window_IntPtr' param_types='Number' param_defaults='undefined' result_type='int'>
 </method>
@@ -2839,6 +2869,14 @@
 <method name='glfwMakeContextCurrent' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwMakeContextCurrent' isStatic='true' isFinal='false' isOverride='false'  param_names='window_IntPtr' param_types='Number' param_defaults='undefined' result_type='void'>
 </method>
 <method name='glfwPollEvents' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwPollEvents' isStatic='true' isFinal='false' isOverride='false'  result_type='void'>
+</method>
+<method name='glfwSetCursorPosCallback' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwSetCursorPosCallback' isStatic='true' isFinal='false' isOverride='false'  param_names='window_IntPtr;callback' param_types='Number;Function' param_defaults='undefined;null' result_type='void'>
+</method>
+<method name='glfwSetErrorCallback' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwSetErrorCallback' isStatic='true' isFinal='false' isOverride='false'  param_names='callback' param_types='Function' param_defaults='undefined' result_type='void'>
+</method>
+<method name='glfwSetInputMode' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwSetInputMode' isStatic='true' isFinal='false' isOverride='false'  param_names='window_IntPtr;model;value' param_types='Number;int;int' param_defaults='undefined;undefined;undefined' result_type='void'>
+</method>
+<method name='glfwSetMouseButtonCallback' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwSetMouseButtonCallback' isStatic='true' isFinal='false' isOverride='false'  param_names='window_IntPtr;callback' param_types='Number;Function' param_defaults='undefined;null' result_type='void'>
 </method>
 <method name='glfwSetWindowPos' fullname='com.vsdevelop.air.extension.glfw:Glfw/glfwSetWindowPos' isStatic='true' isFinal='false' isOverride='false'  param_names='window_IntPtr;x;y' param_types='Number;int;int' param_defaults='undefined;undefined;undefined' result_type='void'>
 </method>
