@@ -1,6 +1,7 @@
 package
 {
 	import agl.shader.Shader;
+	import agl.utils.Matrix4;
 	import com.vsdevelop.air.extension.glfw.ANEGLFW;
 	import com.vsdevelop.air.extension.glfw.Gl;
 	import com.vsdevelop.air.extension.glfw.Glfw;
@@ -45,10 +46,18 @@ package
 		private var isAIRWindow:Boolean = true;
 		
 		private var perspectiveProjection:flash.geom.PerspectiveProjection;
-		private var modelMat4:flash.geom.Matrix3D;
-		private var viewMat4:flash.geom.Matrix3D;
-		private var projectionMat4:flash.geom.Matrix3D;
+		private var modelMat4:Matrix4;
+		private var viewMat4:Matrix4;
+		private var projectionMat4:Matrix4;
 		private var shader:agl.shader.Shader;
+		private var dragging:Boolean = false;
+		private var lastX:Number;
+		private var lastY:Number;
+		private var rotateZ:Boolean;
+		private var rotZ:Number = 0;
+		private var rotX:Number = 0;
+		private var rotY:Number = 0;
+		private var mvpMatrix:Matrix4;
 		
 		public function Box():void
 		{
@@ -138,13 +147,26 @@ package
 			//Glfw.glfwSetInputMode(windowIntPtr, Glfw.GLFW_CURSOR, Glfw.GLFW_CURSOR_DISABLED);
 			//Glfw.glfwSetInputMode(windowIntPtr, Glfw.GLFW_CURSOR, Glfw.GLFW_CURSOR_HIDDEN);
 			
-			Glfw.glfwSetCursorPosCallback(windowIntPtr, function(wIntPtr:Number, x:int, y:int):void
+			Glfw.glfwSetCursorPosCallback(windowIntPtr, function(wIntPtr:Number,clientX:int, clientY:int):void
 			{
 				trace("glfwSetCursorPosCallback", x, y);
+				
+					var x:int = clientX;
+					var y:int = clientY;
+					if(dragging){
+						var factor:Number = 100/stage.stageHeight;
+						var dx:Number = factor * (x-lastX);
+						var dy:Number = factor * (y-lastY);
+						onDrag(dx, dy);
+					}
+					lastX = x;
+					lastY = y;
 			});
 			Glfw.glfwSetMouseButtonCallback(windowIntPtr, function(wIntPtr:Number, button:int, action:int, mods:int):void
 			{
 				trace("glfwSetMouseButtonCallback", button, action, mods);
+				
+				dragging = button==0 && action;
 			});
 			
 			if (!Gl.gladLoadGLLoader())
@@ -197,23 +219,53 @@ package
 			perspectiveProjection.focalLength = stage.stageWidth / stage.stageHeight;
 			//
 			
-			modelMat4 = new Matrix3D();
-			modelMat4.appendScale(0.5, 0.5, 0.5);
-			viewMat4 = new Matrix3D();
-			//viewMat4.appendScale(0.8, 0.8, 0.8);
-			viewMat4.prependRotation(45, Vector3D.X_AXIS);
-			//Matrix3DUtils.lookAt(viewMat4, new Vector3D(0,0,3), new Vector3D(0,0,-1), new Vector3D(0,1,0));
+			modelMat4 = new Matrix4();
+			//modelMat4.appendScale(0.5, 0.5, 0.5);
+			viewMat4 = new Matrix4();
+			viewMat4.setLookAt(.0, .0, 8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 			
-			projectionMat4 = new Matrix3D();
+			projectionMat4 = new Matrix4();
+			projectionMat4.setPerspective(20.0, glWidth/glHeight, 1.0, 100.0);
+			projectionMat4.multiply(viewMat4);
+			
+			mvpMatrix = projectionMat4.cloneMatrix4();
+			
 			
 			addEventListener(Event.ENTER_FRAME, enterFrame);
+		}
+		
+		private function onDrag(dx:Number, dy:Number):void 
+		{
+			trace("onDrag", dx, dy, rotateZ);
+			
+			if(rotateZ){
+				rotZ += dx;
+			} else {
+				rotX = Math.max(Math.min(rotX + dy, 90.0), -90.0);
+				//rotX += dy;
+				rotY += dx;
+			}
+			
+			
+			//modelMat4.appendRotation(rotZ, Vector3D.Z_AXIS);
+			//modelMat4.appendRotation(rotY, Vector3D.Y_AXIS);
+			//modelMat4.appendRotation(rotX, Vector3D.X_AXIS);
+			
+			modelMat4.setRotate(rotZ, 0, 0, 1); //rot around z-axis
+			modelMat4.rotate(rotY, 0.0, 1.0, 0.0); //rot around y-axis
+			modelMat4.rotate(rotX, 1.0, 0.0, 0.0); //rot around x-axis
+			
+			mvpMatrix = projectionMat4.cloneMatrix4();
+			mvpMatrix.multiply(modelMat4);
+			//modelMat4 = new Matrix4();
 		}
 		
 		private function enterFrame(e:Event = null):void
 		{
 			if (!Glfw.glfwWindowShouldClose(windowIntPtr))
 			{
-				//Gl.glClearColor(0, 0.3, 0.5);
+				Gl.glClearColor(0, 0.3, 0.5);
+				Gl.glClearDepth(1.0);
 				Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
 				
 				
@@ -226,17 +278,18 @@ package
 				
 				var perspectiveProjectionMat4:Matrix3D = perspectiveProjection.toMatrix3D();
 				
-				//modelMat4.identity();
-				modelMat4.appendRotation(1, Vector3D.Y_AXIS);
-				modelMat4.appendRotation(1, Vector3D.X_AXIS);
+
 				//modelMat4.appendRotation(1, Vector3D.Z_AXIS);
+				//modelMat4.appendRotation(1, Vector3D.Y_AXIS);
+				//modelMat4.appendRotation(1, Vector3D.X_AXIS);
 				//trace(matrix3d);				
 				//modelMat4.transpose();
 				
 				
-				shader.setMatrix4fv("model", modelMat4);
-				shader.setMatrix4fv("view", viewMat4);
-				shader.setMatrix4fv("projection", projectionMat4);
+				
+				shader.setMatrix4fv("model", mvpMatrix);
+				//shader.setMatrix4fv("view", viewMat4);
+				//shader.setMatrix4fv("projection", projectionMat4);
 				
 				Gl.glBindVertexArray(VAO);
 				Gl.glDrawArrays(Gl.GL_TRIANGLES, 0, 36);

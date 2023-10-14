@@ -445,18 +445,9 @@ extern "C" {
 	FREObject ANE_glCreateBuffers(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		int sizei = ANEutils->getInt32(argv[0]);
-
-		FREObject data = argv[1];
-		uint32_t length;
-		FREGetArrayLength(data, &length);
-		GLuint* buffers = new GLuint[length];
-		for (uint32_t i = 0; i < length; i++) {
-			FREObject value;
-			FREGetArrayElementAt(data, i, &value);
-			buffers[i] = (int)ANEutils->getDouble(value);
-		}
-		glCreateBuffers(sizei, buffers);
-		return NULL;
+		GLuint  buffers;
+		glCreateBuffers(sizei, &buffers);
+		return ANEutils->AS_int(buffers);
 	}
 
 	FREObject ANE_glDeleteBuffers(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])

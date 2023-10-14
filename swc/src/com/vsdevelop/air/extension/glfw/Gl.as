@@ -1422,16 +1422,16 @@ package com.vsdevelop.air.extension.glfw
 			return int(ANEGLFW.getInstance().context.call("glBindVertexArray", array));
 		}
 		
-		public static function glCreateBuffers(GLsizei:int, buffer:Vector.<int>):int
+		public static function glCreateBuffers(GLsizei:int):int
 		{
 			checkSupported();
-			return int(ANEGLFW.getInstance().context.call("glCreateBuffers", GLsizei, buffer));
+			return int(ANEGLFW.getInstance().context.call("glCreateBuffers", GLsizei));
 		}
 		
 		public static function glDeleteBuffers(GLsizei:int, buffer:uint):int
 		{
 			checkSupported();
-			return int(ANEGLFW.getInstance().context.call("glCreateBuffers", GLsizei, buffer));
+			return int(ANEGLFW.getInstance().context.call("glDeleteBuffers", GLsizei, buffer));
 		}
 		
 		public static function glGenBuffers(GLsizei:int):int

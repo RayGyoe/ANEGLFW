@@ -15,7 +15,7 @@
 
 // TODO:  在此处引用程序需要的其他头文件
 
-
+#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
