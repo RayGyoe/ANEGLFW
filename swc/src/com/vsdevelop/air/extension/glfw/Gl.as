@@ -1,6 +1,7 @@
 package com.vsdevelop.air.extension.glfw
 {
 	import flash.geom.Matrix3D;
+	import flash.utils.ByteArray;
 	
 	/**
 	 * ...
@@ -1517,6 +1518,36 @@ package com.vsdevelop.air.extension.glfw
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glUseProgram", program);
 		}
+		
+		
+		public static function glGenTextures(size:int):int
+		{
+			checkSupported();
+			return int(ANEGLFW.getInstance().context.call("glGenTextures", size));
+		}
+		public static function glBindTexture(target:int, texture:int):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glBindTexture", target, texture);
+		}
+		public static function glTexParameteri(target:int,pname:int,param:int):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glTexParameteri", target, pname,param);
+		}
+		
+		public static function glTexImage2D(target:int,  level:int,internalformat:int,width:int,height:int,border:int,format:int,type:int,bitmapdataByte:ByteArray):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glTexImage2D", target, level, internalformat, width, height, border, format, type, bitmapdataByte);
+		}
+		public static function glGenerateMipmap(target:int):int
+		{
+			checkSupported();
+			return int(ANEGLFW.getInstance().context.call("glGenerateMipmap", target));
+		}
+		
+		
 		
 		public static function glGetUniformLocation(program:int, name:String):int
 		{

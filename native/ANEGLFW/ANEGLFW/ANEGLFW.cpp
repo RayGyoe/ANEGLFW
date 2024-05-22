@@ -583,8 +583,54 @@ extern "C" {
 		return NULL;
 	}
 
+	//
+	FREObject ANE_glGenTextures(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int size = ANEutils->getInt32(argv[0]);
+		unsigned int texture;
+		glGenTextures(size, &texture);
+		return ANEutils->AS_int(texture);
+	}
+	FREObject ANE_glBindTexture(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int target = ANEutils->getInt32(argv[0]);
+		int texture = ANEutils->getInt32(argv[1]);
+		glBindTexture(target, texture);
+		return NULL;
+	}
+	FREObject ANE_glTexParameteri(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int target = ANEutils->getInt32(argv[0]);
+		int pname = ANEutils->getInt32(argv[1]);
+		int param = ANEutils->getInt32(argv[2]);
+		glTexParameteri(target, pname,param);
+		return NULL;
+	}
+	FREObject ANE_glTexImage2D(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int target = ANEutils->getInt32(argv[0]);
+		int level = ANEutils->getInt32(argv[1]);
+		int internalformat = ANEutils->getInt32(argv[2]);
+		int width = ANEutils->getInt32(argv[3]);
+		int height = ANEutils->getInt32(argv[4]);
+		int border = ANEutils->getInt32(argv[5]);
+		int format = ANEutils->getInt32(argv[6]);
+		int type = ANEutils->getInt32(argv[7]);
+		FREByteArray byte;
+		FREAcquireByteArray(argv[8], &byte);
+			glTexImage2D(target, level, internalformat, width, height, border, format, type, byte.bytes);
+		FREReleaseByteArray(argv[8]);
 
-
+		return NULL;
+	}
+	FREObject ANE_glGenerateMipmap(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int target = ANEutils->getInt32(argv[0]);
+		glGenerateMipmap(target);
+		return NULL;
+	}
+	
+	//
 	FREObject ANE_glGetUniformLocation(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		int program = ANEutils->getInt32(argv[0]);
@@ -896,6 +942,13 @@ extern "C" {
 			{ (const uint8_t*)"glAttachShader",					NULL, &ANE_glAttachShader },
 			{ (const uint8_t*)"glLinkProgram",					NULL, &ANE_glLinkProgram },
 			{ (const uint8_t*)"glUseProgram",					NULL, &ANE_glUseProgram },
+
+
+			{ (const uint8_t*)"glGenTextures",					NULL, &ANE_glGenTextures },
+			{ (const uint8_t*)"glBindTexture",					NULL, &ANE_glBindTexture },
+			{ (const uint8_t*)"glTexParameteri",					NULL, &ANE_glTexParameteri },
+			{ (const uint8_t*)"glTexImage2D",					NULL, &ANE_glTexImage2D },
+			{ (const uint8_t*)"glGenerateMipmap",					NULL, &ANE_glGenerateMipmap },
 
 
 			{ (const uint8_t*)"glGetUniformLocation",					NULL, &ANE_glGetUniformLocation },

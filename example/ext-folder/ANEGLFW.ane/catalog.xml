@@ -19,18 +19,19 @@
         <dep id="Object" type="i" /> 
         <dep id="AS3" type="n" /> 
       </script>
-      <script name="_11fc5009c3025d5106511709afc4c8d192213ad4731c35f944a01785df882ded_flash_display_Sprite" mod="1697283077077" signatureChecksum="53180557" >
-        <def id="_11fc5009c3025d5106511709afc4c8d192213ad4731c35f944a01785df882ded_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1697282965220" signatureChecksum="3474903396" >
+      <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1697300349009" signatureChecksum="465384050" >
         <def id="com.vsdevelop.air.extension.glfw:Gl" /> 
         <dep id="flash.geom:Matrix3D" type="s" /> 
+        <dep id="flash.utils:ByteArray" type="s" /> 
         <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e" /> 
         <dep id="Error" type="e" /> 
         <dep id="Object" type="i" /> 
+        <dep id="AS3" type="n" /> 
+      </script>
+      <script name="_79bba0642ee13ca6f841307ee6751e65cf962aadc0e44bc4a0c08b053d154b6c_flash_display_Sprite" mod="1697300353227" signatureChecksum="4057627425" >
+        <def id="_79bba0642ee13ca6f841307ee6751e65cf962aadc0e44bc4a0c08b053d154b6c_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
         <dep id="AS3" type="n" /> 
       </script>
       <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1697203932941" signatureChecksum="512801124" >
@@ -46,7 +47,7 @@
         <dep id="AS3" type="n" /> 
       </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="a9d0fd5e25a1a8a3371f198f3b74fdb3a0b4aa9c1d0020677a05349c995996b5"   />
+        <digest type="SHA-256" signed="false" value="be6840f693b47586abe1f34cc4cb1b79cc45a19dc9f4e79461061d15839443ae"   />
       </digests>
     </library>
   </libraries>
