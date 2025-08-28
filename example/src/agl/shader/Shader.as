@@ -35,22 +35,23 @@ package agl.shader
 				return;
 			}
 			
-			// Attach the shader objects
-			Gl.glAttachShader(this._program, vertexShader);
-			Gl.glAttachShader(this._program, fragmentShader);
-			
-			// Link the program object
-			Gl.glLinkProgram(this._program);
-			
-			// Check the result of linking
-			
-			Gl.glDeleteShader(vertexShader);
-			Gl.glDeleteShader(fragmentShader);
+			with (Gl) 
+			{
+				// Attach the shader objects
+				glAttachShader(this._program, vertexShader);
+				glAttachShader(this._program, fragmentShader);
+				
+				// Link the program object
+				glLinkProgram(this._program);
+				
+				// Check the result of linking			
+				glDeleteShader(vertexShader);
+				glDeleteShader(fragmentShader);
+			}
 		}
 		
 		private function loadShader(type:int, shaderString:String):int 
 		{
-			trace(type, shaderString);
 			var shader:int = Gl.glCreateShader(type);
 			Gl.glShaderSource(shader, 1, shaderString);
 			Gl.glCompileShader(shader);

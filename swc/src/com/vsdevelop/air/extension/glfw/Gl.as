@@ -1471,6 +1471,12 @@ package com.vsdevelop.air.extension.glfw
 			ANEGLFW.getInstance().context.call("glDisableVertexAttribArray", index);
 		}
 		
+		public static function glDeleteVertexArrays(n:int, arrays:Vector.<uint>):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glDeleteVertexArrays", n, arrays);
+		}
+		
 		public static function glCreateShader(shader:int):int
 		{
 			checkSupported();
@@ -1547,6 +1553,18 @@ package com.vsdevelop.air.extension.glfw
 			return int(ANEGLFW.getInstance().context.call("glGenerateMipmap", target));
 		}
 		
+		public static function glActiveTexture(texture:int):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glActiveTexture", texture);
+		}
+		
+		public static function glDeleteTextures(n:int, textures:Vector.<uint>):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glDeleteTextures", n, textures);
+		}
+		
 		
 		
 		public static function glGetUniformLocation(program:int, name:String):int
@@ -1571,6 +1589,18 @@ package com.vsdevelop.air.extension.glfw
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glUniform3f", location, v0, v1, v2);
+		}
+		
+		public static function glUniform4f(location:int, v0:Number, v1:Number, v2:Number, v3:Number):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glUniform4f", location, v0, v1, v2, v3);
+		}
+		
+		public static function glUniform1i(location:int, v0:int):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glUniform1i", location, v0);
 		}
 		
 		public static function glUniformMatrix4fv(location:int, count:Number, transpose:int, matrix3D:Matrix3D = null):void
@@ -1635,6 +1665,12 @@ package com.vsdevelop.air.extension.glfw
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glDisable", cap);
+		}
+		
+		public static function glBlendFunc(sfactor:int, dfactor:int):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glBlendFunc", sfactor, dfactor);
 		}
 		
 		public static function glClearDepth(depth:Number):void

@@ -1,4 +1,4 @@
-// ANEGLFW.cpp : ¶¨Òå DLL Ó¦ÓÃ³ÌÐòµÄµ¼³öº¯Êý¡£
+// ANEGLFW.cpp : ï¿½ï¿½ï¿½ï¿½ DLL Ó¦ï¿½Ã³ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //
 #include "ANEGLFW.h"
 
@@ -14,7 +14,7 @@ extern "C" {
 	std::string FGS = "||";
 	FREContext ctxContext;
 	/*
-	³õÊ¼»¯
+	ï¿½ï¿½Ê¼ï¿½ï¿½
 	*/
 	FREObject isSupported(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
@@ -779,16 +779,98 @@ extern "C" {
 		return NULL;
 	}
 
+	/**
+	 * è®¾ç½®æ··åˆå‡½æ•°
+	 * @param sfactor æºæ··åˆå› å­
+	 * @param dfactor ç›®æ ‡æ··åˆå› å­
+	 */
+	FREObject ANE_glBlendFunc(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int sfactor = ANEutils->getInt32(argv[0]);
+		int dfactor = ANEutils->getInt32(argv[1]);
+		glBlendFunc(sfactor, dfactor);
+		return NULL;
+	}
+
+	/**
+	 * è®¾ç½®4ä¸ªæµ®ç‚¹æ•°uniformå˜é‡
+	 * @param location uniformå˜é‡ä½ç½®
+	 * @param v0 ç¬¬ä¸€ä¸ªæµ®ç‚¹å€¼
+	 * @param v1 ç¬¬äºŒä¸ªæµ®ç‚¹å€¼
+	 * @param v2 ç¬¬ä¸‰ä¸ªæµ®ç‚¹å€¼
+	 * @param v3 ç¬¬å››ä¸ªæµ®ç‚¹å€¼
+	 */
+	FREObject ANE_glUniform4f(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int location = ANEutils->getInt32(argv[0]);
+		float v0 = (float)ANEutils->getDouble(argv[1]);
+		float v1 = (float)ANEutils->getDouble(argv[2]);
+		float v2 = (float)ANEutils->getDouble(argv[3]);
+		float v3 = (float)ANEutils->getDouble(argv[4]);
+		glUniform4f(location, v0, v1, v2, v3);
+		return NULL;
+	}
+
+	/**
+	 * è®¾ç½®æ•´æ•°uniformå˜é‡
+	 * @param location uniformå˜é‡ä½ç½®
+	 * @param v0 æ•´æ•°å€¼
+	 */
+	FREObject ANE_glUniform1i(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int location = ANEutils->getInt32(argv[0]);
+		int v0 = ANEutils->getInt32(argv[1]);
+		glUniform1i(location, v0);
+		return NULL;
+	}
+
+	/**
+	 * æ¿€æ´»çº¹ç†å•å…ƒ
+	 * @param texture çº¹ç†å•å…ƒç¼–å·
+	 */
+	FREObject ANE_glActiveTexture(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int texture = ANEutils->getInt32(argv[0]);
+		glActiveTexture(texture);
+		return NULL;
+	}
+
+	/**
+	 * åˆ é™¤çº¹ç†å¯¹è±¡
+	 * @param n è¦åˆ é™¤çš„çº¹ç†æ•°é‡
+	 * @param textures çº¹ç†ID
+	 */
+	FREObject ANE_glDeleteTextures(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int n = ANEutils->getInt32(argv[0]);
+		uint32_t texture = ANEutils->getUInt32(argv[1]);
+		glDeleteTextures(n, (GLuint*)&texture);
+		return NULL;
+	}
+
+	/**
+	 * åˆ é™¤é¡¶ç‚¹æ•°ç»„å¯¹è±¡
+	 * @param n è¦åˆ é™¤çš„é¡¶ç‚¹æ•°ç»„æ•°é‡
+	 * @param arrays é¡¶ç‚¹æ•°ç»„ID
+	 */
+	FREObject ANE_glDeleteVertexArrays(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int n = ANEutils->getInt32(argv[0]);
+		uint32_t array = ANEutils->getUInt32(argv[1]);
+		glDeleteVertexArrays(n, (GLuint*)&array);
+		return NULL;
+	}
+
 	FREObject ANE_render(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		std::vector<float> sphereVertices;
 
 
 		const GLfloat  PI = 3.14159265358979323846f;
-		//½«Çòºá×Ý»®·Ö³É50X50µÄÍø¸ñ
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý»ï¿½ï¿½Ö³ï¿½50X50ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		const int Y_SEGMENTS = 50;
 		const int X_SEGMENTS = 50;
-		// Éú³ÉÇòµÄ¶¥µã
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½
 		for (int y = 0; y <= Y_SEGMENTS; y++)
 		{
 			for (int x = 0; x <= X_SEGMENTS; x++)
@@ -812,7 +894,7 @@ extern "C" {
 		glGenBuffers(1, &element_buffer_object);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_object);
 		std::vector<int> sphereIndices;
-		// Éú³ÉÇòµÄIndices
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Indices
 		for (int i = 0; i < Y_SEGMENTS; i++)
 		{
 			for (int j = 0; j < X_SEGMENTS; j++)
@@ -837,25 +919,25 @@ extern "C" {
 		int projection_location = ANEutils->getInt32(argv[2]);
 
 
-		//ÊÓÒ°
+		//ï¿½ï¿½Ò°
 		float fov = 45.0f;
-		//Ïà»ú²ÎÊý
-		glm::vec3 camera_position = glm::vec3(0.0f, 0.0f, 3.0f);     //ÉãÏñ»úÎ»ÖÃ
-		glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);       //ÉãÏñ»ú·½Ïò
-		glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 0.0f);           //ÉãÏñ»úÉÏÏòÁ¿
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		glm::vec3 camera_position = glm::vec3(0.0f, 0.0f, 3.0f);     //ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+		glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 0.0f);           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
-		// Transform×ø±ê±ä»»¾ØÕó
-		glm::mat4 model(1);//model¾ØÕó£¬¾Ö²¿×ø±ê±ä»»ÖÁÊÀ½ç×ø±ê
+		// Transformï¿½ï¿½ï¿½ï¿½ä»»ï¿½ï¿½ï¿½ï¿½
+		glm::mat4 model(1);//modelï¿½ï¿½ï¿½ó£¬¾Ö²ï¿½ï¿½ï¿½ï¿½ï¿½ä»»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		model = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		glm::mat4 view(1);//view¾ØÕó£¬ÊÀ½ç×ø±ê±ä»»ÖÁ¹Û²ì×ø±êÏµ
+		glm::mat4 view(1);//viewï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä»»ï¿½ï¿½ï¿½Û²ï¿½ï¿½ï¿½ï¿½ï¿½Ïµ
 		view = glm::lookAt(camera_position, camera_position + camera_front, camera_up);
-		glm::mat4 projection(1);//projection¾ØÕó£¬Í¶Ó°¾ØÕó
+		glm::mat4 projection(1);//projectionï¿½ï¿½ï¿½ï¿½Í¶Ó°ï¿½ï¿½ï¿½ï¿½
 		projection = glm::perspective(glm::radians(fov), (float)800 / 450, 0.1f, 100.0f);
 
-		glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model));//Ð´Èë²ÎÊýÖµ
+		glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model));//Ð´ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 		glUniformMatrix4fv(view_location, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projection_location, 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -919,6 +1001,7 @@ extern "C" {
 
 			{ (const uint8_t*)"glGenVertexArrays",					NULL, &ANE_glGenVertexArrays },
 			{ (const uint8_t*)"glBindVertexArray",					NULL, &ANE_glBindVertexArray },
+			{ (const uint8_t*)"glDeleteVertexArrays",					NULL, &ANE_glDeleteVertexArrays },
 
 
 			{ (const uint8_t*)"glCreateBuffers",					NULL, &ANE_glCreateBuffers },
@@ -949,12 +1032,16 @@ extern "C" {
 			{ (const uint8_t*)"glTexParameteri",					NULL, &ANE_glTexParameteri },
 			{ (const uint8_t*)"glTexImage2D",					NULL, &ANE_glTexImage2D },
 			{ (const uint8_t*)"glGenerateMipmap",					NULL, &ANE_glGenerateMipmap },
+			{ (const uint8_t*)"glActiveTexture",					NULL, &ANE_glActiveTexture },
+			{ (const uint8_t*)"glDeleteTextures",					NULL, &ANE_glDeleteTextures },
 
 
 			{ (const uint8_t*)"glGetUniformLocation",					NULL, &ANE_glGetUniformLocation },
 			{ (const uint8_t*)"glUniform1f",					NULL, &ANE_glUniform1f },
 			{ (const uint8_t*)"glUniform2f",					NULL, &ANE_glUniform2f },
 			{ (const uint8_t*)"glUniform3f",					NULL, &ANE_glUniform3f },
+			{ (const uint8_t*)"glUniform4f",					NULL, &ANE_glUniform4f },
+			{ (const uint8_t*)"glUniform1i",					NULL, &ANE_glUniform1i },
 
 			{ (const uint8_t*)"glUniformMatrix4fv",					NULL, &ANE_glUniformMatrix4fv },
 
@@ -974,6 +1061,7 @@ extern "C" {
 			{ (const uint8_t*)"glEnable",					NULL, &ANE_glEnable },
 			{ (const uint8_t*)"glDisable",					NULL, &ANE_glDisable },
 			{ (const uint8_t*)"glClearDepth",					NULL, &ANE_glClearDepth },
+			{ (const uint8_t*)"glBlendFunc",					NULL, &ANE_glBlendFunc },
 
 
 			//test
@@ -993,7 +1081,7 @@ extern "C" {
 
 	void ANEGLFWContextFinalizer(void* extData)
 	{
-		printf("\n%s,%s", TAG, "ANEGLFWContextFinalizer£ºrelease()");
+		printf("\n%s,%s", TAG, "ANEGLFWContextFinalizerï¿½ï¿½release()");
 
 		
 	}
@@ -1007,7 +1095,7 @@ extern "C" {
 
 	void ANEGLFWExtFinalizer(void* extData)
 	{
-		printf("\n%s,%s", TAG, "ANEGLFWExtFinalizer£ºrelease()");
+		printf("\n%s,%s", TAG, "ANEGLFWExtFinalizerï¿½ï¿½release()");
 	}
 
 }

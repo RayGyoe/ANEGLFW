@@ -14,7 +14,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'2024/7/15'</value>
+      <value>'2025/8/29'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -39,7 +39,7 @@
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>E:\Works\eDoctor\ANEGLFW\example\src\Triangle.as</path-element>
+    <path-element>E:\Works\eDoctor\ANEGLFW\example\src\UITestMain.as</path-element>
   </file-specs>
   <default-background-color>#C0C0C0</default-background-color>
   <default-frame-rate>60</default-frame-rate>

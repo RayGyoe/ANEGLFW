@@ -1,4 +1,4 @@
-<extension xmlns="http://ns.adobe.com/air/extension/50.0">
+<extension xmlns="http://ns.adobe.com/air/extension/51.0">
   <id>com.vsdevelop.air.extension.glfw</id>
   <versionNumber>1.0</versionNumber>
   <platforms>
