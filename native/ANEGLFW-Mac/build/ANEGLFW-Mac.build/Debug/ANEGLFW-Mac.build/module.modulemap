@@ -1,0 +1,6 @@
+framework module ANEGLFW_Mac {
+  umbrella header "ANEGLFW_Mac.h"
+  export *
+
+  module * { export * }
+}

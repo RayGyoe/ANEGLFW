@@ -11,6 +11,9 @@
 		4471AB682AD6B2EB008C78A0 /* ANEGLFW_Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4471AB5D2AD6B2EB008C78A0 /* ANEGLFW_Mac.framework */; };
 		4471AB6D2AD6B2EB008C78A0 /* ANEGLFW_MacTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4471AB6C2AD6B2EB008C78A0 /* ANEGLFW_MacTests.m */; };
 		4471AB6E2AD6B2EB008C78A0 /* ANEGLFW_Mac.h in Headers */ = {isa = PBXBuildFile; fileRef = 4471AB602AD6B2EB008C78A0 /* ANEGLFW_Mac.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4471AB732AD6B303008C78A0 /* ANEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4471AB702AD6B300008C78A0 /* ANEUtils.h */; };
+		4471AB742AD6B304008C78A0 /* ANEUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4471AB712AD6B301008C78A0 /* ANEUtils.mm */; };
+		4471AB752AD6B305008C78A0 /* ANEGLFW_Mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4471AB722AD6B302008C78A0 /* ANEGLFW_Mac.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +32,9 @@
 		4471AB612AD6B2EB008C78A0 /* ANEGLFW_Mac.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ANEGLFW_Mac.docc; sourceTree = "<group>"; };
 		4471AB672AD6B2EB008C78A0 /* ANEGLFW-MacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ANEGLFW-MacTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4471AB6C2AD6B2EB008C78A0 /* ANEGLFW_MacTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ANEGLFW_MacTests.m; sourceTree = "<group>"; };
+		4471AB702AD6B300008C78A0 /* ANEUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ANEUtils.h; sourceTree = "<group>"; };
+		4471AB712AD6B301008C78A0 /* ANEUtils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ANEUtils.mm; sourceTree = "<group>"; };
+		4471AB722AD6B302008C78A0 /* ANEGLFW_Mac.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ANEGLFW_Mac.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +78,9 @@
 			isa = PBXGroup;
 			children = (
 				4471AB602AD6B2EB008C78A0 /* ANEGLFW_Mac.h */,
+				4471AB702AD6B300008C78A0 /* ANEUtils.h */,
+				4471AB712AD6B301008C78A0 /* ANEUtils.mm */,
+				4471AB722AD6B302008C78A0 /* ANEGLFW_Mac.mm */,
 				4471AB612AD6B2EB008C78A0 /* ANEGLFW_Mac.docc */,
 			);
 			path = "ANEGLFW-Mac";
@@ -93,6 +102,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4471AB6E2AD6B2EB008C78A0 /* ANEGLFW_Mac.h in Headers */,
+				4471AB732AD6B303008C78A0 /* ANEUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +204,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4471AB622AD6B2EB008C78A0 /* ANEGLFW_Mac.docc in Sources */,
+				4471AB742AD6B304008C78A0 /* ANEUtils.mm in Sources */,
+				4471AB752AD6B305008C78A0 /* ANEGLFW_Mac.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,16 +352,23 @@
 		4471AB722AD6B2EB008C78A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 884R4CPE3U;
+
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../3rdparty/glfw/mac/include",
+					"../../3rdparty/glad/include",
+					"../../3rdparty/glad/include/KHR",
+					"../../3rdparty/glm",
+					"../../3rdparty/airsdk",
+				);
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -357,10 +376,27 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"../../3rdparty/glfw/mac/lib",
+					"../../3rdparty/glad",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_LDFLAGS = (
+					"-lglfw3",
+					"-lglad",
+					"-framework",
+					Cocoa,
+					"-framework",
+					IOKit,
+					"-framework",
+					CoreVideo,
+					"-framework",
+					OpenGL,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vsdevelop.air.extension.glfw.ANEGLFW-Mac";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -371,16 +407,23 @@
 		4471AB732AD6B2EB008C78A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 884R4CPE3U;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"../../3rdparty/glfw/mac/include",
+					"../../3rdparty/glad/include",
+					"../../3rdparty/glad/include/KHR",
+					"../../3rdparty/glm",
+					"../../3rdparty/airsdk",
+				);
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -388,10 +431,27 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"../../3rdparty/glfw/mac/lib",
+					"../../3rdparty/glad",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_LDFLAGS = (
+					"-lglfw3",
+					"-lglad",
+					"-framework",
+					Cocoa,
+					"-framework",
+					IOKit,
+					"-framework",
+					CoreVideo,
+					"-framework",
+					OpenGL,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vsdevelop.air.extension.glfw.ANEGLFW-Mac";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
