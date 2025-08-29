@@ -243,12 +243,16 @@ package ui.text
 		public function setBounds(x:Number, y:Number, width:Number, height:Number):void
 		{
 			// 更新位置和尺寸属性
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
+			_x = x;
+			_y = y;
+			_width = width;
+			_height = height;
+			_bounds.x = x;
+			_bounds.y = y;
+			_bounds.width = width;
+			_bounds.height = height;
 			
-			// 更新文本顶点数据
+			// 立即更新文本顶点数据
 			updateTextVertices();
 		}
 		
@@ -270,15 +274,15 @@ package ui.text
 			// 创建顶点数据（位置 + 纹理坐标）
 			// 注意：翻转Y轴纹理坐标以修正OpenGL和Flash坐标系差异
 			_textVertices = new <Number>[
-											// 第一个三角形
-											textX, textY, 0.0, 0.0, 0.0,                           // 左上 (纹理坐标Y翻转)
-											textX + _textWidth, textY, 0.0, texCoordU, 0.0,        // 右上 (纹理坐标Y翻转)
-											textX, textY + _textHeight, 0.0, 0.0, texCoordV,      // 左下 (纹理坐标Y翻转)
-											
-											// 第二个三角形
-											textX + _textWidth, textY, 0.0, texCoordU, 0.0,        // 右上 (纹理坐标Y翻转)
-											textX + _textWidth, textY + _textHeight, 0.0, texCoordU, texCoordV, // 右下 (纹理坐标Y翻转)
-											textX, textY + _textHeight, 0.0, 0.0, texCoordV       // 左下 (纹理坐标Y翻转)
+													// 第一个三角形
+													textX, textY, 0.0, 0.0, 0.0,                           // 左上 (纹理坐标Y翻转)
+													textX + _textWidth, textY, 0.0, texCoordU, 0.0,        // 右上 (纹理坐标Y翻转)
+													textX, textY + _textHeight, 0.0, 0.0, texCoordV,      // 左下 (纹理坐标Y翻转)
+													
+													// 第二个三角形
+													textX + _textWidth, textY, 0.0, texCoordU, 0.0,        // 右上 (纹理坐标Y翻转)
+													textX + _textWidth, textY + _textHeight, 0.0, texCoordU, texCoordV, // 右下 (纹理坐标Y翻转)
+													textX, textY + _textHeight, 0.0, 0.0, texCoordV       // 左下 (纹理坐标Y翻转)
 			];
 			
 			with (Gl) 
@@ -288,7 +292,6 @@ package ui.text
 				glBufferData(GL_ARRAY_BUFFER, _textVertices.length * 4, _textVertices, GL_DYNAMIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
-			
 		}
 		
 		/**
@@ -356,7 +359,7 @@ package ui.text
 			{
 				if (_textTexture > 0)
 				{
-					glDeleteTextures(1, new Vector.<uint>[_textTexture]);
+					glDeleteTextures(1, _textTexture);
 					_textTexture = 0;
 				}
 				
@@ -404,13 +407,54 @@ package ui.text
 		
 		
 		
-		// 属性访问器
-		public function get text():String  { return _text; }
-		
-		public function get textWidth():Number  { return _textWidth; }
-		
-		public function get textHeight():Number  { return _textHeight; }
-		
-		public function get isReady():Boolean  { return _isTextureReady; }
+		// 重写位置和尺寸设置器以立即更新顶点数据
+        override public function set x(value:Number):void
+        {
+            if (_x != value)
+            {
+                _x = value;
+                _bounds.x = value;
+                updateTextVertices();
+            }
+        }
+        
+        override public function set y(value:Number):void
+        {
+            if (_y != value)
+            {
+                _y = value;
+                _bounds.y = value;
+                updateTextVertices();
+            }
+        }
+        
+        override public function set width(value:Number):void
+        {
+            if (_width != value)
+            {
+                _width = value;
+                _bounds.width = value;
+                updateTextVertices();
+            }
+        }
+        
+        override public function set height(value:Number):void
+        {
+            if (_height != value)
+            {
+                _height = value;
+                _bounds.height = value;
+                updateTextVertices();
+            }
+        }
+        
+        // 属性访问器
+        public function get text():String  { return _text; }
+        
+        public function get textWidth():Number  { return _textWidth; }
+        
+        public function get textHeight():Number  { return _textHeight; }
+        
+        public function get isReady():Boolean  { return _isTextureReady; }
 	}
 }

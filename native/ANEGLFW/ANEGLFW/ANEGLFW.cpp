@@ -583,6 +583,13 @@ extern "C" {
 		return NULL;
 	}
 
+	FREObject ANE_glDeleteProgram(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int program = ANEutils->getInt32(argv[0]);
+		glDeleteProgram(program);
+		return NULL;
+	}
+
 	//
 	FREObject ANE_glGenTextures(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
@@ -776,6 +783,17 @@ extern "C" {
 	FREObject ANE_glClearDepth(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
 		glClearDepth(ANEutils->getDouble(argv[0]));
+		return NULL;
+	}
+
+	/**
+	 * 设置深度测试函数
+	 * @param func 深度测试函数类型
+	 */
+	FREObject ANE_glDepthFunc(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int func = ANEutils->getInt32(argv[0]);
+		glDepthFunc(func);
 		return NULL;
 	}
 
@@ -1025,6 +1043,7 @@ extern "C" {
 			{ (const uint8_t*)"glAttachShader",					NULL, &ANE_glAttachShader },
 			{ (const uint8_t*)"glLinkProgram",					NULL, &ANE_glLinkProgram },
 			{ (const uint8_t*)"glUseProgram",					NULL, &ANE_glUseProgram },
+			{ (const uint8_t*)"glDeleteProgram",					NULL, &ANE_glDeleteProgram },
 
 
 			{ (const uint8_t*)"glGenTextures",					NULL, &ANE_glGenTextures },
@@ -1061,6 +1080,7 @@ extern "C" {
 			{ (const uint8_t*)"glEnable",					NULL, &ANE_glEnable },
 			{ (const uint8_t*)"glDisable",					NULL, &ANE_glDisable },
 			{ (const uint8_t*)"glClearDepth",					NULL, &ANE_glClearDepth },
+			{ (const uint8_t*)"glDepthFunc",					NULL, &ANE_glDepthFunc },
 			{ (const uint8_t*)"glBlendFunc",					NULL, &ANE_glBlendFunc },
 
 

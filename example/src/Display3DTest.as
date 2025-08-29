@@ -5,7 +5,8 @@ package
 	import com.vsdevelop.display3D.IndexBuffer3D;
 	import com.vsdevelop.display3D.Program3D;
 	import com.vsdevelop.display3D.VertexBuffer3D;
-	
+	import com.vsdevelop.display3D.textures.Texture;
+
 	import flash.display.Sprite;
 	import flash.display.BitmapData;
 	import flash.events.Event;
@@ -19,7 +20,7 @@ package
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
 		private var _program:Program3D;
-		private var _texture:com.vsdevelop.display3D.textures.Texture;
+		private var _texture:Texture;
 		
 		private const VERTEX_SHADER:String = 
 			"attribute vec3 aPosition;\n" +
@@ -48,17 +49,16 @@ package
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			
-			_stage3D = new Stage3D();
-			addChild(_stage3D);
-			
-			_stage3D.addEventListener("CONTEXT3D_CREATE", onContextCreated);
+			_stage3D = new Stage3D(stage);			
+			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
 			_stage3D.requestContext3D();
 		}
 		
 		private function onContextCreated(e:Event):void
 		{
+			trace(e);
 			_context = _stage3D.context3D;
-			_context.configureBackBuffer(800, 600, 0, false);
+			_context.configureBackBuffer(stage.stageWidth,stage.stageHeight , 0, false);
 			
 			// 创建顶点缓冲区
 			_vertexBuffer = _context.createVertexBuffer(3, 5); // 3个顶点，每个顶点5个分量(x,y,z,u,v)
@@ -122,9 +122,15 @@ package
 			// 设置着色器程序
 			_context.setProgram(_program);
 			
+			// 设置uniform变量 - 将纹理采样器绑定到纹理单元0
+			_program.setUniform1i("uTexture", 0);
+			
 			// 设置顶点缓冲区 (位置:0, 纹理坐标:1)
 			_context.setVertexBufferAt(0, _vertexBuffer, 0, "float3");
 			_context.setVertexBufferAt(1, _vertexBuffer, 3, "float2");
+			
+			// 绑定纹理到纹理单元0
+			_context.setTextureAt(0, _texture);
 			
 			// 绘制三角形
 			_context.drawTriangles(_indexBuffer, 0, 1);

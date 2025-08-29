@@ -1520,13 +1520,19 @@ package com.vsdevelop.air.extension.glfw
 		}
 		
 		public static function glUseProgram(program:int):void
-		{
-			checkSupported();
-			ANEGLFW.getInstance().context.call("glUseProgram", program);
-		}
-		
-		
-		public static function glGenTextures(size:int):int
+	{
+		checkSupported();
+		ANEGLFW.getInstance().context.call("glUseProgram", program);
+	}
+	
+	public static function glDeleteProgram(program:int):void
+	{
+		checkSupported();
+		ANEGLFW.getInstance().context.call("glDeleteProgram", program);
+	}
+	
+	
+	public static function glGenTextures(size:int):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glGenTextures", size));
@@ -1559,7 +1565,7 @@ package com.vsdevelop.air.extension.glfw
 			ANEGLFW.getInstance().context.call("glActiveTexture", texture);
 		}
 		
-		public static function glDeleteTextures(n:int, textures:Vector.<uint>):void
+		public static function glDeleteTextures(n:int, textures:uint):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glDeleteTextures", n, textures);
@@ -1677,6 +1683,12 @@ package com.vsdevelop.air.extension.glfw
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glClearDepth", depth);
+		}
+		
+		public static function glDepthFunc(func:int):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glDepthFunc", func);
 		}
 	}
 

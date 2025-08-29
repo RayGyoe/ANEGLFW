@@ -102,16 +102,9 @@ package ui.components
 		public function loadImage(url:String):void
 		{
 			_source = url;
-			_isLoaded = false;
 			
-			// 清理之前的加载器
-			if (_loader)
-			{
-				_loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onImageLoaded);
-				_loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, onImageError);
-				_loader.contentLoaderInfo.removeEventListener(IOErrorEvent.VERIFY_ERROR, onVerifyError);
-				_loader = null;
-			}
+			// 清理之前的资源
+			cleanupPreviousImage();
 			
 			// 创建新的加载器
 			_loader = new Loader();
@@ -126,7 +119,54 @@ package ui.components
 			catch (error:Error)
 			{
 				trace("Error loading image: " + error.message);
-					dispatchEvent(new UIEvent(UIEvent.ERROR, false, false, NaN, NaN, error.message));
+				dispatchEvent(new UIEvent(UIEvent.ERROR, false, false, NaN, NaN, error.message));
+			}
+		}
+		
+		/**
+		 * 清理之前的图片资源
+		 */
+		private function cleanupPreviousImage():void
+		{
+			_isLoaded = false;
+			_textureVertices = null;
+			
+			// 清理之前的加载器
+			if (_loader)
+			{
+				_loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onImageLoaded);
+				_loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, onImageError);
+				_loader.contentLoaderInfo.removeEventListener(IOErrorEvent.VERIFY_ERROR, onVerifyError);
+				_loader = null;
+			}
+			
+			// 清理之前的位图数据
+			if (_bitmapData)
+			{
+				_bitmapData.dispose();
+				_bitmapData = null;
+			}
+			
+			// 清理OpenGL纹理
+			if (_texture > 0)
+			{
+				Gl.glDeleteTextures(1, _texture);
+				// 重新生成纹理对象
+				_texture = Gl.glGenTextures(1);
+			}
+		}
+		
+		/**
+		 * 刷新当前图片
+		 * 重新加载当前source指定的图片
+		 */
+		public function refresh():void
+		{
+			if (_source && _source.length > 0 && _source != "[Generated]")
+			{
+				var currentSource:String = _source;
+				cleanupPreviousImage();
+				loadImage(currentSource);
 			}
 		}
 		
@@ -150,11 +190,8 @@ package ui.components
 			
 			try
 			{
-				// 清理之前的位图数据
-				if (_bitmapData)
-				{
-					_bitmapData.dispose();
-				}
+				// 清理之前的资源
+				cleanupPreviousImage();
 				
 				// 设置新的位图数据
 				_bitmapData = bitmapData.clone();
@@ -167,8 +204,8 @@ package ui.components
 				
 				// 更新顶点数据
 				updateTextureVertices();
-				
 				_isLoaded = true;
+				
 				_needsRedraw = true;
 				
 				// 派发加载完成事件
@@ -190,21 +227,7 @@ package ui.components
 			try
 			{
 				// 获取位图数据
-				_bitmapData = (_loader.content as Bitmap).bitmapData;
-				_textureWidth = _bitmapData.width;
-				_textureHeight = _bitmapData.height;
-				
-				// 创建OpenGL纹理
-				createTexture();
-				
-				// 更新顶点数据
-				updateTextureVertices();
-				
-				_isLoaded = true;
-				_needsRedraw = true;
-				
-				// 派发加载完成事件
-				dispatchEvent(new UIEvent(UIEvent.COMPLETE));
+				loadFromBitmapData((_loader.content as Bitmap).bitmapData);
 			}
 			catch (error:Error)
 			{
@@ -292,10 +315,17 @@ package ui.components
 			var renderWidth:Number = _width;
 			var renderHeight:Number = _height;
 			
+			// 纹理坐标（默认为完整纹理）
+			var texLeft:Number = 0.0;
+			var texRight:Number = 1.0;
+			var texTop:Number = 1.0;
+			var texBottom:Number = 0.0;
+			
 			// 根据缩放模式计算渲染尺寸和位置
 			switch (_scaleMode)
 			{
 				case SCALE_MODE_FIT:
+					// 等比缩放适应：保持宽高比，完全显示在容器内
 					var scaleX:Number = _width / _textureWidth;
 					var scaleY:Number = _height / _textureHeight;
 					var scale:Number = Math.min(scaleX, scaleY);
@@ -306,16 +336,31 @@ package ui.components
 					break;
 					
 				case SCALE_MODE_FILL:
+					// 等比缩放填充：保持宽高比，填满容器（可能裁剪）
 					scaleX = _width / _textureWidth;
 					scaleY = _height / _textureHeight;
 					scale = Math.max(scaleX, scaleY);
-					renderWidth = _textureWidth * scale;
-					renderHeight = _textureHeight * scale;
-					renderX = _x + (_width - renderWidth) * 0.5;
-					renderY = _y + (_height - renderHeight) * 0.5;
+					
+					// 计算实际渲染尺寸
+					var actualWidth:Number = _textureWidth * scale;
+					var actualHeight:Number = _textureHeight * scale;
+					
+					// 保持渲染区域为组件大小
+					renderWidth = _width;
+					renderHeight = _height;
+					
+					// 调整纹理坐标以实现裁剪效果
+					var texScaleX:Number = _width / actualWidth;
+					var texScaleY:Number = _height / actualHeight;
+					
+					texLeft = (1.0 - texScaleX) * 0.5;
+					texRight = texLeft + texScaleX;
+					texTop = 1.0 - (1.0 - texScaleY) * 0.5;
+					texBottom = texTop - texScaleY;
 					break;
 					
 				case SCALE_MODE_NONE:
+					// 原始大小：居中显示
 					renderWidth = _textureWidth;
 					renderHeight = _textureHeight;
 					renderX = _x + (_width - renderWidth) * 0.5;
@@ -323,41 +368,84 @@ package ui.components
 					break;
 					
 				default: // SCALE_MODE_STRETCH
-					// 使用默认值
+					// 拉伸填充：直接使用组件尺寸
 					break;
 			}
 			
-			// 创建顶点数据（位置 + 纹理坐标）
+			// 创建顶点数据（位置x,y,z + 纹理坐标u,v）
 			_textureVertices = new <Number>[
 				// 第一个三角形
-				renderX, renderY, 0.0, 1.0,                    // 左上
-				renderX + renderWidth, renderY, 1.0, 1.0,      // 右上
-				renderX, renderY + renderHeight, 0.0, 0.0,     // 左下
+				renderX, renderY, 0, texLeft, texTop,                           // 左上
+				renderX + renderWidth, renderY, 0, texRight, texTop,            // 右上
+				renderX, renderY + renderHeight, 0, texLeft, texBottom,        // 左下
 				
 				// 第二个三角形
-				renderX + renderWidth, renderY, 1.0, 1.0,      // 右上
-				renderX + renderWidth, renderY + renderHeight, 1.0, 0.0, // 右下
-				renderX, renderY + renderHeight, 0.0, 0.0      // 左下
+				renderX + renderWidth, renderY, 0, texRight, texTop,            // 右上
+				renderX + renderWidth, renderY + renderHeight, 0, texRight, texBottom, // 右下
+				renderX, renderY + renderHeight, 0, texLeft, texBottom         // 左下
 			];
 			
-			// 更新VBO
-			updateVertexData(_textureVertices);
+			// 直接更新VBO，避免调用updateVertexData造成死循环
+			super.updateVertexData(_textureVertices);
 		}
 		
+		
 		/**
-		 * 重写位置和尺寸更新方法
+		 * 重写基类的位置和尺寸设置器，确保图片重新计算顶点
 		 */
-		protected override function updateVertexData(vertices:Vector.<Number> = null):void
+		public override function set x(value:Number):void
 		{
-			if (_isLoaded && _textureVertices)
+			if (_x != value)
 			{
-				// 更新纹理顶点数据
-				super.updateVertexData(_textureVertices);
+				_x = value;
+				_bounds.x = value;
+				if (_isLoaded)
+				{
+					updateTextureVertices();
+				}
+				_needsRedraw = true;
 			}
-			else
+		}
+		
+		public override function set y(value:Number):void
+		{
+			if (_y != value)
 			{
-				// 更新自定义顶点数据
-				super.updateVertexData(vertices);
+				_y = value;
+				_bounds.y = value;
+				if (_isLoaded)
+				{
+					updateTextureVertices();
+				}
+				_needsRedraw = true;
+			}
+		}
+		
+		public override function set width(value:Number):void
+		{
+			if (_width != value)
+			{
+				_width = value;
+				_bounds.width = value;
+				if (_isLoaded)
+				{
+					updateTextureVertices();
+				}
+				_needsRedraw = true;
+			}
+		}
+		
+		public override function set height(value:Number):void
+		{
+			if (_height != value)
+			{
+				_height = value;
+				_bounds.height = value;
+				if (_isLoaded)
+				{
+					updateTextureVertices();
+				}
+				_needsRedraw = true;
 			}
 		}
 		
@@ -430,12 +518,7 @@ package ui.components
 			// 删除纹理
 			if (_texture > 0)
 			{
-				var textures:Vector.<uint> = new Vector.<uint>();
-				textures.push(_texture);
-				with (Gl)
-				{
-					glDeleteTextures(uint(1), textures);
-				}
+				Gl.glDeleteTextures(uint(1), _texture);
 				_texture = 0;
 			}
 			
@@ -446,9 +529,20 @@ package ui.components
 		public function get source():String { return _source; }
 		public function set source(value:String):void
 		{
-			if (_source != value && value && value.length > 0)
+			if (_source != value)
 			{
-				loadImage(value);
+				if (value && value.length > 0)
+				{
+					// 加载新图片
+					loadImage(value);
+				}
+				else
+				{
+					// 清空图片
+					cleanupPreviousImage();
+					_source = value || "";
+					_needsRedraw = true;
+				}
 			}
 		}
 		

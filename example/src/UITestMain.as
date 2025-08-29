@@ -93,7 +93,7 @@ package
 				// 创建启动提示
 				createStartupUI();
 				
-				ANEGLFW.getInstance().debug = true;
+				//ANEGLFW.getInstance().debug = true;
 				stage.addEventListener(MouseEvent.CLICK, startDemo);
 			}
 			else
@@ -576,97 +576,30 @@ package
 		{
 			try
 			{
+				
+				_backgroundTimer.removeEventListener(TimerEvent.TIMER, onBackgroundTimer);
+				_backgroundTimer.stop();
+			
+			
 				// 移除事件监听器
-				if (hasEventListener(Event.ENTER_FRAME))
-				{
-					removeEventListener(Event.ENTER_FRAME, renderFrame);
-				}
-				
-				// 清理所有活动定时器
-				for (var i:int = 0; i < _activeTimers.length; i++)
-				{
-					var timer:Timer = _activeTimers[i];
-					if (timer)
-					{
-						if (timer) timer.stop();
-					}
-				}
-				_activeTimers.length = 0;
-				
-				// 清理背景定时器
-				if (_backgroundTimer)
-				{
-					_backgroundTimer.stop();
-					_backgroundTimer.removeEventListener(TimerEvent.TIMER, onBackgroundTimer);
-					_backgroundTimer = null;
-				}
-				
-				// 清理背景图片组件
-				if (_backgroundImage)
-				{
-					_backgroundImage.removeEventListener(UIEvent.COMPLETE, onBackgroundImageLoaded);
-					_backgroundImage.removeEventListener(UIEvent.ERROR, onBackgroundImageError);
-					_backgroundImage.dispose();
-					_backgroundImage = null;
-				}
-				
-				// 清理测试组件
-				if (_testButton1)
-				{
-					_testButton1.removeEventListener(UIEvent.CLICK, onButton1Click);
-					_testButton1.dispose();
-					_testButton1 = null;
-				}
-				if (_testButton2)
-				{
-					_testButton2.removeEventListener(UIEvent.CLICK, onButton2Click);
-					_testButton2.dispose();
-					_testButton2 = null;
-				}
-				if (_testButton3)
-				{
-					_testButton3.removeEventListener(UIEvent.CLICK, onButton3Click);
-					_testButton3.dispose();
-					_testButton3 = null;
-				}
-				if (_testImage)
-				{
-					_testImage.removeEventListener(UIEvent.CLICK, onImageClick);
-					_testImage.removeEventListener(UIEvent.ERROR, onImageError);
-					_testImage.removeEventListener(UIEvent.COMPLETE, onImageLoaded);
-					_testImage.dispose();
-					_testImage = null;
-				}
-				
-				// 清理测试用例
-				if (_testCase)
-				{
-					_testCase.removeEventListener(UITestCase.TEST_COMPLETE, onTestComplete);
-					_testCase.removeEventListener(UITestCase.TEST_FAILED, onTestFailed);
-					_testCase.cleanup();
-					_testCase = null;
-				}
+				removeEventListener(Event.ENTER_FRAME, renderFrame);
 				
 				// 清理UI管理器
-				if (_uiManager)
-				{
-					_uiManager.dispose();
-					_uiManager = null;
-				}
+				//if (_uiManager)
+				//{
+					//_uiManager.dispose();
+					//_uiManager = null;
+				//}
 				
 				// 清理GLFW资源
 				if (windowIntPtr)
 				{
 					Glfw.glfwSetWindowShouldClose(windowIntPtr, true);
 					Glfw.glfwDestroyWindow(windowIntPtr);
-					windowIntPtr = 0;
 				}
-				
+				//
 				// 终止GLFW
 				Glfw.glfwTerminate();
-				
-				// 清理ANE
-				ANEGLFW.getInstance().dispose();
 				
 			}
 			catch (error:Error)
@@ -696,6 +629,7 @@ package
 			// 创建全屏背景图片组件
 			_backgroundImage = new Image(0, 0, glWidth, glHeight);
 			_backgroundImage.alpha = 1.0; // 确保背景图片完全不透明
+			_backgroundImage.scaleMode = Image.SCALE_MODE_FILL;
 			_backgroundImage.addEventListener(UIEvent.COMPLETE, onBackgroundImageLoaded);
 			_backgroundImage.addEventListener(UIEvent.ERROR, onBackgroundImageError);
 			
@@ -721,7 +655,7 @@ package
 			}, 3000); // 3秒超时
 			
 			// 创建定时器，每5秒切换一次背景
-			_backgroundTimer = new Timer(10000);
+			_backgroundTimer = new Timer(5000);
 			_backgroundTimer.addEventListener(TimerEvent.TIMER, onBackgroundTimer);
 			_backgroundTimer.start();
 		}

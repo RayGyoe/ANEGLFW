@@ -1,56 +1,57 @@
-<?xml version="1.0" encoding ="utf-8"?>
+<?xml version="1.0" ?>
 <swc xmlns="http://www.adobe.com/flash/swccatalog/9">
-  <versions>
-    <swc version="1.2" />
-    <flex version="4.6.0" build="23201" minimumSupportedVersion="3.0.0" />
-  </versions>
-  <features>
-    <feature-script-deps />
-    <feature-files />
-  </features>
-  <libraries>
-    <library path="library.swf">
-      <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1697203906070" signatureChecksum="841483291" >
-        <def id="com.vsdevelop.air.extension.glfw:Glfw" /> 
-        <dep id="flash.geom:Point" type="s" /> 
-        <dep id="flash.geom:Point" type="e" /> 
-        <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e" /> 
-        <dep id="Error" type="e" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1756312483131" signatureChecksum="452894428" >
-        <def id="com.vsdevelop.air.extension.glfw:Gl" /> 
-        <dep id="flash.geom:Matrix3D" type="s" /> 
-        <dep id="flash.utils:ByteArray" type="s" /> 
-        <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e" /> 
-        <dep id="Error" type="e" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="_dc6c7d439864a7b70e50dbbb4ebaec75b597d18d9cdb24c0a29efbec5459f409_flash_display_Sprite" mod="1756312916084" signatureChecksum="996703467" >
-        <def id="_dc6c7d439864a7b70e50dbbb4ebaec75b597d18d9cdb24c0a29efbec5459f409_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1697203932941" signatureChecksum="512801124" >
-        <def id="com.vsdevelop.air.extension.glfw:ANEGLFW" /> 
-        <dep id="flash.display:NativeWindow" type="s" /> 
-        <dep id="flash.events:StatusEvent" type="s" /> 
-        <dep id="flash.external:ExtensionContext" type="s" /> 
-        <dep id="trace" type="e" /> 
-        <dep id="flash.events:StatusEvent" type="e" /> 
-        <dep id="Error" type="e" /> 
-        <dep id="flash.external:ExtensionContext" type="e" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <digests>
-        <digest type="SHA-256" signed="false" value="2b0fb0d45668a369ae0b0c1f9dd4a382aa82ef547f5ee29a4ea0a8ec6ab04ad8"   />
-      </digests>
-    </library>
-  </libraries>
-  <files>
-  </files>
+    <versions>
+        <swc version="1.2"/>
+        <compiler name="ActionScript Compiler" version="3.2.3" build="0"/>
+    </versions>
+    <features>
+        <feature-script-deps/>
+    </features>
+    <libraries>
+        <library path="library.swf">
+            <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1756453845528">
+                <def id="com.vsdevelop.air.extension.glfw:ANEGLFW"/>
+                <dep id="Array" type="e"/>
+                <dep id="Boolean" type="s"/>
+                <dep id="Error" type="e"/>
+                <dep id="Function" type="s"/>
+                <dep id="Number" type="e"/>
+                <dep id="Object" type="i"/>
+                <dep id="flash.display:NativeWindow" type="s"/>
+                <dep id="flash.events:StatusEvent" type="s"/>
+                <dep id="flash.external:ExtensionContext" type="s"/>
+                <dep id="int" type="e"/>
+                <dep id="trace" type="e"/>
+            </script>
+            <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1756462051595">
+                <def id="com.vsdevelop.air.extension.glfw:Gl"/>
+                <dep id="Boolean" type="s"/>
+                <dep id="Error" type="e"/>
+                <dep id="Number" type="s"/>
+                <dep id="Object" type="i"/>
+                <dep id="String" type="s"/>
+                <dep id="__AS3__.vec:Vector" type="s"/>
+                <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e"/>
+                <dep id="flash.geom:Matrix3D" type="s"/>
+                <dep id="flash.utils:ByteArray" type="s"/>
+                <dep id="int" type="s"/>
+                <dep id="uint" type="s"/>
+            </script>
+            <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1756456690456">
+                <def id="com.vsdevelop.air.extension.glfw:Glfw"/>
+                <dep id="Boolean" type="s"/>
+                <dep id="Error" type="e"/>
+                <dep id="Function" type="s"/>
+                <dep id="Number" type="s"/>
+                <dep id="Object" type="i"/>
+                <dep id="String" type="s"/>
+                <dep id="com.vsdevelop.air.extension.glfw:ANEGLFW" type="e"/>
+                <dep id="flash.geom:Point" type="e"/>
+                <dep id="int" type="s"/>
+            </script>
+            <digests>
+                <digest type="SHA-256" signed="false" value="9e7f14120d6552f8b6c487af560dbe75bd572cfe3d9e56fad543c7fa1adf2843"/>
+            </digests>
+        </library>
+    </libraries>
 </swc>

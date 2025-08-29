@@ -365,7 +365,7 @@ package ui.state
 			super.x = value;
 			if (_textRenderer)
 			{
-				_textRenderer.x = value + 5;
+				_textRenderer.setBounds(value + 5, _textRenderer.y, _textRenderer.width, _textRenderer.height);
 			}
 		}
 		
@@ -374,7 +374,7 @@ package ui.state
 			super.y = value;
 			if (_textRenderer)
 			{
-				_textRenderer.y = value + 5;
+				_textRenderer.setBounds(_textRenderer.x, value + 5, _textRenderer.width, _textRenderer.height);
 			}
 		}
 		
@@ -383,7 +383,7 @@ package ui.state
 			super.width = value;
 			if (_textRenderer)
 			{
-				_textRenderer.width = value - 10;
+				_textRenderer.setBounds(_textRenderer.x, _textRenderer.y, value - 10, _textRenderer.height);
 			}
 		}
 		
@@ -392,7 +392,7 @@ package ui.state
 			super.height = value;
 			if (_textRenderer)
 			{
-				_textRenderer.height = value - 10;
+				_textRenderer.setBounds(_textRenderer.x, _textRenderer.y, _textRenderer.width, value - 10);
 			}
 		}
 	}

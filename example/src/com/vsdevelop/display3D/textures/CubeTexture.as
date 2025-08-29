@@ -20,11 +20,9 @@ package com.vsdevelop.display3D.textures
             _format = format;
             
             // 创建OpenGL立方体贴图 - 修复API调用方式
-            var textureIds:Vector.<uint> = new Vector.<uint>(1);
             if (Gl.glGenTextures != null)
             {
-                Gl.glGenTextures(1, textureIds);
-                _textureId = textureIds[0];
+                _textureId = Gl.glGenTextures(1);
             }
         }
         
@@ -114,9 +112,7 @@ package com.vsdevelop.display3D.textures
             if (_textureId != 0)
             {
                 // 修复OpenGL纹理删除 - 使用正确的API调用方式
-                var textureIds:Vector.<uint> = new Vector.<uint>(1);
-                textureIds[0] = _textureId;
-                Gl.glDeleteTextures(1, textureIds);
+                Gl.glDeleteTextures(1, _textureId);
                 _textureId = 0;
             }
         }
