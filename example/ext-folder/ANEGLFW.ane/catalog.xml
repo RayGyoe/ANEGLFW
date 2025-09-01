@@ -9,7 +9,7 @@
     </features>
     <libraries>
         <library path="library.swf">
-            <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1756453845528">
+            <script name="com/vsdevelop/air/extension/glfw/ANEGLFW" mod="1756722212926">
                 <def id="com.vsdevelop.air.extension.glfw:ANEGLFW"/>
                 <dep id="Array" type="e"/>
                 <dep id="Boolean" type="s"/>
@@ -23,7 +23,7 @@
                 <dep id="int" type="e"/>
                 <dep id="trace" type="e"/>
             </script>
-            <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1756462051595">
+            <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1756727217806">
                 <def id="com.vsdevelop.air.extension.glfw:Gl"/>
                 <dep id="Boolean" type="s"/>
                 <dep id="Error" type="e"/>
@@ -37,7 +37,7 @@
                 <dep id="int" type="s"/>
                 <dep id="uint" type="s"/>
             </script>
-            <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1756456690456">
+            <script name="com/vsdevelop/air/extension/glfw/Glfw" mod="1756722212926">
                 <def id="com.vsdevelop.air.extension.glfw:Glfw"/>
                 <dep id="Boolean" type="s"/>
                 <dep id="Error" type="e"/>
@@ -50,7 +50,7 @@
                 <dep id="int" type="s"/>
             </script>
             <digests>
-                <digest type="SHA-256" signed="false" value="9e7f14120d6552f8b6c487af560dbe75bd572cfe3d9e56fad543c7fa1adf2843"/>
+                <digest type="SHA-256" signed="false" value="95e0acc5d3e96d2b2b8156f2f6cd23023e8cf89e1bdec534c77c165b11ffbf68"/>
             </digests>
         </library>
     </libraries>

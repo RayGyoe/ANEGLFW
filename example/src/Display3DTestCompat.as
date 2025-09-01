@@ -1,51 +1,46 @@
 package
 {
-	import com.vsdevelop.air.extension.glfw.Gl;
 	import com.vsdevelop.display.Stage3D;
 	import com.vsdevelop.display3D.Context3D;
 	import com.vsdevelop.display3D.IndexBuffer3D;
 	import com.vsdevelop.display3D.Program3D;
 	import com.vsdevelop.display3D.VertexBuffer3D;
 	import com.vsdevelop.display3D.textures.Texture;
-	import flash.display.Bitmap;
-
 	import flash.display.Sprite;
 	import flash.display.BitmapData;
 	import flash.events.Event;
-	import flash.geom.Matrix3D;
-	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	
-	public class Display3DTest extends Sprite
+	public class Display3DTestCompat extends Sprite
 	{
 		private var _stage3D:Stage3D;
 		private var _context:Context3D;
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
 		private var _program:Program3D;
-	private var _texture:Texture;
-	private var _vao:uint; // Vertex Array Object
+		private var _texture:Texture;
 		
+		// 使用OpenGL 2.1兼容的着色器
 		private const VERTEX_SHADER:String = 
-			"#version 330 core\n" +
-			"layout (location = 0) in vec3 aPosition;\n" +
-			"layout (location = 1) in vec2 aTexCoord;\n" +
-			"out vec2 vTexCoord;\n" +
+			"attribute vec3 aPosition;\n" +
+			"attribute vec2 aTexCoord;\n" +
+			"varying vec2 vTexCoord;\n" +
 			"void main() {\n" +
 			"  gl_Position = vec4(aPosition, 1.0);\n" +
 			"  vTexCoord = aTexCoord;\n" +
 			"}";
 		
 		private const FRAGMENT_SHADER:String = 
-			"#version 330 core\n" +
-			"in vec2 vTexCoord;\n" +
+			"#ifdef GL_ES\n" +
+			"precision mediump float;\n" +
+			"#endif\n" +
+			"varying vec2 vTexCoord;\n" +
 			"uniform sampler2D uTexture;\n" +
-			"out vec4 FragColor;\n" +
 			"void main() {\n" +
-			"  FragColor = texture(uTexture, vTexCoord);\n" +
+			"  gl_FragColor = texture2D(uTexture, vTexCoord);\n" +
 			"}";
 		
-		public function Display3DTest()
+		public function Display3DTestCompat()
 		{
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
@@ -55,9 +50,9 @@ package
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			
-			_stage3D = new Stage3D(stage);			
+			_stage3D = new Stage3D(stage);
 			_stage3D.x = 0;
-			_stage3D.y = 0;
+			_stage3D.y = 100;
 			_stage3D.requestContext3D();
 			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
 		}
@@ -66,15 +61,7 @@ package
 		{
 			trace("Context3D created:", e);
 			_context = _stage3D.context3D;
-		_context.configureBackBuffer(stage.stageWidth, stage.stageHeight, 0, false);
-		
-		// 创建并绑定VAO (OpenGL 3.3 Core需要)
-		_vao = Gl.glGenVertexArrays(1);
-		Gl.glBindVertexArray(_vao);
-		
-		// 启用深度测试和背面剔除
-		// Gl.glEnable(Gl.GL_DEPTH_TEST);
-		// Gl.glEnable(Gl.GL_CULL_FACE);
+			_context.configureBackBuffer(stage.stageWidth, stage.stageHeight, 0, false);
 			
 			// 创建顶点缓冲区
 			_vertexBuffer = _context.createVertexBuffer(3, 5); // 3个顶点，每个顶点5个分量(x,y,z,u,v)
@@ -86,6 +73,7 @@ package
 				0.5, -0.5, 0.0, 1.0, 1.0   // 右下顶点
 			];
 			
+			trace("Uploading vertex data:", vertices.length, "floats");
 			_vertexBuffer.uploadFromVector(vertices, 0, 3);
 			
 			// 创建索引缓冲区
@@ -94,11 +82,13 @@ package
 			// 定义三角形索引
 			var indices:Vector.<uint> = new <uint>[0, 1, 2];
 			
+			trace("Uploading index data:", indices.length, "indices");
 			_indexBuffer.uploadFromVector(indices, 0, 3);
 			
 			// 创建着色器程序
 			_program = _context.createProgram();
 			try {
+				trace("Compiling shaders...");
 				_program.uploadFromGLSL(VERTEX_SHADER, FRAGMENT_SHADER);
 				trace("Shader program compiled successfully");
 			} catch (error:Error) {
@@ -112,6 +102,7 @@ package
 			// 创建简单的棋盘纹理数据
 			createCheckerTexture();
 			
+			trace("Starting render loop...");
 			addEventListener(Event.ENTER_FRAME, render);
 		}
 		
@@ -130,11 +121,9 @@ package
 				}
 			}
 			
+			trace("Uploading texture data...");
 			_texture.uploadFromBitmapData(bitmapData);
-			
-			//
-			//var bit:Bitmap = new Bitmap(bitmapData)
-			//stage.addChild(bit);
+			trace("Texture uploaded successfully");
 		}
 		
 		private function render(e:Event):void
@@ -144,94 +133,37 @@ package
 				trace("Missing required objects for rendering");
 				return;
 			}
-		
-			// 清除缓冲区 - 使用深灰色背景便于调试
-			_context.clear(0.2, 0.2, 0.2, 1.0);
 			
-			// 设置着色器程序
-			_context.setProgram(_program);
-			
-			// 设置顶点缓冲区 (位置:0, 纹理坐标:1)
-			_context.setVertexBufferAt(0, _vertexBuffer, 0, "float3");
-			_context.setVertexBufferAt(1, _vertexBuffer, 3, "float2");
-			
-			// 绑定纹理到纹理单元0
-			_context.setTextureAt(0, _texture);
-			
-			// 设置uniform变量 - 将纹理采样器绑定到纹理单元0
-			_program.setUniform1i("uTexture", 0);
-			
-			// 绑定VAO
-			Gl.glBindVertexArray(_vao);
-			
-			// 添加调试信息
-			if (getTimer() % 1000 < 16) {
-				trace("Debug info:");
-				trace("- Program ID:", _program.programID);
-				trace("- Vertex buffer ID:", _vertexBuffer.bufferID);
-				trace("- Index buffer ID:", _indexBuffer.bufferID);
-				trace("- Texture ID:", _texture.textureId);
+			try {
+				// 清除缓冲区 - 使用深灰色背景
+				_context.clear(0.2, 0.2, 0.2, 1.0);
 				
-				var error:int = Gl.glGetError();
-				if (error != Gl.GL_NO_ERROR) {
-					trace("OpenGL Error before draw:", error.toString(16));
+				// 设置着色器程序
+				_context.setProgram(_program);
+				
+				// 绑定纹理到纹理单元0
+				_context.setTextureAt(0, _texture);
+				
+				// 设置uniform变量 - 将纹理采样器绑定到纹理单元0
+				_program.setUniform1i("uTexture", 0);
+				
+				// 设置顶点缓冲区 (位置:0, 纹理坐标:1)
+				_context.setVertexBufferAt(0, _vertexBuffer, 0, "float3");
+				_context.setVertexBufferAt(1, _vertexBuffer, 3, "float2");
+				
+				// 绘制三角形
+				_context.drawTriangles(_indexBuffer, 0, 1);
+				
+				// 呈现渲染结果
+				_context.present();
+				
+				// 减少trace输出频率
+				if (getTimer() % 1000 < 16) {
+					trace("Rendering textured triangle...");
 				}
+			} catch (error:Error) {
+				trace("Rendering error:", error.message);
 			}
-			
-			// 绘制三角形
-			_context.drawTriangles(_indexBuffer, 0, 1);
-			
-			// 检查绘制后的OpenGL错误
-			if (getTimer() % 1000 < 16) {
-				var drawError:int = Gl.glGetError();
-				if (drawError != Gl.GL_NO_ERROR) {
-					trace("OpenGL Error after draw:", drawError.toString(16));
-				}
-			}
-			
-			// 解绑VAO
-			Gl.glBindVertexArray(0);
-			
-			// 呈现渲染结果
-			_context.present();
-			
-			// 减少trace输出频率
-			if (getTimer() % 1000 < 16) {
-				trace("Rendering textured triangle...");
 		}
 	}
-	
-	/**
-	 * 清理资源
-	 */
-	public function dispose():void
-	{
-		if (_vao > 0) {
-			var arrays:Vector.<uint> = new Vector.<uint>(1);
-			arrays[0] = _vao;
-			Gl.glDeleteVertexArrays(1, arrays);
-			_vao = 0;
-		}
-		
-		if (_vertexBuffer) {
-			_vertexBuffer.dispose();
-			_vertexBuffer = null;
-		}
-		
-		if (_indexBuffer) {
-			_indexBuffer.dispose();
-			_indexBuffer = null;
-		}
-		
-		if (_program) {
-			_program.dispose();
-			_program = null;
-		}
-		
-		if (_texture) {
-			_texture.dispose();
-			_texture = null;
-		}
-	}
-}
 }

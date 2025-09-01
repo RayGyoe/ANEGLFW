@@ -42,12 +42,12 @@ package com.vsdevelop.display3D
 				throw new Error("Context3D.configureBackBuffer: width and height must be positive");
 			}
 			if (antiAlias < 0)
-		{
-			throw new Error("Context3D.configureBackBuffer: antiAlias cannot be negative");
-		}
+			{
+				throw new Error("Context3D.configureBackBuffer: antiAlias cannot be negative");
+			}
 			
 			Glfw.glfwSetWindowSize(_stage3d.activeWindow, width, height);
-			Gl.glViewport(0, 0, width, height);
+			Gl.glViewport(0,0, width, height);
 			
 			// 启用深度测试（如果需要）
 			if (enableDepthAndStencil)
@@ -150,24 +150,24 @@ package com.vsdevelop.display3D
 			}
 			
 			buffer.bind();
-		var size:int = 0;
-		switch (format)
-		{
-		case "float1": 
-			size = 1;
-			break;
-		case "float2": 
-			size = 2;
-			break;
-		case "float3": 
-			size = 3;
-			break;
-		case "float4": 
-			size = 4;
-			break;
-		default: 
-			throw new Error("Context3D.setVertexBufferAt: unsupported format '" + format + "'");
-		}
+			var size:int = 0;
+			switch (format)
+			{
+			case "float1": 
+				size = 1;
+				break;
+			case "float2": 
+				size = 2;
+				break;
+			case "float3": 
+				size = 3;
+				break;
+			case "float4": 
+				size = 4;
+				break;
+			default: 
+				throw new Error("Context3D.setVertexBufferAt: unsupported format '" + format + "'");
+			}
 			
 			// 验证缓冲区偏移量
 			var stride:int = buffer.data32PerVertex * 4;

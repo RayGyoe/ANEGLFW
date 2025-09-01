@@ -5,9 +5,9 @@ package com.vsdevelop.display3D
 	
 	public class VertexBuffer3D
 	{
-		internal var _bufferID:uint;
-		internal var _numVertices:int;
-		internal var _data32PerVertex:int;
+		private var _bufferID:uint;
+		private var _numVertices:int;
+		private var _data32PerVertex:int;
 		
 		public function VertexBuffer3D(numVertices:int, data32PerVertex:int)
 		{
@@ -92,6 +92,11 @@ package com.vsdevelop.display3D
 		public function get numVertices():int
 		{
 			return _numVertices;
+		}
+		
+		public function get bufferID():uint
+		{
+			return _bufferID;
 		}
 		
 		public function get data32PerVertex():int

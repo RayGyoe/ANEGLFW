@@ -69,7 +69,7 @@ package com.vsdevelop.display
 				if (hwnd)
 				{
 					ANEGLFW.getInstance().openGLToNativeWindow(hwnd, _stage.nativeWindow);
-					Glfw.glfwSetWindowPos(_activeWindow, 0, 0);
+					Glfw.glfwSetWindowPos(_activeWindow, _x, _y);
 				}
 				
 				// 设置OpenGL上下文
@@ -86,7 +86,9 @@ package com.vsdevelop.display
 				
 				// Simulate async creation and dispatch event
 				
-				dispatchEvent(new Event(Event.CONTEXT3D_CREATE));
+				setTimeout(function():void{
+					dispatchEvent(new Event(Event.CONTEXT3D_CREATE));
+				},0)
 			}
 		}
 		

@@ -1,5 +1,6 @@
 package
 {
+	import com.greensock.TweenLite;
 	import com.vsdevelop.air.extension.glfw.ANEGLFW;
 	import com.vsdevelop.air.extension.glfw.Gl;
 	import com.vsdevelop.air.extension.glfw.Glfw;
@@ -403,6 +404,16 @@ package
 			var colorText3:TextRenderer = new TextRenderer(390, 360, 150, 25);
 			colorText3.setText("蓝色文本", 16, 0x0000FF, "微软雅黑");
 			_uiManager.addComponent(colorText3);
+			
+			
+			testTween(colorText3);
+		}
+		
+		private function testTween(text:TextRenderer):void 
+		{
+			TweenLite.to(text, 1, {x:Math.random()*stage.stageWidth,onComplete:function():void{
+				testTween(text);
+			}});
 		}
 		
 		/**
@@ -493,6 +504,7 @@ package
 		{
 			trace("图片加载完成!");
 			_statusText.text = "图片加载完成! 尺寸: " + _testImage.textureWidth + "x" + _testImage.textureHeight;
+			
 		}
 		
 		/**
@@ -670,6 +682,9 @@ package
 			trace("背景图片尺寸: " + _backgroundImage.textureWidth + "x" + _backgroundImage.textureHeight);
 			trace("背景图片位置: (" + _backgroundImage.x + ", " + _backgroundImage.y + ") 尺寸: " + _backgroundImage.width + "x" + _backgroundImage.height);
 			trace("背景图片是否已加载: " + _backgroundImage.isLoaded);
+			
+			
+			TweenLite.from(_backgroundImage, 0.5, {alpha:0});
 		}
 		
 		/**

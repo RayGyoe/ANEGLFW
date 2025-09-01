@@ -5,6 +5,7 @@ package com.vsdevelop.display3D.textures
     import flash.events.EventDispatcher;
     import flash.utils.ByteArray;
     import com.vsdevelop.air.extension.glfw.Gl;
+	import flash.utils.Endian;
     
     public class Texture extends EventDispatcher
     {
@@ -45,7 +46,9 @@ package com.vsdevelop.display3D.textures
                 throw new Error("Texture.uploadFromBitmapData: source dimensions must match texture dimensions");
             }
                 
-            var pixels:ByteArray = source.getPixels(source.rect);
+            var pixels:ByteArray = new ByteArray();
+			pixels.endian = Endian.LITTLE_ENDIAN;
+			source.copyPixelsToByteArray(source.rect, pixels);
             pixels.position = 0;
             
             Gl.glBindTexture(Gl.GL_TEXTURE_2D, _textureId);

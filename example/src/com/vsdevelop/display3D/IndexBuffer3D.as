@@ -5,8 +5,8 @@ package com.vsdevelop.display3D
 	
 	public class IndexBuffer3D
 	{
-		internal var _bufferID:uint;
-		internal var _numIndices:int;
+		private var _bufferID:uint;
+		private var _numIndices:int;
 		
 		public function IndexBuffer3D(numIndices:int)
 		{
@@ -83,6 +83,11 @@ package com.vsdevelop.display3D
 				Gl.glDeleteBuffers(1, _bufferID);
 				_bufferID = 0;
 			}
+		}
+		
+		public function get bufferID():uint 
+		{
+			return _bufferID;
 		}
 		
 		public function get numIndices():int

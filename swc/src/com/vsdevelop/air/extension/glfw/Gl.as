@@ -1501,6 +1501,18 @@ package com.vsdevelop.air.extension.glfw
 			ANEGLFW.getInstance().context.call("glDeleteShader", shader);
 		}
 		
+		public static function glGetShaderiv(shader:int, pname:int):int
+		{
+			checkSupported();
+			return int(ANEGLFW.getInstance().context.call("glGetShaderiv", shader, pname));
+		}
+		
+		public static function glGetShaderInfoLog(shader:int, bufSize:int):String
+		{
+			checkSupported();
+			return String(ANEGLFW.getInstance().context.call("glGetShaderInfoLog", shader, bufSize));
+		}
+		
 		public static function glCreateProgram():int
 		{
 			checkSupported();
@@ -1529,6 +1541,30 @@ package com.vsdevelop.air.extension.glfw
 	{
 		checkSupported();
 		ANEGLFW.getInstance().context.call("glDeleteProgram", program);
+	}
+	
+	public static function glGetProgramiv(program:int, pname:int):int
+	{
+		checkSupported();
+		return int(ANEGLFW.getInstance().context.call("glGetProgramiv", program, pname));
+	}
+	
+	public static function glGetProgramInfoLog(program:int, bufSize:int):String
+	{
+		checkSupported();
+		return String(ANEGLFW.getInstance().context.call("glGetProgramInfoLog", program, bufSize));
+	}
+	
+	public static function glBindAttribLocation(program:int, index:int, name:String):void
+	{
+		checkSupported();
+		ANEGLFW.getInstance().context.call("glBindAttribLocation", program, index, name);
+	}
+
+	public static function glGetError():int
+	{
+		checkSupported();
+		return int(ANEGLFW.getInstance().context.call("glGetError"));
 	}
 	
 	

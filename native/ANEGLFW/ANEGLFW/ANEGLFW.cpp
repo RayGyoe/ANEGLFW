@@ -557,6 +557,63 @@ extern "C" {
 		return NULL;
 	}
 
+	FREObject ANE_glGetShaderiv(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int shader = ANEutils->getInt32(argv[0]);
+		int pname = ANEutils->getInt32(argv[1]);
+		int params;
+		glGetShaderiv(shader, pname, &params);
+		return ANEutils->AS_int(params);
+	}
+
+	FREObject ANE_glGetShaderInfoLog(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int shader = ANEutils->getInt32(argv[0]);
+		int bufSize = ANEutils->getInt32(argv[1]);
+		char* infoLog = new char[bufSize];
+		int length;
+		glGetShaderInfoLog(shader, bufSize, &length, infoLog);
+		std::string result(infoLog, length);
+		delete[] infoLog;
+		return ANEutils->AS_String(result.c_str());
+	}
+
+	FREObject ANE_glGetProgramiv(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int program = ANEutils->getInt32(argv[0]);
+		int pname = ANEutils->getInt32(argv[1]);
+		int params;
+		glGetProgramiv(program, pname, &params);
+		return ANEutils->AS_int(params);
+	}
+
+	FREObject ANE_glGetProgramInfoLog(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int program = ANEutils->getInt32(argv[0]);
+		int bufSize = ANEutils->getInt32(argv[1]);
+		char* infoLog = new char[bufSize];
+		int length;
+		glGetProgramInfoLog(program, bufSize, &length, infoLog);
+		std::string result(infoLog, length);
+		delete[] infoLog;
+		return ANEutils->AS_String(result.c_str());
+	}
+
+	FREObject ANE_glBindAttribLocation(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int program = ANEutils->getInt32(argv[0]);
+		int index = ANEutils->getInt32(argv[1]);
+		std::string name = ANEutils->getString(argv[2]);
+		glBindAttribLocation(program, index, name.c_str());
+		return NULL;
+	}
+
+	FREObject ANE_glGetError(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		GLenum error = glGetError();
+		return ANEutils->AS_int(error);
+	}
+
 	
 	FREObject ANE_glCreateProgram(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
@@ -1038,12 +1095,18 @@ extern "C" {
 			{ (const uint8_t*)"glShaderSource",					NULL, &ANE_glShaderSource },
 			{ (const uint8_t*)"glCompileShader",					NULL, &ANE_glCompileShader },
 			{ (const uint8_t*)"glDeleteShader",					NULL, &ANE_glDeleteShader },
+			{ (const uint8_t*)"glGetShaderiv",					NULL, &ANE_glGetShaderiv },
+			{ (const uint8_t*)"glGetShaderInfoLog",				NULL, &ANE_glGetShaderInfoLog },
 			
 			{ (const uint8_t*)"glCreateProgram",					NULL, &ANE_glCreateProgram },
 			{ (const uint8_t*)"glAttachShader",					NULL, &ANE_glAttachShader },
 			{ (const uint8_t*)"glLinkProgram",					NULL, &ANE_glLinkProgram },
 			{ (const uint8_t*)"glUseProgram",					NULL, &ANE_glUseProgram },
 			{ (const uint8_t*)"glDeleteProgram",					NULL, &ANE_glDeleteProgram },
+			{ (const uint8_t*)"glGetProgramiv",					NULL, &ANE_glGetProgramiv },
+			{ (const uint8_t*)"glGetProgramInfoLog",				NULL, &ANE_glGetProgramInfoLog },
+			{ (const uint8_t*)"glBindAttribLocation",				NULL, &ANE_glBindAttribLocation },
+		{ (const uint8_t*)"glGetError",						NULL, &ANE_glGetError },
 
 
 			{ (const uint8_t*)"glGenTextures",					NULL, &ANE_glGenTextures },
