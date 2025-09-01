@@ -12,3 +12,5 @@ native/ANEGLFW/ANEGLFW/x64
 .docx
 apm
 native/.vs
+native/build-mac
+.trae
