@@ -15,3 +15,5 @@ native/.vs
 native/build-mac
 native/ANEGLFW-Mac/build
 .trae
+example/bin-release/*
+example/bin/*
