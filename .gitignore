@@ -13,4 +13,5 @@ native/ANEGLFW/ANEGLFW/x64
 apm
 native/.vs
 native/build-mac
+native/ANEGLFW-Mac/build
 .trae
