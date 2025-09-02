@@ -1567,6 +1567,18 @@ package com.vsdevelop.air.extension.glfw
 		return int(ANEGLFW.getInstance().context.call("glGetError"));
 	}
 	
+	public static function glGetIntegerv(pname:int):int
+	{
+		checkSupported();
+		return int(ANEGLFW.getInstance().context.call("glGetIntegerv", pname));
+	}
+	
+	public static function glGetAttribLocation(program:int, name:String):int
+	{
+		checkSupported();
+		return int(ANEGLFW.getInstance().context.call("glGetAttribLocation", program, name));
+	}
+	
 	
 	public static function glGenTextures(size:int):int
 		{

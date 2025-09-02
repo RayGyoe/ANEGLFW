@@ -52,23 +52,28 @@ package com.vsdevelop.display3D
 				throw new Error("IndexBuffer3D.uploadFromVector: index range exceeds buffer capacity");
 			}
 			
-			// 将Vector数据转换为ByteArray
-			var byteArray:ByteArray = new ByteArray();
-			byteArray.endian = "littleEndian";
+			// 创建16位无符号整数数组，与GL_UNSIGNED_SHORT匹配
+			var indexVector:Vector.<Number> = new Vector.<Number>();
 			
 			var endIndex:int = startIndex + numIndices;
 			for (var i:int = startIndex; i < endIndex && i < data.length; i++) {
-				byteArray.writeShort(data[i]); // 使用16位无符号整数
+				// 确保索引值在16位无符号整数范围内
+				if (data[i] > 65535) {
+					throw new Error("IndexBuffer3D.uploadFromVector: index value exceeds 16-bit limit: " + data[i]);
+				}
+				indexVector.push(data[i]);
 			}
 			
-			byteArray.position = 0;
-			// 将ByteArray转换为Vector.<Number>
-			var dataVector:Vector.<Number> = new Vector.<Number>();
-			byteArray.position = 0;
-			while (byteArray.bytesAvailable >= 2) {
-				dataVector.push(byteArray.readUnsignedShort());
+			trace("IndexBuffer3D: Uploading", indexVector.length, "indices:", indexVector);
+			
+			// 使用正确的数据类型上传索引数据
+			Gl.glBufferData(Gl.GL_ELEMENT_ARRAY_BUFFER, indexVector.length * 2, indexVector, Gl.GL_STATIC_DRAW);
+			
+			// 验证上传是否成功
+			var error:int = Gl.glGetError();
+			if (error != Gl.GL_NO_ERROR) {
+				trace("IndexBuffer3D upload error:", error.toString(16));
 			}
-			Gl.glBufferData(Gl.GL_ELEMENT_ARRAY_BUFFER, byteArray.length, dataVector, Gl.GL_STATIC_DRAW);
 		}
 		
 		public function bind():void

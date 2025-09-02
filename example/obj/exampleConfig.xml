@@ -14,7 +14,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'2025/9/1'</value>
+      <value>'2025/9/2'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -39,7 +39,7 @@
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\example\src\UITestMain.as</path-element>
+    <path-element>D:\Works\Works\TalkMEDAndroid-Company\ANEGLFW\example\src\Display3DTest.as</path-element>
   </file-specs>
   <default-background-color>#C0C0C0</default-background-color>
   <default-frame-rate>60</default-frame-rate>

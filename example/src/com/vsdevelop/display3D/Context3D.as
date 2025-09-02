@@ -47,7 +47,7 @@ package com.vsdevelop.display3D
 			}
 			
 			Glfw.glfwSetWindowSize(_stage3d.activeWindow, width, height);
-			Gl.glViewport(0,0, width, height);
+			Gl.glViewport(0, 0, width, height);
 			
 			// 启用深度测试（如果需要）
 			if (enableDepthAndStencil)
@@ -149,7 +149,19 @@ package com.vsdevelop.display3D
 				throw new Error("Context3D.setVertexBufferAt: bufferOffset cannot be negative");
 			}
 			
-			buffer.bind();
+			// 检查当前是否有绑定的VAO
+			var currentVAO:int = Gl.glGetIntegerv(Gl.GL_VERTEX_ARRAY_BINDING);
+			if (currentVAO == 0)
+			{
+				// 如果没有VAO绑定，则需要手动绑定缓冲区并设置属性
+				buffer.bind();
+			}
+			else
+			{
+				// 如果有VAO绑定，确保缓冲区已绑定（VAO会记住这个状态）
+				buffer.bind();
+			}
+			
 			var size:int = 0;
 			switch (format)
 			{
@@ -177,6 +189,7 @@ package com.vsdevelop.display3D
 				throw new Error("Context3D.setVertexBufferAt: bufferOffset exceeds vertex buffer capacity");
 			}
 			
+			// 设置顶点属性指针并启用
 			Gl.glVertexAttribPointer(index, size, Gl.GL_FLOAT, Gl.GL_FALSE, stride, offset);
 			Gl.glEnableVertexAttribArray(index);
 		}

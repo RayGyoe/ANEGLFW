@@ -23,7 +23,7 @@
                 <dep id="int" type="e"/>
                 <dep id="trace" type="e"/>
             </script>
-            <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1756727217806">
+            <script name="com/vsdevelop/air/extension/glfw/Gl" mod="1756809500936">
                 <def id="com.vsdevelop.air.extension.glfw:Gl"/>
                 <dep id="Boolean" type="s"/>
                 <dep id="Error" type="e"/>
@@ -50,7 +50,7 @@
                 <dep id="int" type="s"/>
             </script>
             <digests>
-                <digest type="SHA-256" signed="false" value="95e0acc5d3e96d2b2b8156f2f6cd23023e8cf89e1bdec534c77c165b11ffbf68"/>
+                <digest type="SHA-256" signed="false" value="aed37e9fbf33434e9a8c1f1604bc12915d42db0a930a44687299b65a0a6e6774"/>
             </digests>
         </library>
     </libraries>

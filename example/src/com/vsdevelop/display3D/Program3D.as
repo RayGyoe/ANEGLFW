@@ -58,14 +58,32 @@ package com.vsdevelop.display3D
 			throw new Error("Fragment shader compilation failed: " + fragmentLog);
 		}
 		
-		// 绑定attribute位置（在链接之前）
-		Gl.glBindAttribLocation(_programID, 0, "aPosition");
-		Gl.glBindAttribLocation(_programID, 1, "aTexCoord");
-		Gl.glBindAttribLocation(_programID, 1, "aColor"); // 为颜色属性绑定位置1（根据着色器使用情况）
-		
-		// 链接程序
+		// 附加着色器到程序
 		Gl.glAttachShader(_programID, _vertexShaderID);
 		Gl.glAttachShader(_programID, _fragmentShaderID);
+		
+		// 在链接之前绑定属性位置（这是正确的时机）
+		var attributeIndex:int = 0;
+		
+		// 检查并绑定常见的顶点属性
+		if (vertexSource.indexOf("aPosition") != -1) {
+			Gl.glBindAttribLocation(_programID, attributeIndex++, "aPosition");
+			trace("Bound aPosition to location:", attributeIndex - 1);
+		}
+		if (vertexSource.indexOf("aTexCoord") != -1) {
+			Gl.glBindAttribLocation(_programID, attributeIndex++, "aTexCoord");
+			trace("Bound aTexCoord to location:", attributeIndex - 1);
+		}
+		if (vertexSource.indexOf("aNormal") != -1) {
+			Gl.glBindAttribLocation(_programID, attributeIndex++, "aNormal");
+			trace("Bound aNormal to location:", attributeIndex - 1);
+		}
+		if (vertexSource.indexOf("aColor") != -1) {
+			Gl.glBindAttribLocation(_programID, attributeIndex++, "aColor");
+			trace("Bound aColor to location:", attributeIndex - 1);
+		}
+		
+		// 链接程序（必须在绑定属性位置之后）
 		Gl.glLinkProgram(_programID);
 		
 		// 检查程序链接状态
@@ -77,6 +95,16 @@ package com.vsdevelop.display3D
 		}
 		
 		trace("Shader program compiled and linked successfully");
+		
+		// 验证属性绑定（调试用）
+		if (vertexSource.indexOf("aPosition") != -1) {
+			var posLocation:int = Gl.glGetAttribLocation(_programID, "aPosition");
+			trace("aPosition actual location:", posLocation);
+		}
+		if (vertexSource.indexOf("aTexCoord") != -1) {
+			var texLocation:int = Gl.glGetAttribLocation(_programID, "aTexCoord");
+			trace("aTexCoord actual location:", texLocation);
+		}
 	}
 		
 		public function activate():void

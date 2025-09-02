@@ -614,6 +614,33 @@ extern "C" {
 		return ANEutils->AS_int(error);
 	}
 
+	FREObject ANE_glGetIntegerv(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int pname = ANEutils->getInt32(argv[0]);
+		int params;
+		
+		// 对于顶点属性相关的查询，需要使用 glGetVertexAttribiv
+		if (pname >= GL_VERTEX_ATTRIB_ARRAY_ENABLED && pname <= GL_VERTEX_ATTRIB_ARRAY_ENABLED + 15) {
+			int index = pname - GL_VERTEX_ATTRIB_ARRAY_ENABLED;
+			glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &params);
+			if (debug) printf("\n%s glGetVertexAttribiv index=%d enabled=%d", TAG, index, params);
+		} else {
+			glGetIntegerv(pname, &params);
+			if (debug) printf("\n%s glGetIntegerv pname=0x%x value=%d", TAG, pname, params);
+		}
+		
+		return ANEutils->AS_int(params);
+	}
+
+	FREObject ANE_glGetAttribLocation(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int program = ANEutils->getInt32(argv[0]);
+		std::string name = ANEutils->getString(argv[1]);
+		int location = glGetAttribLocation(program, name.c_str());
+		if (debug) printf("\n%s glGetAttribLocation program=%d name=%s location=%d", TAG, program, name.c_str(), location);
+		return ANEutils->AS_int(location);
+	}
+
 	
 	FREObject ANE_glCreateProgram(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
@@ -1106,7 +1133,9 @@ extern "C" {
 			{ (const uint8_t*)"glGetProgramiv",					NULL, &ANE_glGetProgramiv },
 			{ (const uint8_t*)"glGetProgramInfoLog",				NULL, &ANE_glGetProgramInfoLog },
 			{ (const uint8_t*)"glBindAttribLocation",				NULL, &ANE_glBindAttribLocation },
-		{ (const uint8_t*)"glGetError",						NULL, &ANE_glGetError },
+			{ (const uint8_t*)"glGetAttribLocation",				NULL, &ANE_glGetAttribLocation },
+	{ (const uint8_t*)"glGetError",						NULL, &ANE_glGetError },
+	{ (const uint8_t*)"glGetIntegerv",					NULL, &ANE_glGetIntegerv },
 
 
 			{ (const uint8_t*)"glGenTextures",					NULL, &ANE_glGenTextures },
