@@ -170,23 +170,13 @@ package ui.core
 		 */
 		public function render():void
 		{
-			with (Gl)
-			{
-				// 启用混合模式以支持透明度
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			}
+			// 启用混合模式以支持透明度
+			Gl.glEnable(Gl.GL_BLEND);
+			Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
 			
 			// 渲染所有组件
-			for (var i:int = 0; i < _components.length; i++)
-			{
-				_components[i].render();
-			}
-			
-			with (Gl)
-			{
-				glDisable(GL_BLEND);
-			}
+			for (var i:int = 0; i < _components.length; i++)_components[i].render();
+			Gl.glDisable(Gl.GL_BLEND);
 		}
 		
 		/**
@@ -280,6 +270,7 @@ package ui.core
 		
 		/**
 		 * 获取指定坐标处的组件
+		 * 递归查找最深层的、具有鼠标事件监听器的子组件
 		 * @param x X坐标
 		 * @param y Y坐标
 		 * @return 找到的组件，如果没有则返回null
@@ -292,10 +283,66 @@ package ui.core
 				var component:UIComponent = _components[i];
 				if (component.hitTest(x, y))
 				{
-					return component;
+					// 递归查找子组件中最深层的、具有事件监听器的组件
+					var deepestComponent:UIComponent = findDeepestInteractiveComponent(component, x, y);
+					return deepestComponent;
 				}
 			}
 			return null;
+		}
+		
+		/**
+		 * 递归查找最深层的、具有鼠标事件监听器的子组件
+		 * @param component 要搜索的父组件
+		 * @param x X坐标
+		 * @param y Y坐标
+		 * @return 找到的最深层交互组件，如果没有则返回null
+		 */
+		private function findDeepestInteractiveComponent(component:UIComponent, x:Number, y:Number):UIComponent
+		{
+			var deepestInteractive:UIComponent = null;
+			
+			// 检查当前组件是否有鼠标事件监听器
+			var hasMouseEvents:Boolean = hasMouseEventListeners(component);
+			if (hasMouseEvents)
+			{
+				deepestInteractive = component;
+			}else{
+					
+				// 递归检查子组件（从后往前，确保上层组件优先）
+				var children:Vector.<UIComponent> = component.getChildren();
+				for (var i:int = children.length - 1; i >= 0; i--)
+				{
+					var child:UIComponent = children[i];
+					if (child.hitTest(x, y))
+					{
+						var childResult:UIComponent = findDeepestInteractiveComponent(child, x, y);
+						if (childResult != null)
+						{
+							deepestInteractive = childResult;
+							break; // 找到最上层的交互子组件就停止
+						}
+					}
+				}
+			}
+			
+			
+			return deepestInteractive;
+		}
+		
+		/**
+		 * 检查组件是否有鼠标事件监听器
+		 * @param component 要检查的组件
+		 * @return 是否有鼠标事件监听器
+		 */
+		private function hasMouseEventListeners(component:UIComponent):Boolean
+		{
+			return component.hasEventListener(UIEvent.MOUSE_DOWN) ||
+				   component.hasEventListener(UIEvent.MOUSE_UP) ||
+				   component.hasEventListener(UIEvent.CLICK) ||
+				   component.hasEventListener(UIEvent.MOUSE_OVER) ||
+				   component.hasEventListener(UIEvent.MOUSE_OUT) ||
+				   component.hasEventListener(UIEvent.MOUSE_MOVE);
 		}
 		
 		/**

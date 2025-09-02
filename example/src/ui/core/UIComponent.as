@@ -31,6 +31,10 @@ package ui.core
 		protected var _VBO:int = 0;
 		protected var _vertices:Vector.<Number>;
 		
+		// 子组件管理
+		protected var _children:Vector.<UIComponent>;
+		protected var _parent:UIComponent;
+		
 		/**
 		 * 构造函数
 		 * @param x X坐标
@@ -46,6 +50,8 @@ package ui.core
 			_width = width;
 			_height = height;
 			_bounds = new Rectangle(x, y, width, height);
+			_children = new Vector.<UIComponent>();
+			_parent = null;
 			
 			initializeGL();
 		}
@@ -67,20 +73,46 @@ package ui.core
 		}
 		
 		/**
+		 * 获取组件的绝对坐标（包括所有父容器的偏移）
+		 * @return 包含绝对x和y坐标的对象
+		 */
+		protected function getAbsolutePosition():Object
+		{
+			var absX:Number = _x;
+			var absY:Number = _y;
+			
+			// 累加所有父容器的坐标偏移
+			var currentParent:UIComponent = _parent;
+			while (currentParent != null)
+			{
+				absX += currentParent._x;
+				absY += currentParent._y;
+				currentParent = currentParent._parent;
+			}
+			
+			return {x: absX, y: absY};
+		}
+		
+		/**
 		 * 更新顶点数据
 		 */
 		protected function updateVertices():void
 		{
+			// 获取绝对坐标
+			var absPos:Object = getAbsolutePosition();
+			var absX:Number = absPos.x;
+			var absY:Number = absPos.y;
+			
 			// 创建矩形顶点数据 (位置 + 纹理坐标)
 			_vertices = new <Number>[
 				// 位置 (x, y, z)     纹理坐标 (u, v)
-				_x, _y, 0,         0, 0,
-				_x + _width, _y, 0, 1.0, 0,
-				_x + _width, _y + _height, 0, 1, 1,
+				absX, absY, 0,         0, 0,
+				absX + _width, absY, 0, 1.0, 0,
+				absX + _width, absY + _height, 0, 1, 1,
 				
-				_x, _y, 0,         0, 0,
-				_x + _width, _y + _height, 0, 1, 1,
-				_x, _y + _height, 0, 0, 1
+				absX, absY, 0,         0, 0,
+				absX + _width, absY + _height, 0, 1, 1,
+				absX, absY + _height, 0, 0, 1
 			];
 			
 			updateVertexData(_vertices);
@@ -156,15 +188,138 @@ package ui.core
 		
 		/**
 		 * 检查点是否在组件内
-		 * @param pointX X坐标
-		 * @param pointY Y坐标
+		 * @param pointX X坐标（绝对坐标）
+		 * @param pointY Y坐标（绝对坐标）
 		 * @return 是否在组件内
 		 */
 		public function hitTest(pointX:Number, pointY:Number):Boolean
 		{
-			return _visible && _enabled && 
-				   pointX >= _x && pointX <= _x + _width &&
-				   pointY >= _y && pointY <= _y + _height;
+			if (!_visible || !_enabled) return false;
+			
+			// 获取组件的绝对坐标
+			var absPos:Object = getAbsolutePosition();
+			var absX:Number = absPos.x;
+			var absY:Number = absPos.y;
+			
+			// 使用绝对坐标进行点击测试
+			return pointX >= absX && pointX <= absX + _width &&
+				   pointY >= absY && pointY <= absY + _height;
+		}
+		
+		/**
+		 * 递归更新所有子组件的顶点数据
+		 */
+		protected function updateChildrenVertices():void
+		{
+			for (var i:int = 0; i < _children.length; i++)
+			{
+				var child:UIComponent = _children[i];
+				child.updateVertices();
+				child.updateChildrenVertices(); // 递归更新子组件的子组件
+			}
+		}
+		
+		/**
+		 * 添加子组件
+		 * @param child 要添加的子组件
+		 * @return 添加的子组件
+		 */
+		public function addChild(child:UIComponent):UIComponent
+		{
+			if (child == null || child == this)
+				return child;
+				
+			// 如果子组件已经有父组件，先从原父组件中移除
+			if (child._parent != null)
+			{
+				child._parent.removeChild(child);
+			}
+			
+			// 添加到子组件列表
+			_children.push(child);
+			child._parent = this;
+			
+			// 更新子组件的顶点数据（因为父组件改变了）
+			child.updateVertices();
+			child.updateChildrenVertices();
+			
+			return child;
+		}
+		
+		/**
+		 * 移除子组件
+		 * @param child 要移除的子组件
+		 * @return 移除的子组件
+		 */
+		public function removeChild(child:UIComponent):UIComponent
+		{
+			if (child == null)
+				return null;
+				
+			var index:int = _children.indexOf(child);
+			if (index >= 0)
+			{
+				return removeChildAt(index);
+			}
+			
+			return null;
+		}
+		
+		/**
+		 * 根据索引移除子组件
+		 * @param index 子组件索引
+		 * @return 移除的子组件
+		 */
+		public function removeChildAt(index:int):UIComponent
+		{
+			if (index < 0 || index >= _children.length)
+				return null;
+				
+			var child:UIComponent = _children[index];
+			_children.splice(index, 1);
+			child._parent = null;
+			
+			return child;
+		}
+		
+		/**
+		 * 获取子组件列表的副本
+		 * @return 子组件列表
+		 */
+		public function getChildren():Vector.<UIComponent>
+		{
+			return _children.slice();
+		}
+		
+		/**
+		 * 获取子组件数量
+		 * @return 子组件数量
+		 */
+		public function get numChildren():int
+		{
+			return _children.length;
+		}
+		
+		/**
+		 * 根据索引获取子组件
+		 * @param index 子组件索引
+		 * @return 子组件
+		 */
+		public function getChildAt(index:int):UIComponent
+		{
+			if (index < 0 || index >= _children.length)
+				return null;
+				
+			return _children[index];
+		}
+		
+		/**
+		 * 获取父组件
+		 * @return 父组件
+		 */
+		public function get parent():UIComponent
+		{
+			return _parent;
 		}
 		
 		/**
@@ -172,6 +327,19 @@ package ui.core
 		 */
 		public function dispose():void
 		{
+			// 释放所有子组件
+			for (var i:int = 0; i < _children.length; i++)
+			{
+				_children[i].dispose();
+			}
+			_children.length = 0;
+			
+			// 从父组件中移除
+			if (_parent != null)
+			{
+				_parent.removeChild(this);
+			}
+			
 			if (_VAO > 0)
 			{
 				var arrays:Vector.<uint> = new Vector.<uint>(1);
@@ -196,6 +364,8 @@ package ui.core
 				_x = value;
 				_bounds.x = value;
 				_needsRedraw = true;
+				updateVertices(); // 更新顶点数据以反映位置变化
+				updateChildrenVertices(); // 更新所有子组件的顶点数据
 			}
 		}
 		
@@ -207,6 +377,8 @@ package ui.core
 				_y = value;
 				_bounds.y = value;
 				_needsRedraw = true;
+				updateVertices(); // 更新顶点数据以反映位置变化
+				updateChildrenVertices(); // 更新所有子组件的顶点数据
 			}
 		}
 		
@@ -218,6 +390,7 @@ package ui.core
 				_width = value;
 				_bounds.width = value;
 				_needsRedraw = true;
+				updateVertices(); // 更新顶点数据以反映尺寸变化
 			}
 		}
 		
@@ -229,6 +402,7 @@ package ui.core
 				_height = value;
 				_bounds.height = value;
 				_needsRedraw = true;
+				updateVertices(); // 更新顶点数据以反映尺寸变化
 			}
 		}
 		

@@ -6,6 +6,7 @@ package
 	import com.vsdevelop.air.extension.glfw.Glfw;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import ui.containers.Container;
 	import ui.text.TextRenderer;
 	
 	import ui.core.UIManager;
@@ -13,7 +14,11 @@ package
 	import ui.components.Image;
 	import ui.events.UIEvent;
 	import ui.test.UITestCase;
+	import ui.test.LayoutTestCase;
 	import ui.state.FpsMonitor;
+	import ui.layout.LinearLayout;
+	import ui.layout.GridLayout;
+	import ui.layout.BorderLayout;
 	import flash.display.Screen;
 	import flash.display.BitmapData;
 	import flash.events.Event;
@@ -44,7 +49,6 @@ package
 		// UI框架相关
 		private var _uiManager:UIManager;
 		private var _testCase:UITestCase;
-		
 		// 测试组件
 		private var _testButton1:Button;
 		private var _testButton2:Button;
@@ -331,36 +335,65 @@ package
 		 */
 		private function createTestComponents():void
 		{
-			// 创建FPS监控组件
+			// 创建FPS监控组件（保持固定位置）
 			fpsMonitor = new FpsMonitor(glWidth - 90, 0);
 			_uiManager.addComponent(fpsMonitor);
 			
+			// 创建按钮容器和布局
+			var buttonContainer:Container = new Container(50, 50, 450, 50);
+			var buttonLayout:LinearLayout = new LinearLayout();
+			buttonLayout.orientation = LinearLayout.HORIZONTAL;
+			buttonLayout.alignment = LinearLayout.ALIGN_START;
+			buttonLayout.setSpacing(20);
+			buttonContainer.setLayoutManager(buttonLayout);
+			
 			// 创建按钮1 - 普通按钮
-			_testButton1 = new Button(50, 50, 120, 40, "点击我!");
+			_testButton1 = new Button(0, 0, 150, 40, "点击我!");
 			_testButton1.addEventListener(UIEvent.CLICK, onButton1Click);
-			_uiManager.addComponent(_testButton1);
+			buttonContainer.addChild(_testButton1);
 			
 			// 创建按钮2 - 自定义颜色
-			_testButton2 = new Button(200, 50, 120, 40, "自定义按钮");
+			_testButton2 = new Button(0, 0, 150, 40, "自定义按钮");
 			_testButton2.setColors(new <Number>[0.2, 0.6, 0.2, 1.0], // 绿色正常状态
 			new <Number>[0.3, 0.8, 0.3, 1.0], // 亮绿色悬停状态
 			new <Number>[0.1, 0.4, 0.1, 1.0], // 深绿色按下状态
 			new <Number>[0.1, 0.3, 0.1, 0.5]  // 半透明禁用状态
 			);
 			_testButton2.addEventListener(UIEvent.CLICK, onButton2Click);
-			_uiManager.addComponent(_testButton2);
+			buttonContainer.addChild(_testButton2);
 			
 			// 创建按钮3 - 可禁用按钮
-			_testButton3 = new Button(350, 50, 120, 40, "切换状态");
+			_testButton3 = new Button(0, 0, 150, 40, "切换状态");
 			_testButton3.addEventListener(UIEvent.CLICK, onButton3Click);
-			_uiManager.addComponent(_testButton3);
+			buttonContainer.addChild(_testButton3);
 			
-			// 创建图片组件并生成测试图片
-			_testImage = new Image(50, 120, 200, 150);
+			// 应用布局并添加到UI管理器
+			buttonContainer.updateLayout();
+			_uiManager.addComponent(buttonContainer);
+			
+			// 创建图片容器，使用边框布局
+			var imageContainer:Container = new Container(50, 120, 400, 200);
+			var imageLayout:BorderLayout = new BorderLayout();
+			imageLayout.northHeight = 30;
+			imageContainer.setLayoutManager(imageLayout);
+			
+			// 创建图片标题
+			var imageTitle:TextRenderer = new TextRenderer(0, 0, 200, 30);
+			imageTitle.setText("测试图片组件", 16, 0xFFFFFF, "微软雅黑");
+			imageContainer.addChild(imageTitle);
+			imageLayout.addComponent(imageTitle, BorderLayout.NORTH);
+			
+			// 创建图片组件
+			_testImage = new Image(0, 0, 200, 150);
 			_testImage.addEventListener(UIEvent.CLICK, onImageClick);
 			_testImage.addEventListener(UIEvent.ERROR, onImageError);
 			_testImage.addEventListener(UIEvent.COMPLETE, onImageLoaded);
-			_uiManager.addComponent(_testImage);
+			imageContainer.addChild(_testImage);
+			imageLayout.addComponent(_testImage, BorderLayout.CENTER);
+			
+			// 应用布局并添加到UI管理器
+			imageContainer.updateLayout();
+			_uiManager.addComponent(imageContainer);
 			
 			// 生成测试图片数据
 			createTestImage();
@@ -372,46 +405,87 @@ package
 		 */
 		private function createTextRendererTests():void
 		{
-			// 创建标题文本
-			var titleText:TextRenderer = new TextRenderer(300, 120, 250, 35);
+			// 创建文本容器，使用边框布局
+			var textContainer:Container = new Container(500, 350, 300, 200);
+			var textLayout:BorderLayout = new BorderLayout();
+			textLayout.northHeight = 40;
+			textLayout.southHeight = 30;
+			textContainer.setLayoutManager(textLayout);
+			
+			// 创建标题文本（北区域）
+			var titleText:TextRenderer = new TextRenderer(0, 0, 250, 35);
 			titleText.setText("TextRenderer测试", 20, 0xFF0000, "微软雅黑");
-			_uiManager.addComponent(titleText);
+			textContainer.addChild(titleText);
+			textLayout.addComponent(titleText, BorderLayout.NORTH);
+			
+			// 创建中心区域容器，使用线性布局
+			var centerContainer:Container = new Container(0, 0, 300, 130);
+			var centerLayout:LinearLayout = new LinearLayout();
+			centerLayout.orientation = LinearLayout.VERTICAL;
+			centerLayout.alignment = LinearLayout.ALIGN_START;
+			centerLayout.setSpacing(10);
+			centerContainer.setLayoutManager(centerLayout);
 			
 			// 创建描述文本
-			var descText:TextRenderer = new TextRenderer(300, 170, 300, 25);
+			var descText:TextRenderer = new TextRenderer(0, 0, 300, 25);
 			descText.setText("独立的文本渲染组件", 14, 0x0000FF, "微软雅黑");
-			_uiManager.addComponent(descText);
+			centerContainer.addChild(descText);
 			
 			// 创建小字体文本
-			var smallText:TextRenderer = new TextRenderer(300, 210, 200, 20);
+			var smallText:TextRenderer = new TextRenderer(0, 0, 200, 20);
 			smallText.setText("小字体 (12px)", 12, 0x666666, "微软雅黑");
-			_uiManager.addComponent(smallText);
+			centerContainer.addChild(smallText);
 			
 			// 创建大字体文本
-			var largeText:TextRenderer = new TextRenderer(50, 300, 350, 40);
-			largeText.setText("大字体标题 (24px)", 24, 0x800080, "微软雅黑");
-			_uiManager.addComponent(largeText);
+			var largeText:TextRenderer = new TextRenderer(0, 0, 300, 30);
+			largeText.setText("大字体 (18px)", 18, 0x800080, "微软雅黑");
+			centerContainer.addChild(largeText);
+			
+			centerContainer.updateLayout();
+			textContainer.addChild(centerContainer);
+			textLayout.addComponent(centerContainer, BorderLayout.CENTER);
+			
+			// 创建底部多色文本容器，使用网格布局
+			var colorContainer:Container = new Container(100, 0, 300, 30);
+			var colorLayout:GridLayout = new GridLayout();
+			colorLayout.rows = 1;
+			colorLayout.columns = 3;
+			colorLayout.horizontalSpacing = 10;
+			colorLayout.cellAlignment = GridLayout.ALIGN_CENTER;
+			colorContainer.setLayoutManager(colorLayout);
 			
 			// 创建多色文本示例
-			var colorText1:TextRenderer = new TextRenderer(50, 360, 150, 25);
-			colorText1.setText("红色文本", 16, 0xFF0000, "微软雅黑");
-			_uiManager.addComponent(colorText1);
+			var colorText1:TextRenderer = new TextRenderer(0, 0, 90, 25);
+			colorText1.setText("红色", 14, 0xFF0000, "微软雅黑");
+			colorContainer.addChild(colorText1);
 			
-			var colorText2:TextRenderer = new TextRenderer(220, 360, 150, 25);
-			colorText2.setText("绿色文本", 16, 0x00FF00, "微软雅黑");
-			_uiManager.addComponent(colorText2);
+			var colorText2:TextRenderer = new TextRenderer(0, 0, 90, 25);
+			colorText2.setText("绿色", 14, 0x00FF00, "微软雅黑");
+			colorContainer.addChild(colorText2);
 			
-			var colorText3:TextRenderer = new TextRenderer(390, 360, 150, 25);
-			colorText3.setText("蓝色文本", 16, 0x0000FF, "微软雅黑");
-			_uiManager.addComponent(colorText3);
+			var colorText3:TextRenderer = new TextRenderer(0, 0, 90, 25);
+			colorText3.setText("蓝色", 14, 0x0000FF, "微软雅黑");
+			colorContainer.addChild(colorText3);
 			
+			colorContainer.updateLayout();
+			textContainer.addChild(colorContainer);
+			textLayout.addComponent(colorContainer, BorderLayout.NORTH);
 			
-			testTween(colorText3);
+			// 应用布局并添加到UI管理器
+			textContainer.updateLayout();
+			_uiManager.addComponent(textContainer);
+			
+			// 创建独立的动画文本（保持原有的动画效果）
+			var animText:TextRenderer = new TextRenderer(50, 580, 200, 30);
+			animText.setText("动画文本", 16, 0xFFFF00, "微软雅黑");
+			_uiManager.addComponent(animText);
+			testTween(animText);
 		}
 		
-		private function testTween(text:TextRenderer):void 
+		private function testTween(text:TextRenderer):void
 		{
-			TweenLite.to(text, 1, {x:Math.random()*stage.stageWidth,onComplete:function():void{
+			TweenLite.to(text, 1, {x: Math.random() * stage.stageWidth, onComplete: function():void
+			{
 				testTween(text);
 			}});
 		}
@@ -504,7 +578,7 @@ package
 		{
 			trace("图片加载完成!");
 			_statusText.text = "图片加载完成! 尺寸: " + _testImage.textureWidth + "x" + _testImage.textureHeight;
-			
+		
 		}
 		
 		/**
@@ -522,6 +596,7 @@ package
 		 */
 		private function runTests():void
 		{
+			// 运行基础UI测试
 			_testCase = new UITestCase();
 			_testCase.addEventListener(UITestCase.TEST_COMPLETE, onTestComplete);
 			_testCase.addEventListener(UITestCase.TEST_FAILED, onTestFailed);
@@ -530,7 +605,48 @@ package
 			setTimeout(function():void
 			{
 				_testCase.runAllTests();
+				
+				// 运行布局管理器测试
+				runLayoutTests();
 			}, 1000);
+		}
+		
+		/**
+		 * 运行布局管理器测试
+		 */
+		private function runLayoutTests():void
+		{
+			trace("开始运行布局管理器测试...");
+			
+			var layoutTestCase:LayoutTestCase = new LayoutTestCase();
+			layoutTestCase.addEventListener(UITestCase.TEST_COMPLETE, onLayoutTestComplete);
+			layoutTestCase.addEventListener(UITestCase.TEST_FAILED, onLayoutTestFailed);
+			
+			// 延迟运行布局测试
+			setTimeout(function():void
+			{
+				layoutTestCase.runTests();
+			}, 500);
+		}
+		
+		/**
+		 * 布局测试完成事件处理
+		 * @param event 事件对象
+		 */
+		private function onLayoutTestComplete(event:UIEvent):void
+		{
+			trace("布局管理器测试全部通过!");
+			_statusText.text = "UI框架演示运行中 - 布局测试通过!";
+		}
+		
+		/**
+		 * 布局测试失败事件处理
+		 * @param event 事件对象
+		 */
+		private function onLayoutTestFailed(event:UIEvent):void
+		{
+			trace("布局管理器测试失败:", event.data);
+			_statusText.text = "布局测试失败: " + event.data;
 		}
 		
 		/**
@@ -588,19 +704,23 @@ package
 		{
 			try
 			{
+				// 移除事件监听器
+				removeEventListener(Event.ENTER_FRAME, renderFrame);
+				
+				
+				Glfw.glfwSetCursorPosCallback(windowIntPtr, null);
+				Glfw.glfwSetMouseButtonCallback(windowIntPtr, null);
+				Glfw.glfwSetWindowSizeCallback(windowIntPtr, null);
 				
 				_backgroundTimer.removeEventListener(TimerEvent.TIMER, onBackgroundTimer);
 				_backgroundTimer.stop();
-			
-			
-				// 移除事件监听器
-				removeEventListener(Event.ENTER_FRAME, renderFrame);
+				
 				
 				// 清理UI管理器
 				//if (_uiManager)
 				//{
-					//_uiManager.dispose();
-					//_uiManager = null;
+				//_uiManager.dispose();
+				//_uiManager = null;
 				//}
 				
 				// 清理GLFW资源
@@ -683,8 +803,7 @@ package
 			trace("背景图片位置: (" + _backgroundImage.x + ", " + _backgroundImage.y + ") 尺寸: " + _backgroundImage.width + "x" + _backgroundImage.height);
 			trace("背景图片是否已加载: " + _backgroundImage.isLoaded);
 			
-			
-			TweenLite.from(_backgroundImage, 0.5, {alpha:0});
+			TweenLite.from(_backgroundImage, 0.5, {alpha: 0});
 		}
 		
 		/**
