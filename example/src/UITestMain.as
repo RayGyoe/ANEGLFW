@@ -840,6 +840,7 @@ package
 			
 			trace("创建本地测试背景图片，尺寸: " + glWidth + "x" + glHeight);
 			_backgroundImage.loadFromBitmapData(bgBitmap);
+			
 		}
 		
 		/**

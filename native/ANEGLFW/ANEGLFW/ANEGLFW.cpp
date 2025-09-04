@@ -499,6 +499,42 @@ extern "C" {
 		return NULL;
 	}
 
+	/**
+	 * 更新缓冲区对象的部分数据
+	 * @param target 缓冲区目标类型
+	 * @param offset 数据偏移量（字节）
+	 * @param dataSize 数据大小（字节）
+	 * @param data 要上传的数据
+	 */
+	FREObject ANE_glBufferSubData(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		int target = ANEutils->getInt32(argv[0]);
+		int offset = ANEutils->getInt32(argv[1]);
+		int dataSize = ANEutils->getInt32(argv[2]);
+		FREObject data = argv[3];
+		uint32_t length;
+		FREGetArrayLength(data, &length);
+
+		if (debug)printf("\n%s %s  %d  %d  %d  %d", TAG, "ANE_glBufferSubData", target, offset, dataSize, length);
+
+		std::vector<float> Vector;
+		for (uint32_t i = 0; i < length; i++) {
+			FREObject value;
+			FREGetArrayElementAt(data, i, &value);
+			float valuef = static_cast<float>(ANEutils->getDouble(value)) + 0.0f;
+			Vector.push_back(valuef);
+		}
+
+		int size = sizeof(float) * Vector.size();
+		if (debug)printf("\n%s %s  %d  %d   ", TAG, "ANE_glBufferSubData Length", dataSize, size);
+		if (size > dataSize) {
+			dataSize = size;
+		}
+		glBufferSubData(target, offset, dataSize, &Vector[0]);
+
+		return NULL;
+	}
+
 
 	FREObject ANE_glVertexAttribPointer(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
@@ -1113,6 +1149,7 @@ extern "C" {
 			{ (const uint8_t*)"glGenBuffers",					NULL, &ANE_glGenBuffers },
 			{ (const uint8_t*)"glBindBuffer",					NULL, &ANE_glBindBuffer },
 			{ (const uint8_t*)"glBufferData",					NULL, &ANE_glBufferData },
+			{ (const uint8_t*)"glBufferSubData",					NULL, &ANE_glBufferSubData },
 
 			{ (const uint8_t*)"glVertexAttribPointer",					NULL, &ANE_glVertexAttribPointer },
 			{ (const uint8_t*)"glEnableVertexAttribArray",					NULL, &ANE_glEnableVertexAttribArray },

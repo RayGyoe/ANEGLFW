@@ -19,6 +19,7 @@ package agl.shader
 		
 		private var _uniformLocations:Object = {};
 		
+		
 		public function Shader(vshader:String, fshader:String)
 		{
 			var vertexShader:int = this.loadShader(Gl.GL_VERTEX_SHADER, vshader);
@@ -74,6 +75,31 @@ package agl.shader
 			if (!_uniformLocations[name])_uniformLocations[name] = Gl.glGetUniformLocation(this._program, name);
 			return _uniformLocations[name];
 		}
+		
+		/**
+		 * 释放着色器资源
+		 * 删除OpenGL着色器程序并清理相关资源
+		 */
+		public function dispose():void
+		{			
+			try
+			{
+				// 删除OpenGL着色器程序
+				if (_program > 0)
+				{
+					Gl.glDeleteProgram(_program);
+					_program = 0;
+				}
+				
+				// 清理uniform位置缓存
+				_uniformLocations = {};
+			}
+			catch (error:Error)
+			{
+				trace("[Shader] 释放资源时发生错误:", error.message);
+			}
+		}
+		
 	}
 
 }

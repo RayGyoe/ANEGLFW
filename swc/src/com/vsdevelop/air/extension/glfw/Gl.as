@@ -1453,6 +1453,19 @@ package com.vsdevelop.air.extension.glfw
 			ANEGLFW.getInstance().context.call("glBufferData", target, dataSize, data, buffer);
 		}
 		
+		/**
+		 * 更新缓冲区对象的部分数据
+		 * @param target 缓冲区目标类型
+		 * @param offset 数据偏移量（字节）
+		 * @param dataSize 数据大小（字节）
+		 * @param data 要上传的数据
+		 */
+		public static function glBufferSubData(target:int, offset:int, dataSize:int, data:Vector.<Number>):void
+		{
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glBufferSubData", target, offset, dataSize, data);
+		}
+		
 		public static function glVertexAttribPointer(index:uint, size:int, type:uint, normalized:Boolean, stride:int, pointer_IntPtr:int):void
 		{
 			checkSupported();
