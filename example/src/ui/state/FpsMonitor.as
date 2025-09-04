@@ -2,7 +2,7 @@ package ui.state
 {
 	import flash.utils.getTimer;
 	import ui.core.UIComponent;
-	import ui.text.TextRenderer;
+	import ui.components.TextRenderer;
 	import agl.shader.Shader;
 	import com.vsdevelop.air.extension.glfw.Gl;
 	import agl.utils.Matrix4;

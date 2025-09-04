@@ -3,7 +3,7 @@ package ui.components
 	import ui.containers.Container;
 	import ui.core.UIManager;
 	import ui.events.UIEvent;
-	import ui.text.TextRenderer;
+	import ui.components.TextRenderer;
 	import ui.layout.CenterLayout;
 	import agl.shader.Shader;
 	import com.vsdevelop.air.extension.glfw.Gl;

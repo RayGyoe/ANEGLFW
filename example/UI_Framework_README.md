@@ -74,7 +74,7 @@ UIComponent (基础组件)
 - **纹理处理**: 自动转换BitmapData为OpenGL纹理
 - **事件支持**: 加载完成、加载错误事件
 
-#### 5. TextRenderer (ui/text/TextRenderer.as)
+#### 5. TextRenderer (ui/components/TextRenderer.as)
 **文本渲染器**
 - **功能**: 基于OpenGL纹理的高性能文本渲染
 - **核心特性**:
@@ -111,8 +111,8 @@ UIComponent (基础组件)
 ### 渲染系统
 
 #### 着色器架构
-- **顶点着色器**: `ui_vertex.glsl` - 处理顶点变换和投影
-- **片段着色器**: `ui_fragment.glsl` - 处理颜色、纹理和透明度
+- **顶点着色器**: `example/src/assets/ui/ui_vertex.glsl` - 处理顶点变换和投影
+- **片段着色器**: `example/src/assets/ui/ui_fragment.glsl` - 处理颜色、纹理和透明度
 - **统一变量**:
   - `uModel`: 模型矩阵
   - `uProjection`: 投影矩阵
@@ -127,27 +127,6 @@ UIComponent (基础组件)
 - **混合模式**: 支持透明度混合 (`GL_SRC_ALPHA`, `GL_ONE_MINUS_SRC_ALPHA`)
 - **资源清理**: 完善的dispose机制防止内存泄漏
 
-### 测试系统
-
-#### UITestCase (ui/test/UITestCase.as)
-**测试用例类**
-- **测试覆盖**:
-  - 按钮创建和事件测试
-  - 按钮状态变化测试
-  - 图片创建和加载测试
-  - 图片缩放模式测试
-  - UI管理器功能测试
-- **测试机制**: 异步测试支持，自动化测试流程
-
-#### UITestMain (UITestMain.as)
-**测试主程序**
-- **功能**: 集成GLFW窗口管理和UI框架测试
-- **特性**:
-  - GLFW窗口初始化
-  - OpenGL上下文设置
-  - 背景图片轮播
-  - 动画测试 (TweenLite)
-  - 完整的事件处理链
 
 ## 技术特点
 
@@ -236,20 +215,17 @@ src/
 │   ├── components/
 │   │   ├── Button.as           # 按钮组件
 │   │   ├── Image.as            # 图片组件
-│   │   └── FpsMonitor.as       # FPS监控器
+│   │   └── TextRenderer.as     # 文本渲染器
 │   ├── layout/
 │   │   ├── LayoutManager.as    # 布局管理器基类
 │   │   ├── LinearLayout.as     # 线性布局管理器
 │   │   ├── GridLayout.as       # 网格布局管理器
 │   │   ├── BorderLayout.as     # 边界布局管理器
 │   │   └── CenterLayout.as     # 居中布局管理器
-│   ├── text/
-│   │   └── TextRenderer.as     # 文本渲染器
+│   ├── state/
+│   │   └── FpsMonitor.as       # FPS监控器
 │   ├── events/
 │   │   └── UIEvent.as          # 事件类
-│   └── test/
-│       ├── UITestCase.as       # 基础测试用例
-│       └── LayoutTestCase.as   # 布局管理器测试用例
 ├── assets/
 │   └── ui/
 │       ├── ui_vertex.glsl      # 顶点着色器
@@ -502,11 +478,6 @@ container.addChild(new Button());
 // 布局会自动应用
 ```
 
-### 测试用例
-布局管理器系统包含完整的测试用例 (`LayoutTestCase.as`)，涵盖：
-- 线性布局测试 (水平/垂直、权重、对齐)
-- 网格布局测试 (基本网格、跨行跨列、对齐、动态尺寸)
-- 边界布局测试 (基本布局、区域设置、固定尺寸)
 
 ### 待优化项目
 - 🔄 更多UI组件 (Slider, CheckBox, RadioButton等)

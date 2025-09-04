@@ -1,4 +1,4 @@
-package ui.text
+package ui.components
 {
 	import flash.display.BitmapData;
 	import flash.geom.Rectangle;

@@ -7,14 +7,12 @@ package
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import ui.containers.Container;
-	import ui.text.TextRenderer;
+	import ui.components.TextRenderer;
 	
 	import ui.core.UIManager;
 	import ui.components.Button;
 	import ui.components.Image;
 	import ui.events.UIEvent;
-	import ui.test.UITestCase;
-	import ui.test.LayoutTestCase;
 	import ui.state.FpsMonitor;
 	import ui.layout.LinearLayout;
 	import ui.layout.GridLayout;
@@ -48,7 +46,6 @@ package
 		
 		// UI框架相关
 		private var _uiManager:UIManager;
-		private var _testCase:UITestCase;
 		// 测试组件
 		private var _testButton1:Button;
 		private var _testButton2:Button;
@@ -591,43 +588,7 @@ package
 			_statusText.text = "图片加载失败: " + event.data;
 		}
 		
-		/**
-		 * 运行测试用例
-		 */
-		private function runTests():void
-		{
-			// 运行基础UI测试
-			_testCase = new UITestCase();
-			_testCase.addEventListener(UITestCase.TEST_COMPLETE, onTestComplete);
-			_testCase.addEventListener(UITestCase.TEST_FAILED, onTestFailed);
-			
-			// 延迟运行测试，让UI组件先初始化
-			setTimeout(function():void
-			{
-				_testCase.runAllTests();
-				
-				// 运行布局管理器测试
-				runLayoutTests();
-			}, 1000);
-		}
 		
-		/**
-		 * 运行布局管理器测试
-		 */
-		private function runLayoutTests():void
-		{
-			trace("开始运行布局管理器测试...");
-			
-			var layoutTestCase:LayoutTestCase = new LayoutTestCase();
-			layoutTestCase.addEventListener(UITestCase.TEST_COMPLETE, onLayoutTestComplete);
-			layoutTestCase.addEventListener(UITestCase.TEST_FAILED, onLayoutTestFailed);
-			
-			// 延迟运行布局测试
-			setTimeout(function():void
-			{
-				layoutTestCase.runTests();
-			}, 500);
-		}
 		
 		/**
 		 * 布局测试完成事件处理
