@@ -1701,10 +1701,20 @@ package com.vsdevelop.air.extension.glfw
 		}
 		
 		public static function glClear(mask:uint):void
-		{
+        {
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glClear", mask);
-		}
+        }
+
+        /**
+         * specify the clear value for the stencil buffer
+         * @param s Specifies the index used when the stencil buffer is cleared. The initial value is 0.
+         */
+        public static function glClearStencil(s:int):void
+        {
+			checkSupported();
+			ANEGLFW.getInstance().context.call("glClearStencil", s);
+        }
 		
 		public static function glPolygonMode(face:int, mode:int):void
 		{

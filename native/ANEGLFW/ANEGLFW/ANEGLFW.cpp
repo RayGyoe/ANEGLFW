@@ -866,6 +866,12 @@ extern "C" {
 		return NULL;
 	}
 
+	FREObject ANE_glClearStencil(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+	{
+		if (argc != 1) return NULL;
+		glClearStencil(ANEutils->getInt32(argv[0]));
+		return NULL;
+	}
 
 	FREObject ANE_glPolygonMode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 	{
@@ -1201,6 +1207,7 @@ extern "C" {
 			
 			{ (const uint8_t*)"glClearColor",					NULL, &ANE_glClearColor },
 			{ (const uint8_t*)"glClear",					NULL, &ANE_glClear },
+{ (const uint8_t*)"glClearStencil",					NULL, &ANE_glClearStencil },
 
 
 			{ (const uint8_t*)"glPolygonMode",					NULL, &ANE_glPolygonMode },
