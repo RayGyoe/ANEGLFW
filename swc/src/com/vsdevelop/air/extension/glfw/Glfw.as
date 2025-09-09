@@ -300,6 +300,10 @@ package com.vsdevelop.air.extension.glfw
 		public static const GLFW_COCOA_CHDIR_RESOURCES:int = 0x00051001;
 		public static const GLFW_COCOA_MENUBAR:int = 0x00051002;
 		
+		/**
+		 * 检查ANEGLFW扩展是否支持
+		 * @throws Error 如果ANEGLFW不支持则抛出异常
+		 */
 		static private function checkSupported():void
 		{
 			if (!ANEGLFW.getInstance().isSupported)
@@ -308,11 +312,19 @@ package com.vsdevelop.air.extension.glfw
 			}
 		}
 		
+		/**
+		 * 获取GLFW版本字符串
+		 * @return GLFW版本字符串
+		 */
 		public static function glfwGetVersionString():String
 		{
 			checkSupported();
 			return ANEGLFW.getInstance().context.call("glfwGetVersionString") as String;
 		}
+		/**
+		 * 设置错误回调函数
+		 * @param callback 错误回调函数
+		 */
 		public static function glfwSetErrorCallback(callback:Function):void
 		{
 			checkSupported();
@@ -326,60 +338,111 @@ package com.vsdevelop.air.extension.glfw
 			ANEGLFW.getInstance().context.call("glfwSetErrorCallback",callName);
 		}
 		
+		/**
+		 * 初始化GLFW库
+		 * @return 初始化成功返回1，失败返回0
+		 */
 		public static function glfwInit():int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glfwInit"));
 		}
 		
+		/**
+		 * 终止GLFW库
+		 */
 		public static function glfwTerminate():void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glfwTerminate");
 		}
 		
+		/**
+		 * 设置窗口创建提示
+		 * @param hint 提示类型
+		 * @param value 提示值
+		 */
 		public static function glfwWindowHint(hint:int, value:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glfwWindowHint", hint, value);
 		}
 		
+		/**
+		 * 创建窗口
+		 * @param width 窗口宽度
+		 * @param height 窗口高度
+		 * @param title 窗口标题
+		 * @param monitor_IntPtr 显示器指针，默认为0
+		 * @param window_share_IntPtr 共享窗口指针，默认为0
+		 * @return 窗口指针
+		 */
 		public static function glfwCreateWindow(width:int, height:int, title:String, monitor_IntPtr:int = 0, window_share_IntPtr:int = 0):Number
 		{
 			checkSupported();
 			return ANEGLFW.getInstance().context.call("glfwCreateWindow", width, height, title, monitor_IntPtr, window_share_IntPtr) as Number;
 		}
 		
+		/**
+		 * 销毁窗口
+		 * @param window_IntPtr 窗口指针
+		 */
 		public static function glfwDestroyWindow(window_IntPtr:Number):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glfwDestroyWindow", window_IntPtr);
 		}
 		
+		/**
+		 * 获取Win32窗口句柄
+		 * @param window_IntPtr 窗口指针
+		 * @return Win32窗口句柄
+		 */
 		public static function glfwGetWin32Window(window_IntPtr:Number):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glfwGetWin32Window", window_IntPtr));
 		}
 		
+		/**
+		 * 设置当前OpenGL上下文
+		 * @param window_IntPtr 窗口指针
+		 */
 		public static function glfwMakeContextCurrent(window_IntPtr:Number):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glfwMakeContextCurrent", window_IntPtr);
 		}
 		
+		/**
+		 * 设置窗口位置
+		 * @param window_IntPtr 窗口指针
+		 * @param x 窗口X坐标
+		 * @param y 窗口Y坐标
+		 */
 		public static function glfwSetWindowPos(window_IntPtr:Number, x:int, y:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glfwSetWindowPos", window_IntPtr, x, y);
 		}
 		
+		/**
+		 * 设置窗口大小
+		 * @param window_IntPtr 窗口指针
+		 * @param width 窗口宽度
+		 * @param height 窗口高度
+		 */
 		public static function glfwSetWindowSize(window_IntPtr:Number, width:int, height:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glfwSetWindowSize", window_IntPtr, width, height);
 		}
 		
+		/**
+		 * 设置窗口大小改变回调函数
+		 * @param window_IntPtr 窗口指针
+		 * @param callback 回调函数，为null时移除回调
+		 */
 		public static function glfwSetWindowSizeCallback(window_IntPtr:Number, callback:Function = null):void
 		{
 			checkSupported();
@@ -393,30 +456,52 @@ package com.vsdevelop.air.extension.glfw
 			ANEGLFW.getInstance().context.call("glfwSetWindowSizeCallback", window_IntPtr, callName);
 		}
 		
+		/**
+		 * 设置缓冲区交换间隔
+		 * @param value 是否启用垂直同步，默认为false
+		 * @return 操作结果
+		 */
 		public static function glfwSwapInterval(value:Boolean = false):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glfwSwapInterval", value ? 1 : 0));
 		}
 		
+		/**
+		 * 检查窗口是否应该关闭
+		 * @param window_IntPtr 窗口指针
+		 * @return 如果窗口应该关闭返回1，否则返回0
+		 */
 		public static function glfwWindowShouldClose(window_IntPtr:Number):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glfwWindowShouldClose", window_IntPtr));
 		}
 		
+		/**
+		 * 设置窗口是否应该关闭
+		 * @param window_IntPtr 窗口指针
+		 * @param value 是否应该关闭窗口，默认为false
+		 */
 		public static function glfwSetWindowShouldClose(window_IntPtr:Number, value:Boolean = false):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glfwSetWindowShouldClose", window_IntPtr, value ? 1 : 0);
 		}
 		
+		/**
+		 * 交换前后缓冲区
+		 * @param window_IntPtr 窗口指针
+		 */
 		public static function glfwSwapBuffers(window_IntPtr:Number):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glfwSwapBuffers", window_IntPtr);
 		}
 		
+		/**
+		 * 处理所有待处理的事件
+		 */
 		public static function glfwPollEvents():void
 		{
 			checkSupported();
@@ -424,18 +509,34 @@ package com.vsdevelop.air.extension.glfw
 		}
 		
 		
+		/**
+		 * 获取鼠标光标位置
+		 * @param window_IntPtr 窗口指针
+		 * @return 鼠标光标的位置坐标
+		 */
 		public static function glfwGetCursorPos(window_IntPtr:Number):Point
 		{
 			checkSupported();
 			return ANEGLFW.getInstance().context.call("glfwGetCursorPos", window_IntPtr) as Point;
 		}
 		
+		/**
+		 * 设置窗口的输入模式
+		 * @param window_IntPtr 窗口指针
+		 * @param model 输入模式类型
+		 * @param value 输入模式值
+		 */
 		public static function glfwSetInputMode(window_IntPtr:Number, model:int, value:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glfwSetInputMode", window_IntPtr,model,value);
 		}
 		
+		/**
+		 * 设置鼠标光标位置回调函数
+		 * @param window_IntPtr 窗口指针
+		 * @param callback 回调函数，为null时移除回调
+		 */
 		public static function glfwSetCursorPosCallback(window_IntPtr:Number, callback:Function = null):void
 		{
 			checkSupported();
@@ -449,6 +550,11 @@ package com.vsdevelop.air.extension.glfw
 			ANEGLFW.getInstance().context.call("glfwSetCursorPosCallback", window_IntPtr, callName);
 		}
 		
+		/**
+		 * 设置鼠标按钮回调函数
+		 * @param window_IntPtr 窗口指针
+		 * @param callback 回调函数，为null时移除回调
+		 */
 		public static function glfwSetMouseButtonCallback(window_IntPtr:Number, callback:Function = null):void
 		{
 			checkSupported();

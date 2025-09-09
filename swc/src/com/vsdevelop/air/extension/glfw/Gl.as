@@ -4,8 +4,8 @@ package com.vsdevelop.air.extension.glfw
 	import flash.utils.ByteArray;
 	
 	/**
-	 * ...
-	 * @author Ray.eDoctor
+	 * OpenGL函数封装类，提供OpenGL API的ActionScript接口
+	 * @author Ray.lei
 	 */
 	public final class Gl
 	{
@@ -1390,6 +1390,10 @@ package com.vsdevelop.air.extension.glfw
 		public static const GL_MAX_TEXTURE_MAX_ANISOTROPY:int = 0x84FF;
 		public static const GL_TRANSFORM_FEEDBACK_OVERFLOW:int = 0x82EC;
 		
+		/**
+		 * 检查ANEGLFW扩展是否支持
+		 * @throws Error 如果不支持则抛出异常
+		 */
 		static private function checkSupported():void
 		{
 			if (!ANEGLFW.getInstance().isSupported)
@@ -1399,54 +1403,104 @@ package com.vsdevelop.air.extension.glfw
 		}
 		
 		
+		/**
+		 * 加载OpenGL函数指针
+		 * @param procname 过程名称，默认为空字符串
+		 * @return 加载结果状态码
+		 */
 		public static function gladLoadGLLoader(procname:String = ""):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("gladLoadGLLoader", procname));
 		}
 		
+		/**
+		 * 设置视口
+		 * @param x 视口左下角x坐标
+		 * @param y 视口左下角y坐标
+		 * @param width 视口宽度
+		 * @param height 视口高度
+		 */
 		public static function glViewport(x:int, y:int, width:int, height:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glViewport", x, y, width, height);
 		}
 		
+		/**
+		 * 生成顶点数组对象
+		 * @param n 要生成的顶点数组对象数量
+		 * @return 生成的顶点数组对象ID
+		 */
 		public static function glGenVertexArrays(n:int):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glGenVertexArrays", n));
 		}
 		
+		/**
+		 * 绑定顶点数组对象
+		 * @param array 顶点数组对象ID
+		 * @return 操作结果状态码
+		 */
 		public static function glBindVertexArray(array:int):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glBindVertexArray", array));
 		}
 		
+		/**
+		 * 创建缓冲区对象
+		 * @param GLsizei 要创建的缓冲区对象数量
+		 * @return 创建的缓冲区对象ID
+		 */
 		public static function glCreateBuffers(GLsizei:int):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glCreateBuffers", GLsizei));
 		}
 		
+		/**
+		 * 删除缓冲区对象
+		 * @param GLsizei 要删除的缓冲区对象数量
+		 * @param buffer 缓冲区对象ID
+		 * @return 操作结果状态码
+		 */
 		public static function glDeleteBuffers(GLsizei:int, buffer:uint):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glDeleteBuffers", GLsizei, buffer));
 		}
 		
+		/**
+		 * 生成缓冲区对象
+		 * @param GLsizei 要生成的缓冲区对象数量
+		 * @return 生成的缓冲区对象ID
+		 */
 		public static function glGenBuffers(GLsizei:int):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glGenBuffers", GLsizei));
 		}
 		
+		/**
+		 * 绑定缓冲区对象到指定目标
+		 * @param target 缓冲区目标类型
+		 * @param buffer 缓冲区对象ID
+		 */
 		public static function glBindBuffer(target:int, buffer:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glBindBuffer", target, buffer);
 		}
 		
+		/**
+		 * 为缓冲区对象分配数据存储并初始化数据
+		 * @param target 缓冲区目标类型
+		 * @param dataSize 数据大小（字节）
+		 * @param data 要上传的数据
+		 * @param buffer 缓冲区使用方式
+		 */
 		public static function glBufferData(target:int, dataSize:int, data:Vector.<Number>, buffer:int):void
 		{
 			checkSupported();
@@ -1466,126 +1520,233 @@ package com.vsdevelop.air.extension.glfw
 			ANEGLFW.getInstance().context.call("glBufferSubData", target, offset, dataSize, data);
 		}
 		
+		/**
+		 * 定义顶点属性数组的数据格式和位置
+		 * @param index 顶点属性索引
+		 * @param size 每个顶点属性的组件数量
+		 * @param type 数据类型
+		 * @param normalized 是否归一化
+		 * @param stride 连续顶点属性之间的字节偏移量
+		 * @param pointer_IntPtr 数据指针
+		 */
 		public static function glVertexAttribPointer(index:uint, size:int, type:uint, normalized:Boolean, stride:int, pointer_IntPtr:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glVertexAttribPointer", index, size, type, normalized, stride, pointer_IntPtr);
 		}
 		
+		/**
+		 * 启用顶点属性数组
+		 * @param index 顶点属性索引
+		 */
 		public static function glEnableVertexAttribArray(index:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glEnableVertexAttribArray", index);
 		}
 		
+		/**
+		 * 禁用顶点属性数组
+		 * @param index 顶点属性索引
+		 */
 		public static function glDisableVertexAttribArray(index:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glDisableVertexAttribArray", index);
 		}
 		
+		/**
+		 * 删除顶点数组对象
+		 * @param n 要删除的顶点数组对象数量
+		 * @param arrays 顶点数组对象ID数组
+		 */
 		public static function glDeleteVertexArrays(n:int, arrays:Vector.<uint>):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glDeleteVertexArrays", n, arrays);
 		}
 		
+		/**
+		 * 创建着色器对象
+		 * @param shader 着色器类型
+		 * @return 着色器对象ID
+		 */
 		public static function glCreateShader(shader:int):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glCreateShader", shader));
 		}
 		
+		/**
+		 * 设置着色器源代码
+		 * @param shader 着色器对象ID
+		 * @param count 字符串数量
+		 * @param shaderString 着色器源代码字符串
+		 */
 		public static function glShaderSource(shader:int, count:int, shaderString:String):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glShaderSource", shader, count, shaderString);
 		}
 		
+		/**
+		 * 编译着色器
+		 * @param shader 着色器对象ID
+		 */
 		public static function glCompileShader(shader:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glCompileShader", shader);
 		}
 		
+		/**
+		 * 删除着色器对象
+		 * @param shader 着色器对象ID
+		 */
 		public static function glDeleteShader(shader:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glDeleteShader", shader);
 		}
 		
+		/**
+		 * 获取着色器参数
+		 * @param shader 着色器对象ID
+		 * @param pname 参数名称
+		 * @return 参数值
+		 */
 		public static function glGetShaderiv(shader:int, pname:int):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glGetShaderiv", shader, pname));
 		}
 		
+		/**
+		 * 获取着色器编译信息日志
+		 * @param shader 着色器对象ID
+		 * @param bufSize 缓冲区大小
+		 * @return 编译信息日志字符串
+		 */
 		public static function glGetShaderInfoLog(shader:int, bufSize:int):String
 		{
 			checkSupported();
 			return String(ANEGLFW.getInstance().context.call("glGetShaderInfoLog", shader, bufSize));
 		}
 		
+		/**
+		 * 创建着色器程序对象
+		 * @return 着色器程序对象ID
+		 */
 		public static function glCreateProgram():int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glCreateProgram"));
 		}
 		
+		/**
+		 * 将着色器对象附加到程序对象
+		 * @param program 程序对象ID
+		 * @param shader 着色器对象ID
+		 */
 		public static function glAttachShader(program:int, shader:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glAttachShader", program, shader);
 		}
 		
+		/**
+		 * 链接程序对象
+		 * @param program 程序对象ID
+		 */
 		public static function glLinkProgram(program:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glLinkProgram", program);
 		}
 		
+		/**
+		 * 使用指定的程序对象
+		 * @param program 程序对象ID
+		 */
 		public static function glUseProgram(program:int):void
 	{
 		checkSupported();
 		ANEGLFW.getInstance().context.call("glUseProgram", program);
 	}
 	
+	/**
+	 * 删除程序对象
+	 * @param program 程序对象ID
+	 */
 	public static function glDeleteProgram(program:int):void
 	{
 		checkSupported();
 		ANEGLFW.getInstance().context.call("glDeleteProgram", program);
 	}
 	
+	/**
+	 * 获取程序对象参数
+	 * @param program 程序对象ID
+	 * @param pname 参数名称
+	 * @return 参数值
+	 */
 	public static function glGetProgramiv(program:int, pname:int):int
 	{
 		checkSupported();
 		return int(ANEGLFW.getInstance().context.call("glGetProgramiv", program, pname));
 	}
 	
+	/**
+	 * 获取程序对象链接信息日志
+	 * @param program 程序对象ID
+	 * @param bufSize 缓冲区大小
+	 * @return 链接信息日志字符串
+	 */
 	public static function glGetProgramInfoLog(program:int, bufSize:int):String
 	{
 		checkSupported();
 		return String(ANEGLFW.getInstance().context.call("glGetProgramInfoLog", program, bufSize));
 	}
 	
+	/**
+	 * 绑定顶点属性位置
+	 * @param program 程序对象ID
+	 * @param index 属性索引
+	 * @param name 属性名称
+	 */
 	public static function glBindAttribLocation(program:int, index:int, name:String):void
 	{
 		checkSupported();
 		ANEGLFW.getInstance().context.call("glBindAttribLocation", program, index, name);
 	}
 
+	/**
+	 * 获取OpenGL错误代码
+	 * @return 错误代码
+	 */
 	public static function glGetError():int
 	{
 		checkSupported();
 		return int(ANEGLFW.getInstance().context.call("glGetError"));
 	}
 	
+	/**
+	 * 获取整数类型的OpenGL状态值
+	 * @param pname 状态参数名称
+	 * @return 状态值
+	 */
 	public static function glGetIntegerv(pname:int):int
 	{
 		checkSupported();
 		return int(ANEGLFW.getInstance().context.call("glGetIntegerv", pname));
 	}
 	
+	/**
+	 * 获取顶点属性位置
+	 * @param program 程序对象ID
+	 * @param name 属性名称
+	 * @return 属性位置索引
+	 */
 	public static function glGetAttribLocation(program:int, name:String):int
 	{
 		checkSupported();
@@ -1593,39 +1754,81 @@ package com.vsdevelop.air.extension.glfw
 	}
 	
 	
+	/**
+	 * 生成纹理对象
+	 * @param size 生成纹理对象的数量
+	 * @return 纹理对象ID
+	 */
 	public static function glGenTextures(size:int):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glGenTextures", size));
 		}
+		/**
+		 * 绑定纹理对象
+		 * @param target 纹理目标
+		 * @param texture 纹理对象ID
+		 */
 		public static function glBindTexture(target:int, texture:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glBindTexture", target, texture);
 		}
+		/**
+		 * 设置纹理参数
+		 * @param target 纹理目标
+		 * @param pname 参数名称
+		 * @param param 参数值
+		 */
 		public static function glTexParameteri(target:int,pname:int,param:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glTexParameteri", target, pname,param);
 		}
 		
+		/**
+		 * 指定2D纹理图像
+		 * @param target 纹理目标
+		 * @param level 细节级别
+		 * @param internalformat 内部格式
+		 * @param width 纹理宽度
+		 * @param height 纹理高度
+		 * @param border 边框宽度
+		 * @param format 像素格式
+		 * @param type 像素数据类型
+		 * @param bitmapdataByte 像素数据
+		 */
 		public static function glTexImage2D(target:int,  level:int,internalformat:int,width:int,height:int,border:int,format:int,type:int,bitmapdataByte:ByteArray):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glTexImage2D", target, level, internalformat, width, height, border, format, type, bitmapdataByte);
 		}
+		/**
+		 * 生成纹理的多级渐远纹理
+		 * @param target 纹理目标
+		 * @return 操作结果
+		 */
 		public static function glGenerateMipmap(target:int):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glGenerateMipmap", target));
 		}
 		
+		/**
+		 * 激活纹理单元
+		 * @param texture 纹理单元
+		 */
 		public static function glActiveTexture(texture:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glActiveTexture", texture);
 		}
 		
+		/**
+		 * 删除纹理对象
+		 * @param n 要删除的纹理数量
+		 * @param textures 纹理对象ID
+		 */
 		public static function glDeleteTextures(n:int, textures:uint):void
 		{
 			checkSupported();
@@ -1634,72 +1837,144 @@ package com.vsdevelop.air.extension.glfw
 		
 		
 		
+		/**
+		 * 获取uniform变量位置
+		 * @param program 程序对象ID
+		 * @param name uniform变量名称
+		 * @return uniform变量位置
+		 */
 		public static function glGetUniformLocation(program:int, name:String):int
 		{
 			checkSupported();
 			return int(ANEGLFW.getInstance().context.call("glGetUniformLocation", program, name));
 		}
 		
+		/**
+		 * 设置单个浮点数uniform变量
+		 * @param location uniform变量位置
+		 * @param v0 浮点数值
+		 */
 		public static function glUniform1f(location:int, v0:Number):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glUniform1f", location, v0);
 		}
 		
+		/**
+		 * 设置2个浮点数uniform变量
+		 * @param location uniform变量位置
+		 * @param v0 第一个浮点数值
+		 * @param v1 第二个浮点数值
+		 */
 		public static function glUniform2f(location:int, v0:Number, v1:Number):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glUniform2f", location, v0, v1);
 		}
 		
+		/**
+		 * 设置3个浮点数uniform变量
+		 * @param location uniform变量位置
+		 * @param v0 第一个浮点数值
+		 * @param v1 第二个浮点数值
+		 * @param v2 第三个浮点数值
+		 */
 		public static function glUniform3f(location:int, v0:Number, v1:Number, v2:Number):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glUniform3f", location, v0, v1, v2);
 		}
 		
+		/**
+		 * 设置4个浮点数uniform变量
+		 * @param location uniform变量位置
+		 * @param v0 第一个浮点数值
+		 * @param v1 第二个浮点数值
+		 * @param v2 第三个浮点数值
+		 * @param v3 第四个浮点数值
+		 */
 		public static function glUniform4f(location:int, v0:Number, v1:Number, v2:Number, v3:Number):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glUniform4f", location, v0, v1, v2, v3);
 		}
 		
+		/**
+		 * 设置单个整数uniform变量
+		 * @param location uniform变量位置
+		 * @param v0 整数值
+		 */
 		public static function glUniform1i(location:int, v0:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glUniform1i", location, v0);
 		}
 		
+		/**
+		 * 设置4x4矩阵uniform变量
+		 * @param location uniform变量位置
+		 * @param count 矩阵数量
+		 * @param transpose 是否转置矩阵
+		 * @param matrix3D 4x4矩阵数据
+		 */
 		public static function glUniformMatrix4fv(location:int, count:Number, transpose:int, matrix3D:Matrix3D = null):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glUniformMatrix4fv", location, count, transpose, matrix3D);
 		}
 		
+		/**
+		 * 获取GLFW时间
+		 * @return 当前时间（秒）
+		 */
 		public static function glfwGetTime():Number
 		{
 			checkSupported();
 			return Number(ANEGLFW.getInstance().context.call("glfwGetTime"));
 		}
 		
+		/**
+		 * 绘制数组中的图元
+		 * @param mode 图元类型
+		 * @param first 起始顶点索引
+		 * @param count 顶点数量
+		 */
 		public static function glDrawArrays(mode:int, first:int, count:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glDrawArrays", mode, first, count);
 		}
 		
+		/**
+		 * 使用索引绘制图元
+		 * @param mode 图元类型
+		 * @param count 索引数量
+		 * @param type 索引数据类型
+		 * @param indicesPtr 索引数据指针
+		 */
 		public static function glDrawElements(mode:int, count:int, type:int, indicesPtr:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glDrawElements", mode, count, type, indicesPtr);
 		}
 		
+		/**
+		 * 设置清除颜色
+		 * @param red 红色分量
+		 * @param green 绿色分量
+		 * @param blue 蓝色分量
+		 * @param alpha 透明度分量
+		 */
 		public static function glClearColor(red:Number, green:Number, blue:Number, alpha:Number = 1):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glClearColor", red, green, blue, alpha);
 		}
 		
+		/**
+		 * 清除缓冲区
+		 * @param mask 缓冲区掩码
+		 */
 		public static function glClear(mask:uint):void
         {
 			checkSupported();
@@ -1716,46 +1991,80 @@ package com.vsdevelop.air.extension.glfw
 			ANEGLFW.getInstance().context.call("glClearStencil", s);
         }
 		
+		/**
+		 * 设置多边形光栅化模式
+		 * @param face 面的类型
+		 * @param mode 光栅化模式
+		 */
 		public static function glPolygonMode(face:int, mode:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glPolygonMode", face, mode);
 		}
 		
+		/**
+		 * 设置点的大小
+		 * @param size 点的大小
+		 */
 		public static function glPointSize(size:Number):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glPointSize", size);
 		}
+		/**
+		 * 设置面剔除模式
+		 * @param mode 剔除模式
+		 */
 		public static function glCullFace(mode:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glCullFace", mode);
 		}
+		/**
+		 * 启用OpenGL功能
+		 * @param cap 功能标识符
+		 */
 		public static function glEnable(cap:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glEnable", cap);
 		}
 		
+		/**
+		 * 禁用OpenGL功能
+		 * @param cap 功能标识符
+		 */
 		public static function glDisable(cap:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glDisable", cap);
 		}
 		
+		/**
+		 * 设置混合函数
+		 * @param sfactor 源因子
+		 * @param dfactor 目标因子
+		 */
 		public static function glBlendFunc(sfactor:int, dfactor:int):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glBlendFunc", sfactor, dfactor);
 		}
 		
+		/**
+		 * 设置深度缓冲区清除值
+		 * @param depth 深度值
+		 */
 		public static function glClearDepth(depth:Number):void
 		{
 			checkSupported();
 			ANEGLFW.getInstance().context.call("glClearDepth", depth);
 		}
 		
+		/**
+		 * 设置深度测试函数
+		 * @param func 深度测试函数
+		 */
 		public static function glDepthFunc(func:int):void
 		{
 			checkSupported();
